@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xsi:schemaLocation="
+    	http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.1.xsd
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.1.xsd">
+    <!-- 属性文件位置 -->
+    <bean id="annotationPropertyConfigurer"
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:init.properties</value>
+            </list>
+        </property>
+    </bean>
+    
+    <!-- 自动扫描包  注解 自动扫描Spring注解 @Component @Service @Repository @Constroller -->
+ 	<context:component-scan base-package="com.*" annotation-config="true" />
+
+    <!-- druid -->
+     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">  
+     	<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<!-- 配置监控统计拦截的filters，去掉后监控界面sql无法统计 -->  
+		<property name="filters" value="stat" />
+		<!-- 配置初始化大小、最小、最大 -->  
+		<property name="initialSize" value="1" />
+		<property name="minIdle" value="1" />
+		<property name="maxActive" value="20" />
+		<!-- 配置获取连接等待超时的时间 -->  
+		<property name="maxWait" value="60000" />
+		 <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->  
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->  
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		
+		<property name="validationQuery" value="SELECT 'x'" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		 <!-- #是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭,default=false --> 
+		<property name="poolPreparedStatements" value="true" />
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+     </bean>
+   
+    <!-- 配置hibernate的SessionFactory -->
+    <bean id="sessionFactory"
+        class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <!-- 注入数据源 相关信息看源码 -->
+        <property name="dataSource" ref="dataSource" />
+        <!-- hibernate配置信息 -->
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+                <!-- 开启二级缓存 ehcache -->
+                <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
+                <prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
+                <prop key="hibernate.cache.region.factory_class">${hibernate.cache.region.factory_class}</prop>
+                <prop key="hibernate.cache.provider_configuration_file_resource_path">${hibernate.cache.provider_configuration_file_resource_path}
+                </prop>
+            </props>
+        </property>
+        <!-- 扫描hibernate注解配置的entity -->
+        <property name="packagesToScan" >
+		    <list>
+				<value>com.zpj.sys.entity</value>
+				<value>com.zpj.materials.entity</value>
+			</list>
+		</property>
+    </bean>
+
+    <!-- 配置事务管理器 -->
+    <bean id="transactionManager"
+        class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    <!-- 报错解决办法 添加下面一行，然后再实现类上添加@Transactional   Could not obtain transaction-synchronized Session for current thread -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>  
+    <!-- 配置事务增强处理Bean，指定事务管理器 -->
+    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+        <!-- 配置详细事务处理语义 -->
+        <tx:attributes>
+            <tx:method name="insert*" propagation="REQUIRED" />
+            <tx:method name="save*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="delete*" propagation="REQUIRED" />
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="find*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="load*" propagation="SUPPORTS" read-only="true" />
+            <!-- 其他采用默认事务方式 -->
+            <tx:method name="*" />
+        </tx:attributes>
+    </tx:advice>
+    
+    
+     <!--  spring-session -redis 配置 默认0 Redis默认有16个库,默认连接的是 index=0 的那一个。这16个库互相之间是独立的。类似于同一MySQL服务器里面的多个数据库。 -->
+<!--     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig"/> -->
+<!--     <bean id="jedisConnectionFactory"  class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"> -->
+<!--         <property name="hostName" value="127.0.0.1" /> -->
+<!--         <property name="password" value="123456" /> -->
+<!--         <property name="port" value="6379" /> -->
+<!--         <property name="database" value="0" /> -->
+<!--         <property name="poolConfig" ref="jedisPoolConfig" /> -->
+<!--         <property name="usePool" value="true" /> -->
+<!--     </bean> -->
+<!--     <bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate"> -->
+<!--         <property name="connectionFactory" ref="jedisConnectionFactory" /> -->
+<!--     </bean> -->
+<!--     <bean id="redisHttpSessionConfiguration" class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"> -->
+<!--         <property name="maxInactiveIntervalInSeconds" value="1800" /> -->
+<!--     </bean> -->
+    
+    <!-- Spring aop事务管理 -->
+    <!-- 打开aop 注解 -->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <!-- 强制使用cglib代理，如果不设置，将默认使用jdk的代理，但是jdk的代理是基于接口的 -->  
+    <aop:config proxy-target-class="true" >
+        <!-- 配置切入点 -->
+        <aop:pointcut id="transactionPointcut"
+            expression="execution(* com.*.service.*.*(..))"  />
+        <!-- 指定在txAdvice切入点应用txAdvice事务增强处理 -->
+        <aop:advisor pointcut-ref="transactionPointcut"    advice-ref="transactionAdvice" />
+   
+    </aop:config>
+     <bean class="com.zpj.common.ResourceCodeUtil"/>  
+</beans>

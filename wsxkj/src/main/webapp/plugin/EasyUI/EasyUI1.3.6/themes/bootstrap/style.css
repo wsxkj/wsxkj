@@ -1,0 +1,175 @@
+a:link,a:visited{
+ text-decoration:none;  /*超链接无下划线*/
+}
+a:hover{
+ text-decoration:underline;  /*鼠标放上去有下划线*/
+}
+
+/*******表单******/
+table{
+	font-size:12px;
+}
+.tableForm {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+.tableForm th, .tableForm td {
+    border: 1px solid #7CC9FC;
+    padding: 0.3em 0.7em;
+    text-align: left;
+}
+
+.tableForm th {
+    background: none repeat scroll 0 0 #CBEDFC;
+    text-align: center;
+    font-weight:normal;
+}
+
+.dynamicTd {
+    background: none repeat scroll 0 0 #CBEDFC;
+    text-align: center;
+    font-weight:normal;
+}
+.tableForm thead th {
+    text-align: center;
+}
+.tableForm tbody th {
+    text-align: right;
+    white-space: nowrap;
+}
+.tableForm tr:hover {
+    background-color: #F6FAFD;
+}
+.tableForm td:hover {
+    background-color: #F9FEFF;
+}
+/*******表单******/
+
+/*******layout*****/
+.easyui-layout{
+	height: 100%;
+}
+/*********layout*******/
+
+fieldset {
+    border: 1px dotted #D1D7DC;
+}
+legend {
+    border: 1px dotted #D1D7DC;
+    font-size: small;
+}
+
+form{
+    /*height: 100%;*/
+}
+label{
+    vertical-align: middle;
+}
+.form { 
+    margin: 5px;
+}
+input[type=text],input[type=password],textarea{
+    border:1px  #D4D4D4 solid;
+    /*height: 18px;*/
+    vertical-align: middle;
+}
+.img-btn{
+    margin: 0 5px;
+    padding: 2px 0 2px 16px;
+    cursor:pointer;
+}
+.img-btn:hover{
+    border: 1px  #D4D4D4 solid;
+}
+div.loading{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2147483646;
+    opacity: 0.1;
+    background: #000;
+    height: 100%;
+    width: 100%;
+    cursor: progress;
+    display: none;
+}
+div.progress{
+    display: none;
+    position: absolute;
+    top:0;
+    right:0;
+    text-align: center;
+    font-size: 12px;
+    width: 128px;
+    height: 25px;
+    color: #000;
+    background: #0092DC;
+    z-index: 2147483647;
+    background: url('../Images/ajax-loader.gif') no-repeat;
+}
+
+.user_info{
+    position: absolute;
+    right: 0;
+    line-height: 20px;
+}
+
+.system_controller{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+/*首页左侧树菜单*/
+#left_tree li {
+	margin: 5px 0 5px 10px;
+}
+#left_tree span {
+	margin: 0px 5px 0px 0px;
+}
+
+/*ADDCLASS*/
+.tableForm td.ReportTitle{ background:#CBEDFC;}
+.tableForm td.ReportTitle:hover{ background:#CBEDFC;}
+
+.button_table {width:100%; border-top:1px solid #ccc;}
+.search_table td{  padding-top:5px; padding-bottom:5px; vertical-align:middle;padding-left:5px;padding-right:5px;}
+.search_div{ overflow:hidden;*zoom:1; padding-top:5px;}
+/*.search_div span{ margin-left:10px; margin-right:5px;}*/
+.search_div select{ position: relative;top:2px;}
+
+ul.notice li{ text-align: left; line-height:22px; padding-left:5px; }
+ul.notice li a{ color:#000;text-decoration: none;}
+
+#jd_dialog_window{background:#fff;}
+
+/*首页头部提醒页面 begin
+.popumain{ width:450px; height:338px; overflow:hidden;*zoom:1; border:1px solid #ccc;}
+.reminders{ height:38px; border-bottom:1px solid #ccc; background:#199DDE url(../images/tan_g1.gif) 10px center no-repeat; line-height:38px; padding-left:35px; color:#fff; font-weight:bold; font-size:16px; font-family::"微软雅黑"; overflow:hidden;*zoom:1;}
+.reminders img{ float:right; cursor:pointer; margin-top:8px; margin-right:5px;}
+.reminders span{ font-size:12px;}
+.reminders span strong{ color:#FD7509;}*/
+
+.info_list{  overflow-y:auto; overflow-x:hidden; } /*background:#F2F2F2;*/
+.classification{ background:url(myimages/mail.png) 10px center no-repeat; padding-left:35px; line-height:32px; height:32px;border-bottom: 1px solid #DBDBDB;
+    border-top: 1px solid #FFFFFF;}
+.classification img{ float:right; margin-right:15px; margin-top:3px;}
+.info_list ul li{
+	background:url(myimages/noc_li_dot.png) 10px center no-repeat;
+	border-bottom: 1px solid #DBDBDB;
+    border-top: 1px solid #FFFFFF;
+    cursor: pointer;
+	padding:10px 0px 10px 30px;
+}
+.info_list ul li p.noc_iterm_info {
+    color: #666666;
+    cursor: pointer;
+    font-weight: bold;
+}
+.info_list ul li p.noc_iterm_info span{ float:right; margin-right:10px; color:#FF7403;}
+.info_list ul li p.noc_iterm_content {
+    color: #807E7E;
+    cursor: pointer;
+}
+/***首页头部提醒页面 end***/
+

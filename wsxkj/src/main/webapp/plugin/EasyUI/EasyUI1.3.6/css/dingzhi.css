@@ -1,0 +1,64 @@
+@charset "utf-8";
+/* CSS Document */
+/*--定制皮肤包--*/
+.layout-panel-west .panel-header{ background:#2D56A7 url(../../../../images/index/b_j30.jpg) right top repeat-y; color:#fff;}
+.layout-panel-west .panel-header .panel-title{ color:#fff;}
+#esWest .panel-header{background:#CCEBFF url(../../../../images/index/b_j31.jpg) right top repeat-y;}
+#esWest .panel-header .panel-title{ color:#0066CC; font-weight:normal;}
+#esWest .accordion .accordion-header-selected{background:#FF6A04 url(../../../../images/index/b_j32.jpg) right top repeat-y;}
+#esWest .accordion .accordion-header-selected .panel-title{ color:#fff; font-weight:bold;}
+
+
+.layout-button-up {
+    background: url("../../../../images/layout_arrows2.png") no-repeat scroll -16px -16px rgba(0, 0, 0, 0);
+}
+.layout-button-down {
+    background: url("../../../../images/layout_arrows2.png") no-repeat scroll -16px 0 rgba(0, 0, 0, 0);
+}
+.layout-button-left {
+    background: url("../../../../images/layout_arrows2.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+.layout-button-right {
+    background: url("../../../../images/layout_arrows2.png") no-repeat scroll 0 -16px rgba(0, 0, 0, 0);
+}
+
+
+ .panel-tool a {
+    display: inline-block;
+    height: 16px;
+    margin: 0 0 0 2px;
+    opacity: 0.6;
+    vertical-align: top;
+    width: 16px;
+}
+ .panel-tool a:hover {
+    background-color: #000;
+    border-radius: 3px;
+    opacity: 0.5;
+}
+.layout-expand{ background:#234282;}
+#esWest .panel-body{
+	background: url("../../../../images/b_j33.jpg")
+	}
+#left_tree li {
+    background: url("../../../../images/b_j34.jpg") repeat-x scroll left bottom !important;
+}
+#left_tree .tree-node-hover {
+    color: #FF9900;
+}
+#left_tree .tree-node-selected{color: #FF9900;background: url("../../../../images/b_j35.jpg") repeat-x scroll left bottom !important;}
+.layout-split-west{}
+
+#centerTab .tabs-header { background:#fff url("../../../../images/b_j36.jpg") left bottom no-repeat;}
+#centerTab .tabs-tool{ background:#fff;}
+.panel-header{}
+.wu-footer{  background:#eee; color:#000;}
+
+
+/*导航顶部*/
+.all_full{ float:right; border:0px;}
+a.all_a{ display:block; float:right; padding-left:30px; padding-right:30px; height:90px; line-height:90px; font-size:14px; color:#fff; text-decoration:none;}
+.all_out{background:url("../../../../images/index/b_p15.png") left center no-repeat;}
+.all_ce{background:url("../../../../images/index/b_p16.png") left center no-repeat;}
+.all_mima{background:url("../../../../images/index/b_p17.png") left center no-repeat;}
+.all_name{height:90px; float:right;background:url("../../../../images/index/b_p18.png") left center no-repeat;padding-left:30px; padding-right:30px;line-height:90px;font-size:14px; color:#fff;}

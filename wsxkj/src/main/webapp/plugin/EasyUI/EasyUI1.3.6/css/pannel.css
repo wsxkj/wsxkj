@@ -1,0 +1,8 @@
+@charset "utf-8";
+/* CSS Document */
+
+.panel-header{ background:#0066CC; color:#fff; font-family:"宋体";}
+.panel-header .panel-title{color:#fff !important; font-weight:normal;}
+#maintt .tabs li a.tabs-inner{ background:#fff ; color:#0066CC;border-color:#0066CC;}
+#maintt .tabs li.tabs-selected a.tabs-inner{ background:#0066CC;  border-color:CCCCCC; color:#fff;}
+#maintt .tabs-header { background:#F6F6F6;border-color:#CCCCCC;}
