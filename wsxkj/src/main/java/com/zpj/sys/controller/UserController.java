@@ -74,7 +74,7 @@ public class UserController extends BaseController{
 	@RequestMapping("/doAdd")
 	@ResponseBody
 	public void doAddUser(User user){
-		user.setCreateTime(new Date());
+		user.setUpdateTime(new Date());
 		userService.saveInfo(user);
 		Map map=new HashMap();
 		map.put("flag", true);

@@ -4,10 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gson.Gson;
-import com.zpj.jwt.Constant;
 import com.zpj.jwt.JwtUtil;
-import com.zpj.materials.service.MaintainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +22,7 @@ import io.swagger.annotations.Api;
 public class LoginAppController extends BaseController {
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private MaintainService maintainService;
-	
+
 	@RequestMapping("/checkLogin")
 	@ResponseBody
 	public void checkLogin(String username, String password){
@@ -46,13 +41,11 @@ public class LoginAppController extends BaseController {
 		}
 		Map map1=new HashMap();
 		if(null!=user){
-			user.setIsAdmin("1");
+//			user.setIsAdmin("1");
 			getSession().setAttribute("jluser", user);
 			map1.put("msg", true);
 			map1.put("data", user);
 			map1.put("token",JwtUtil.buildJsonByUser(user));
-			List list=maintainService.findUserNameList();
-			map1.put("namelist",list);
 		}else{
 			map1.put("msg", false);
 		}

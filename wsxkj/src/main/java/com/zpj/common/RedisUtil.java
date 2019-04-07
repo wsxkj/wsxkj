@@ -210,7 +210,7 @@ public class RedisUtil {
         Jedis jedis=RedisUtil.getJedis();
         User user = new User();
         user.setId("123");
-        user.setName("fighter");
+//        user.setName("fighter");
 
         // 存入一个 user对象
         jedis.set("user".getBytes(), SerializationUtil.serialize(user));
@@ -218,7 +218,7 @@ public class RedisUtil {
         // 获取
         byte[] bs = jedis.get("user".getBytes());
         User desUser = (User) SerializationUtil.deserialize(bs);
-        System.out.println(desUser.getId() + ":" + desUser.getName());
+//        System.out.println(desUser.getId() + ":" + desUser.getName());
 
     }
 }

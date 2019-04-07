@@ -78,7 +78,7 @@ public class ResourceCodeUtil implements ApplicationListener<ContextRefreshedEve
 	}
 	
 	public void initDictionary() {
-		jedis=RedisUtil.getJedis();
+//		jedis=RedisUtil.getJedis();
 		System.out.println("----初始化字典数据-----");
 		itemMap.clear();
 		typeMap.clear();
@@ -109,7 +109,7 @@ public class ResourceCodeUtil implements ApplicationListener<ContextRefreshedEve
 		for(int q=0;q<typeList.size();q++){
 			dpspType.put(typeList.get(q).getTypeCode(),typeList.get(q).getTypeName());
 		}
-		jedis.hmset("dpspType",dpspType);
+//		jedis.hmset("dpspType",dpspType);
 		/********初始化商品分类信息**结束*********/
 		
 		/********初始化字典值信息**开始**************************/
@@ -251,7 +251,7 @@ public void onApplicationEvent(ContextRefreshedEvent event) {
 	
 	if(event.getApplicationContext().getParent() == null){//root application context 没有parent，他就是老大.  
         //需要执行的逻辑代码，当spring容器初始化完成后就会执行该方法。  
-		initDictionary();
+//		initDictionary();
 	}  
 }
 }

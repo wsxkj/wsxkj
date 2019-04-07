@@ -11,6 +11,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import com.zpj.common.UUIDGenerator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -24,37 +25,19 @@ import io.swagger.annotations.ApiModelProperty;
 public class User implements java.io.Serializable {
 	
 	@ApiModelProperty(value = "主键",name="id", required = true)
-	private String id;//id
-	@ApiModelProperty(value = "姓名",name="name", required =  false)
-	private String name;//名称
-	@ApiModelProperty(value = "登陆名称",name="loginName", required =  false)
-	private String loginName;
-	@ApiModelProperty(value = "密码",name="password", required =  false)
-	private String password;//密码
-	@ApiModelProperty(value = "邮箱",name="email", required =  false)
-	private String email;
-	@ApiModelProperty(value = "性别，0男，1女，2保密",name="sex", required =  false)
-	private String sex;//0男，女1,保密2
-	@ApiModelProperty(value = "会员等级，0普通，1注册，2中级，3高级",name="priority", required =  false)
-	private String priority;//优先级
-	@ApiModelProperty(value = "状态，0正常，1禁用",name="state", required =  false)
-	private String state;
-	@ApiModelProperty(value = "时间",name="createTime", required =  false)
-	private Date createTime;
+	private String id= UUIDGenerator.generatePk("user");
+	@ApiModelProperty(value = "手机号码",name="phone", required =  false)
+	private String phone;
+	@ApiModelProperty(value = "微信openid",name="name", required =  false)
+	private String wxid;
+	@ApiModelProperty(value = "微信昵称",name="wxnickname", required =  false)
+	private String wxnickname;
+	@ApiModelProperty(value = "最后一次登陆时间",name="lastLoginTime", required =  false)
 	private Date lastLoginTime;
-	@ApiModelProperty(value = "描述",name="descirption", required =  false)
-	private String description;//描述
+	@ApiModelProperty(value = "更新时间",name="updateTime", required =  false)
+	private Date updateTime;
 	
-	private String isAdmin;//1是，0不是
-
-	public User(){
-
-	}
-	public User(String id,String name,String password){
-		this.id=id;
-		this.name=name;
-		this.password=password;
-	}
+	
 
 	@Id
 	@Column(name = "id", unique = true, nullable = false ,length=36)
@@ -64,50 +47,26 @@ public class User implements java.io.Serializable {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
 	
-	public String getLoginName() {
-		return loginName;
+
+	public String getPhone() {
+		return phone;
 	}
-	public void setLoginName(String loginName) {
-		this.loginName = loginName;
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
-	public String getEmail() {
-		return email;
+	public String getWxid() {
+		return wxid;
 	}
-	public void setEmail(String email) {
-		this.email = email;
+	public void setWxid(String wxid) {
+		this.wxid = wxid;
 	}
-	public String getSex() {
-		return sex;
+	public String getWxnickname() {
+		return wxnickname;
 	}
-	public void setSex(String sex) {
-		this.sex = sex;
-	}
-	
-	public String getPriority() {
-		return priority;
-	}
-	public void setPriority(String priority) {
-		this.priority = priority;
-	}
-	public String getState() {
-		return state;
-	}
-	public void setState(String state) {
-		this.state = state;
-	}
-	@Temporal(value=TemporalType.TIMESTAMP)
-	public Date getCreateTime() {
-		return createTime;
-	}
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
+	public void setWxnickname(String wxnickname) {
+		this.wxnickname = wxnickname;
 	}
 	public Date getLastLoginTime() {
 		return lastLoginTime;
@@ -115,27 +74,14 @@ public class User implements java.io.Serializable {
 	public void setLastLoginTime(Date lastLoginTime) {
 		this.lastLoginTime = lastLoginTime;
 	}
-	public String getPassword() {
-		return password;
+	public Date getUpdateTime() {
+		return updateTime;
 	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 
-	@Transient
-	public String getIsAdmin() {
-		return isAdmin;
-	}
-
-	public void setIsAdmin(String isAdmin) {
-		this.isAdmin = isAdmin;
-	}
+	
 	
 
 }

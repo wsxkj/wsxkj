@@ -74,10 +74,9 @@ public class LoginController extends BaseController{
 			String loginIP=getIp2(request);
 			LogInfo loginfo=new LogInfo();
 			loginfo.setId(UUID.randomUUID().toString());
-        	loginfo.setUsername(user.getName());
         	loginfo.setCreatetime(new Date());
         	loginfo.setType("登陆");
-        	loginfo.setDescription(DateHelper.getToday("yyyy-MM-dd HH:mm:ss")+"   "+user.getName()+"  成功登陆系统"+",IP地址"+loginIP);
+        	loginfo.setDescription(DateHelper.getToday("yyyy-MM-dd HH:mm:ss")+"   "+user.getPhone()+"  成功登陆系统"+",IP地址"+loginIP);
 			
         	logService.saveLog(loginfo);
 			

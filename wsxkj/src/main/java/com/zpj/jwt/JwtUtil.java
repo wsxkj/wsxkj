@@ -98,7 +98,7 @@ public class JwtUtil {
 
     public static void main(String[] args) {
 
-        User user = new User("1","zhupeijun","123456");
+        User user = null;//new User("1","zhupeijun","123456");
         String subject = new Gson().toJson(user);
 
         try {

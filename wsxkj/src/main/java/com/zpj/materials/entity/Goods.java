@@ -2,49 +2,43 @@ package com.zpj.materials.entity;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
+import com.zpj.common.UUIDGenerator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
+/*
+ * @ClassName: Goods
+ * @Description: 商品信息表
+ * @author zpj
+ * @date 2019/4/1 14:25
+*/
 @Entity
 @Table(name = "jl_material_goods_info")
 @ApiModel(value = "商品表", description = "商品信息表")
 public class Goods implements java.io.Serializable{
 	
 	@ApiModelProperty(value = "主键",name="id", required = true)
-	private String id;
+	private String id= UUIDGenerator.generatePk("goods");
 	@ApiModelProperty(value = "商品名称",name="name", required = false)
 	private String name;
-	@ApiModelProperty(value = "规格型号",name="type", required = false)
-	private String type;//规格型号
-	@ApiModelProperty(value = "单位",name="unit", required = false)
-	private String unit;//
-	@ApiModelProperty(value = "进价",name="purchaseprice", required = false)
-	private double purchasePrice=0;
-	@ApiModelProperty(value = "卖价",name="sellingPrice", required = false)
-	private double sellingPrice=0;
-	@ApiModelProperty(value = "数量",name="num", required = false)
-	private double num=0;//数量
-	@ApiModelProperty(value = "供应商id",name="supplierId", required = false)
-	private String supplierId;//供应商id
-	@ApiModelProperty(value = "供应商名称",name="supplierName", required = false)
-	private String supplierName;//供应商名称
-	@ApiModelProperty(value = "商品类别",name="goodsType", required = false)
+	@ApiModelProperty(value = "用户表id",name="userId", required = false)
+	private String userId;
+	@ApiModelProperty(value = "条形码，二维码",name="qrCode", required = false)
+	private String qrCode;
+	@ApiModelProperty(value = "商品图片,多个用英文，分割",name="picture", required = false)
+	private String picture;
+	@ApiModelProperty(value = "商品分类",name="goodsType", required = false)
 	private String goodsType;
-	private String goodsTypeName;
-	private Date createtime=new Date();//创建时间
-	@ApiModelProperty(value = "备注",name="remark", required = false)
-	private String remark;
-	
-	@ApiModelProperty(value = "附件路径已逗号分割",name="fujian", required = false)
-	private String fujian;
+	@ApiModelProperty(value = "商品品牌",name="goodsBrand", required = false)
+	private String goodsBrand;
+	@ApiModelProperty(value = "创建时间",name="createTime", required = false)
+	private Date createTime=new Date();
+	@ApiModelProperty(value = "修改时间",name="updateTime", required = false)
+	private Date updateTime;
+	@ApiModelProperty(value = "总库存数量",name="storeNum", required = false)
+	private double storeNum;
+
 	
 	@Id
 	@Column(name = "id",  nullable = false, length=50)
@@ -60,91 +54,76 @@ public class Goods implements java.io.Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getType() {
-		return type;
+
+
+	public String getUserId() {
+		return userId;
 	}
-	public void setType(String type) {
-		this.type = type;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
-	public String getUnit() {
-		return unit;
+	public String getQrCode() {
+		return qrCode;
 	}
-	public void setUnit(String unit) {
-		this.unit = unit;
+
+	public void setQrCode(String qrCode) {
+		this.qrCode = qrCode;
 	}
-	
-	public double getPurchasePrice() {
-		return purchasePrice;
+
+	public String getPicture() {
+		return picture;
 	}
-	public void setPurchasePrice(double purchasePrice) {
-		this.purchasePrice = purchasePrice;
+
+	public void setPicture(String picture) {
+		this.picture = picture;
 	}
-	public double getSellingPrice() {
-		return sellingPrice;
-	}
-	public void setSellingPrice(double sellingPrice) {
-		this.sellingPrice = sellingPrice;
-	}
-	public double getNum() {
-		return num;
-	}
-	public void setNum(double num) {
-		this.num = num;
-	}
-	public String getSupplierId() {
-		return supplierId;
-	}
-	public void setSupplierId(String supplierId) {
-		this.supplierId = supplierId;
-	}
-	public String getSupplierName() {
-		return supplierName;
-	}
-	public void setSupplierName(String supplierName) {
-		this.supplierName = supplierName;
-	}
-	public Date getCreatetime() {
-		return createtime;
-	}
-	public void setCreatetime(Date createtime) {
-		this.createtime = createtime;
-	}
-	public String getRemark() {
-		return remark;
-	}
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
+
 	public String getGoodsType() {
 		return goodsType;
 	}
+
 	public void setGoodsType(String goodsType) {
 		this.goodsType = goodsType;
 	}
-	public String getFujian() {
-		return fujian;
+
+	public String getGoodsBrand() {
+		return goodsBrand;
 	}
-	public void setFujian(String fujian) {
-		this.fujian = fujian;
+
+	public void setGoodsBrand(String goodsBrand) {
+		this.goodsBrand = goodsBrand;
 	}
-	@Transient
-	public String getGoodsTypeName() {
-		return goodsTypeName;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "createTime", length=7)
+	public Date getCreateTime() {
+		return createTime;
 	}
-	public void setGoodsTypeName(String goodsTypeName) {
-		this.goodsTypeName = goodsTypeName;
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "updateTime", length=7)
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public double getStoreNum() {
+		return storeNum;
+	}
+
+	public void setStoreNum(double storeNum) {
+		this.storeNum = storeNum;
 	}
 
 	@Override
 	public String toString() {
 		return "id:"+this.getId()+
-				",name:"+this.getName()
-				+",type:"+this.getType()
-				+",unit:"+this.getUnit()
-				+",purchasePrice:"+this.getPurchasePrice()+
-				",sellingPrice:"+this.getSellingPrice()+
-				",supplierName:"+this.getSupplierName()+
-				",goodsType:"+this.getGoodsType()+
-				",remark:"+this.getRemark();
+				",name:"+this.getName();
+
 	}
 }

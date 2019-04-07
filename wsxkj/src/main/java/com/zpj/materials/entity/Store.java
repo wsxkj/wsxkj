@@ -1,5 +1,8 @@
 package com.zpj.materials.entity;
 
+import com.zpj.common.UUIDGenerator;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -11,71 +14,129 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-/**
- * @Description: 库存表
+/*
  * @ClassName: Store
- * @author zpj 
- * @date 2016-4-11 上午9:25:30
- *
- */
+ * @Description: 库存信息表
+ * @author zpj
+ * @date 2019/4/1 14:25
+*/
 @Entity
 @Table(name = "jl_material_store_info")
 public class Store implements java.io.Serializable {
-	private int id;//主键
-	private int goodsid;//物资id
-	private int supplierid;//供应商id
-	private double num=0;//库存总数量
-	private double price=0;//库存总金额
-	private Date updatetime;//更新时间
-	
+	@ApiModelProperty(value = "主键",name="id", required = true)
+	private String id=UUIDGenerator.generatePk("store");
+	@ApiModelProperty(value = "用户表id",name="userId", required = false)
+	private String userId;
+	@ApiModelProperty(value = "条形码，二维码",name="qrCode", required = false)
+	private String qrCode;
+	@ApiModelProperty(value = "进货日期",name="inDate", required = false)
+	private Date inDate;
+	@ApiModelProperty(value = "进货数量",name="inNum", required = false)
+	private double inNum;
+	@ApiModelProperty(value = "库存数量",name="storeNum", required = false)
+	private double storeNum;
+	@ApiModelProperty(value = "进货价格",name="inPrice", required = false)
+	private double inPrice;
+	@ApiModelProperty(value = "出货价格",name="outPrice", required = false)
+	private double outPrice;
+	@ApiModelProperty(value = "保质日期",name="sureDate", required = false)
+	private Date sureDate;
+
+	@ApiModelProperty(value = "更新时间",name="updateTime", required = false)
+	private Date updateTime;
+
+	@ApiModelProperty(value = "是否现货，1有现货，0无现货",name="isSpot", required = false)
+	private String isSpot;
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)	
-	@Column(name = "id",  nullable = false, precision = 22, scale = 0)
-	public int getId() {
+	@Column(name = "id",  nullable = false, length = 50)
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
-	@Column(name = "goodsid", precision = 22, scale = 0)
-	public int getGoodsid() {
-		return goodsid;
-	}
-	public void setGoodsid(int goodsid) {
-		this.goodsid = goodsid;
-	}
 
-	@Column(name = "supplierid", precision = 22, scale = 0)
-	public int getSupplierid() {
-		return supplierid;
-	}
-	public void setSupplierid(int supplierid) {
-		this.supplierid = supplierid;
-	}
 	
-	@Column(name = "num", precision=12 ,scale=2)
-	public double getNum() {
-		return num;
+
+	public String getUserId() {
+		return userId;
 	}
-	public void setNum(double num) {
-		this.num = num;
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	public String getQrCode() {
+		return qrCode;
 	}
 
-	@Column(name = "price", precision=12 ,scale=2)
-	public double getPrice() {
-		return price;
+	public void setQrCode(String qrCode) {
+		this.qrCode = qrCode;
 	}
-	public void setPrice(double price) {
-		this.price = price;
+
+	public Date getInDate() {
+		return inDate;
+	}
+
+	public void setInDate(Date inDate) {
+		this.inDate = inDate;
+	}
+	@Column(name = "inNum", precision=12 ,scale=2)
+	public double getInNum() {
+		return inNum;
+	}
+
+	public void setInNum(double inNum) {
+		this.inNum = inNum;
+	}
+	@Column(name = "storeNum", precision=12 ,scale=2)
+	public double getStoreNum() {
+		return storeNum;
+	}
+
+	public void setStoreNum(double storeNum) {
+		this.storeNum = storeNum;
+	}
+	@Column(name = "inPrice", precision=12 ,scale=2)
+	public double getInPrice() {
+		return inPrice;
+	}
+
+	public void setInPrice(double inPrice) {
+		this.inPrice = inPrice;
+	}
+	@Column(name = "outPrice", precision=12 ,scale=2)
+	public double getOutPrice() {
+		return outPrice;
+	}
+
+	public void setOutPrice(double outPrice) {
+		this.outPrice = outPrice;
 	}
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "updatetime", length=7)
-	public Date getUpdatetime() {
-		return updatetime;
+	@Column(name = "sureDate", length=7)
+	public Date getSureDate() {
+		return sureDate;
 	}
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+
+	public void setSureDate(Date sureDate) {
+		this.sureDate = sureDate;
 	}
-	
-	
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "updateTime", length=7)
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public String getIsSpot() {
+		return isSpot;
+	}
+
+	public void setIsSpot(String isSpot) {
+		this.isSpot = isSpot;
+	}
 }
