@@ -29,6 +29,12 @@ public class OrderGoodsInfo implements java.io.Serializable{
     private double soldPrice;
     @ApiModelProperty(value = "更新时间",name="updateTime", required = false)
     private Date updateTime;
+    @ApiModelProperty(value = "已付多少",name="paidMoney", required = false)
+    private double paidMoney;
+    @ApiModelProperty(value = "未付多少",name="unpaidMoney", required = false)
+    private double unpaidMoney;
+    
+    
     @Id
     public String getId() {
         return id;
@@ -78,4 +84,22 @@ public class OrderGoodsInfo implements java.io.Serializable{
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public double getPaidMoney() {
+		return paidMoney;
+	}
+
+	public void setPaidMoney(double paidMoney) {
+		this.paidMoney = paidMoney;
+	}
+
+	public double getUnpaidMoney() {
+		return unpaidMoney;
+	}
+
+	public void setUnpaidMoney(double unpaidMoney) {
+		this.unpaidMoney = unpaidMoney;
+	}
+    
+    
 }

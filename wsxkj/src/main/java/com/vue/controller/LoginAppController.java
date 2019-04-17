@@ -4,7 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zpj.common.MsgUtil;
 import com.zpj.jwt.JwtUtil;
+import com.zpj.materials.entity.IdCodeInfo;
+import com.zpj.materials.service.IdCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +28,24 @@ import io.swagger.annotations.ApiParam;
 public class LoginAppController extends BaseController {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private IdCodeService idCodeService;
+
+
+
+	@RequestMapping("/sendCode")
+	@ResponseBody
+	@ApiOperation(value = "发送验证码", notes = "发送验证码", httpMethod = "POST")
+	public void sendCode(@ApiParam(required = false, name = "phone", value = "手机号码")@RequestParam("phone")String phone){
+
+		IdCodeInfo ici=new IdCodeInfo();
+		String yzm=MsgUtil.generateYzm();
+		ici.setPhone(phone);
+		ici.setYzm(yzm);
+		idCodeService.saveInfo(ici);
+		MsgUtil.sendMsg(yzm,phone);
+	}
+
 
 	@RequestMapping("/checkLogin")
 	@ResponseBody
@@ -54,13 +75,6 @@ public class LoginAppController extends BaseController {
 //			map1.put("msg", false);
 //		}
 		jsonWrite2(map);
-		
-	}
-	
-	@RequestMapping("/sendCode")
-	@ResponseBody
-	@ApiOperation(value = "发送验证码", notes = "发送验证码", httpMethod = "POST")
-	public void sendCode(@ApiParam(required = false, name = "phone", value = "手机号码")@RequestParam("phone")String phone){
-		System.out.println(phone);
+
 	}
 }
