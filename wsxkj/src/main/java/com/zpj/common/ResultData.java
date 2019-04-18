@@ -3,14 +3,15 @@ package com.zpj.common;
 public class ResultData<T> implements java.io.Serializable{
 	
 	private String msg;
-	private boolean code;
+	private int code;
 	private T data;
+	private String token;
 	
 	public ResultData(){
 		
 	}
 	
-	public ResultData(T data,String msg,boolean code) {
+	public ResultData(T data,String msg,int code) {
 		this.data=data;
 		this.msg=msg;
 		this.code=code;
@@ -24,13 +25,7 @@ public class ResultData<T> implements java.io.Serializable{
 		this.msg = msg;
 	}
 	
-	public boolean isCode() {
-		return code;
-	}
 
-	public void setCode(boolean code) {
-		this.code = code;
-	}
 
 	public T getData() {
 		return data;
@@ -38,7 +33,22 @@ public class ResultData<T> implements java.io.Serializable{
 	public void setData(T data) {
 		this.data = data;
 	}
-	
-	
-	
+
+
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public int getCode() {
+		return code;
+	}
+
+	public void setCode(int code) {
+		this.code = code;
+	}
 }

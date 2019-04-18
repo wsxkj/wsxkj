@@ -1,10 +1,12 @@
 package com.vue.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.zpj.common.MsgUtil;
+import com.zpj.common.ResultData;
 import com.zpj.jwt.JwtUtil;
 import com.zpj.materials.entity.IdCodeInfo;
 import com.zpj.materials.service.IdCodeService;
@@ -44,37 +46,44 @@ public class LoginAppController extends BaseController {
 		ici.setYzm(yzm);
 		idCodeService.saveInfo(ici);
 		MsgUtil.sendMsg(yzm,phone);
+		ResultData rd=new ResultData<>();
+		rd.setCode(200);
+		rd.setMsg("验证码发送成功");
+		jsonWrite2(rd);
 	}
 
 
 	@RequestMapping("/checkLogin")
 	@ResponseBody
-	@ApiOperation(value = "登陆", notes = "登陆", httpMethod = "POST")
-	public void checkLogin(@ApiParam(required = false, name = "phone", value = "手机号码")@RequestParam("phone")String phone){
-		Map map=getRequestMap();
-//		User user=(User)getSession().getAttribute("jluser");
-//		param=new HashMap<String,Object>();
-//		if(!isNotNullObject(username)){
-//			username="";
-//		}
-//		if(!isNotNullObject(password)){
-//			password="";
-//		}
-//		if(null==user){
-//			if(!username.equalsIgnoreCase("")&&!password.equalsIgnoreCase(""))
-//				user=userService.checkLogin(username,password);
-//		}
-//		Map map1=new HashMap();
-//		if(null!=user){
-////			user.setIsAdmin("1");
-//			getSession().setAttribute("jluser", user);
-//			map1.put("msg", true);
-//			map1.put("data", user);
-//			map1.put("token",JwtUtil.buildJsonByUser(user));
-//		}else{
-//			map1.put("msg", false);
-//		}
-		jsonWrite2(map);
+	@ApiOperation(value = "登陆", notes = "登陆", httpMethod = "POST",response=User.class)
+	public void checkLogin(@ApiParam(required = false, name = "phone", value = "手机号码")@RequestParam("phone")String phone,
+						   @ApiParam(required = false, name = "yzm", value = "验证码")@RequestParam("yzm")String yzm
+						   ){
+		IdCodeInfo ici=idCodeService.findInfoByPhone(phone);
+		ResultData rd=new ResultData<>();
+		if(ici.getYzm().equalsIgnoreCase(yzm)){
+			User user=userService.findUserByPhone(phone);
+			if(null!=user){
+				user.setLastLoginTime(user.getUpdateTime());
+				user.setUpdateTime(new Date());
+
+			}else{
+				user=new User();
+				user.setUpdateTime(new Date());
+				user.setLastLoginTime(new Date());
+				user.setPhone(phone);
+			}
+			userService.saveInfo(user);
+			rd.setCode(200);
+			rd.setData(user);
+			rd.setMsg("登陆成功");
+			String token=JwtUtil.buildJsonByUser(user);
+			rd.setToken(token);
+		}else{
+			rd.setCode(500);
+			rd.setMsg("验证码错误");
+		}
+		jsonWrite2(rd);
 
 	}
 }

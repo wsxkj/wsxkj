@@ -26,9 +26,6 @@ public class GoodsServiceImpl implements GoodsService {
 		if(null!=canshu.get("name")&&!"".equalsIgnoreCase((String)canshu.get("name"))){
 			param.put("name-like", canshu.get("name"));
 		}
-		if(null!=canshu.get("supplierId")&&!"".equalsIgnoreCase((String)canshu.get("supplierId"))){
-			param.put("supplierId-like", canshu.get("supplierId"));
-		}
 		if(null!=canshu.get("goodsType")&&!"".equalsIgnoreCase((String)canshu.get("goodsType"))){
 			param.put("goodsType-like", canshu.get("goodsType"));
 		}

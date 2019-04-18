@@ -21,6 +21,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private BaseDao<User> userDao;
 
+	private String tableName="sys_userinfo";
 	@Override
 	public MyPage findPageData(String username, Integer page, Integer limit) {
 		Map<String,Object> param=new HashMap<String,Object>();
@@ -82,6 +83,15 @@ public class UserServiceImpl implements UserService {
 		return null;
 		
 	}
-	
+
+	public User findUserByPhone(String phone){
+		StringBuffer sql=new StringBuffer("select * from "+tableName+" where phone='"+phone+"'");
+		List<User> userlist=userDao.findBySqlT(sql.toString(), User.class);
+		if(null!=userlist&&userlist.size()>0){
+			return userlist.get(0);
+		}
+		return null;
+	}
+
 	
 }

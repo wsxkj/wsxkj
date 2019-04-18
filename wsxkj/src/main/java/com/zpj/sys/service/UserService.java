@@ -22,5 +22,15 @@ public interface UserService {
 	 * @time 2018年4月17日 下午2:32:12
 	 */
 	public User checkLogin(String username,String password);
+
+	/*
+	 * @MethodName: findUserByPhone
+	 * @Description: TODO(根据手机号码查询用户对象信息)
+	 * @params [phone]
+	 * @return com.zpj.sys.entity.User
+	 * @author zpj
+	 * @date 2019/4/18 9:12
+	*/
+	public User findUserByPhone(String phone);
 	
 }

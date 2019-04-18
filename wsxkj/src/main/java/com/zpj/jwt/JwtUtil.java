@@ -2,10 +2,7 @@ package com.zpj.jwt;
 
 import com.google.gson.Gson;
 import com.zpj.sys.entity.User;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.apache.commons.net.util.Base64;
 
 import javax.crypto.SecretKey;
@@ -120,7 +117,7 @@ public class JwtUtil {
         }
     }
 
-    public static String buildJsonByUser(User user){
+    public static String buildJsonByUser(User user)throws JwtException{
         try {
             String subject = new Gson().toJson(user);
             JwtUtil util = new JwtUtil();
@@ -131,7 +128,7 @@ public class JwtUtil {
             return "";
         }
     }
-    public static User getUserByJson(String token){
+    public static User getUserByJson(String token) throws JwtException {
         JwtUtil ju=new JwtUtil();
         SecretKey key = ju.generalKey();  //签名秘钥，和生成的签名的秘钥一模一样
         Claims claims = Jwts.parser()  //得到DefaultJwtParser
