@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 @Controller
-@RequestMapping("/vue/log")
-@Api(value = "/vue/log",tags="日志接口", description = "日志接口")
+@RequestMapping("/app/log")
+@Api(value = "/app/log",tags="日志接口", description = "日志接口")
 public class LogAppController extends BaseController {
 
     @Autowired

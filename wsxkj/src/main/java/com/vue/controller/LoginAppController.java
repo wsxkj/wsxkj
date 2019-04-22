@@ -25,8 +25,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 @Controller
-@RequestMapping("/vue/login")
-@Api(value = "/vue/login",tags="登陆功能", description = "登陆功能接口")
+@RequestMapping("/app/login")
+@Api(value = "/app/login",tags="登陆功能", description = "登陆功能接口")
 public class LoginAppController extends BaseController {
 	@Autowired
 	private UserService userService;

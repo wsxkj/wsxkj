@@ -21,8 +21,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 @Controller
-@RequestMapping("/vue/user")
-@Api(value = "/vue/user",tags="用户功能接口", description = "用户接口")
+@RequestMapping("/app/user")
+@Api(value = "/app/user",tags="用户功能接口", description = "用户接口")
 public class UserAppController extends BaseController{
 	@Autowired
 	public UserService userService;

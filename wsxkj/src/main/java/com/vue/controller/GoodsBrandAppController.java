@@ -26,8 +26,8 @@ import java.util.Map;
  * @date 2019/4/19 15:36
 */
 @Controller
-@RequestMapping("/vue/goodsbrand")
-@Api(value = "/vue/goodsbrand",tags="商品品牌功能", description = "商品品牌功能接口")
+@RequestMapping("/app/goodsbrand")
+@Api(value = "/app/goodsbrand",tags="商品品牌功能", description = "商品品牌功能接口")
 public class GoodsBrandAppController extends BaseController {
 
     @Autowired
@@ -51,7 +51,7 @@ public class GoodsBrandAppController extends BaseController {
                                   @ApiParam(required = false, name = "pagerow", value = "pagerow")@RequestParam("pagerow")String pagerow){
         ResultData rd=new ResultData();
         try{
-            User user= JwtUtil.getUserByJson(token);
+            User user= (User)request.getSession().getAttribute("jluser");
             Map map=new HashMap();
             map.put("name",name);
             map.put("userId",user.getId());

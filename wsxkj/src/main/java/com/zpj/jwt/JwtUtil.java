@@ -20,7 +20,7 @@ public class JwtUtil {
      *
      * @return
      */
-    public  SecretKey  generalKey() {
+    public static SecretKey  generalKey() {
         String stringKey = Constant.JWT_SECRET;
 
         // 本地的密码解码
@@ -41,7 +41,7 @@ public class JwtUtil {
      * @return
      * @throws Exception
      */
-    public String createJWT(String id, String issuer, String subject, long ttlMillis) {
+    public static String createJWT(String id, String issuer, String subject, long ttlMillis) {
 
         // 指定签名的时候使用的签名算法，也就是header那部分，jjwt已经将这部分内容封装好了。
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -85,7 +85,7 @@ public class JwtUtil {
      * @return
      * @throws Exception
      */
-    public Claims parseJWT(String jwt) throws Exception {
+    public static Claims parseJWT(String jwt) throws Exception {
         SecretKey key = generalKey();  //签名秘钥，和生成的签名的秘钥一模一样
         Claims claims = Jwts.parser()  //得到DefaultJwtParser
                 .setSigningKey(key)                 //设置签名的秘钥
@@ -99,13 +99,12 @@ public class JwtUtil {
         String subject = new Gson().toJson(user);
 
         try {
-            JwtUtil util = new JwtUtil();
-            String jwt = util.createJWT(Constant.JWT_ID, "zhupeijun", subject, Constant.JWT_TTL);
+            String jwt = JwtUtil.createJWT(Constant.JWT_ID, "zhupeijun", subject, Constant.JWT_TTL);
             System.out.println("JWT：" + jwt);
 
             System.out.println("\n解密\n");
 
-            Claims c = util.parseJWT(jwt);
+            Claims c = JwtUtil.parseJWT(jwt);
             System.out.println(c.getId());
             System.out.println(c.getIssuedAt());
             System.out.println(c.getSubject());
@@ -120,8 +119,7 @@ public class JwtUtil {
     public static String buildJsonByUser(User user)throws JwtException{
         try {
             String subject = new Gson().toJson(user);
-            JwtUtil util = new JwtUtil();
-            String jwt = util.createJWT(Constant.JWT_ID, "zhupeijun", subject, Constant.JWT_TTL);
+            String jwt = JwtUtil.createJWT(Constant.JWT_ID, "zhupeijun", subject, Constant.JWT_TTL);
             return jwt;
         } catch (Exception e) {
             e.printStackTrace();
@@ -129,8 +127,7 @@ public class JwtUtil {
         }
     }
     public static User getUserByJson(String token) throws JwtException {
-        JwtUtil ju=new JwtUtil();
-        SecretKey key = ju.generalKey();  //签名秘钥，和生成的签名的秘钥一模一样
+        SecretKey key = JwtUtil.generalKey();  //签名秘钥，和生成的签名的秘钥一模一样
         Claims claims = Jwts.parser()  //得到DefaultJwtParser
                 .setSigningKey(key)                 //设置签名的秘钥
                 .parseClaimsJws(token).getBody();     //设置需要解析的jwt

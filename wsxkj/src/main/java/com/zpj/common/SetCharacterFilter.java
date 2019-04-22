@@ -44,29 +44,31 @@ public class SetCharacterFilter implements Filter{
 	        	if(null!=curruser){
 					chain.doFilter(request, response);
 				}else{
-//					System.out.println(str_href);
 					req.getRequestDispatcher("/404.jsp").forward(req, res);
 				}
 	        } 
 		}else{
-			chain.doFilter(request, response);
-			//判断是否是手机传过来的请求
-//			if(str_href.indexOf("vue/login/checkLogin")>0){
-//				chain.doFilter(request, response);
-//			}else if(str_href.indexOf("vue")>0){
-//				String token =req.getParameter("token");
-//				User user=JwtUtil.getUserByJson(token);
-//				if(null!=user){
-//					req.getSession().setAttribute("jluser",user);
-//					chain.doFilter(request, response);
-//				}
-//			}else{
-//				chain.doFilter(request, response);
-//			}
+			//手机请求
+			if(str_href.indexOf("app")>-1){
+				if(str_href.indexOf("app/login")>-1){
+					chain.doFilter(request, response);
+				}else{
+					String token=req.getParameter("token");
+					User user= JwtUtil.getUserByJson(token);
+					if(null!=user){
+						req.getSession().setAttribute("jluser",user);
+						chain.doFilter(request, response);
+					}else{
+						req.getRequestDispatcher("/404.jsp").forward(req, res);
+					}
+				}
+			}else{
+				chain.doFilter(request, response);
+			}
 		}
 	}
 	public boolean judgeIsPass(String spath){
-		String[] urls = {"downloadApp","controller.jsp","file","v2","swagger","druid","vue","404","500",".js",".css",".ico",".jpeg",".bmp",".jpg",".png",".gif",".htm",".html",".woff",".woff2",".ttf",".mp3",".mp4",".mov",".avi"};
+		String[] urls = {"downloadApp","controller.jsp","file","v2","swagger","druid","app","404","500",".js",".css",".ico",".jpeg",".bmp",".jpg",".png",".gif",".htm",".html",".woff",".woff2",".ttf",".mp3",".mp4",".mov",".avi"};
         boolean flag = true;
     	for (String str : urls) {
             if (spath.indexOf(str) != -1) {

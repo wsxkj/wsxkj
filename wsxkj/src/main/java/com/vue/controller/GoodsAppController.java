@@ -32,8 +32,8 @@ import java.util.Map;
  * @date 2019/4/18 16:26
 */
 @Controller
-@RequestMapping("/vue/goods")
-@Api(value = "/vue/goods",tags="商品功能", description = "商品功能接口")
+@RequestMapping("/app/goods")
+@Api(value = "/app/goods",tags="商品功能", description = "商品功能接口")
 public class GoodsAppController extends BaseController {
     @Autowired
     private GoodsService goodsService;
@@ -59,7 +59,7 @@ public class GoodsAppController extends BaseController {
                          @ApiParam(required = false, name = "isSpot", value = "是否现货")@RequestParam("isSpot")String isSpot){
         ResultData rd=new ResultData();
         try{
-            User user= JwtUtil.getUserByJson(token);
+            User user= (User)request.getSession().getAttribute("jluser");
             Map map=new HashMap();
             double innum=0;
             if(null!=inNum) innum=Double.parseDouble(inNum);
@@ -115,7 +115,7 @@ public class GoodsAppController extends BaseController {
                          @ApiParam(required = false, name = "isSpot", value = "是否现货")@RequestParam("isSpot")String isSpot){
         ResultData rd=new ResultData();
         try{
-            User user= JwtUtil.getUserByJson(token);
+            User user= (User)request.getSession().getAttribute("jluser");
             Map map=new HashMap();
             double innum=0;
             if(null!=inNum) innum=Double.parseDouble(inNum);
