@@ -21,12 +21,16 @@ public class OrderGoodsInfo implements java.io.Serializable{
     private String id= UUIDGenerator.generatePk("OG");
     @ApiModelProperty(value = "order表id",name="orderId", required = false)
     private String orderId;
-    @ApiModelProperty(value = "库存表id",name="storeId", required = false)
+    @ApiModelProperty(value = "库存表id,若库存表id为空则说明没有库存",name="storeId", required = false)
     private String storeId;
+    @ApiModelProperty(value = "商品id",name="goodsId", required = false)
+    private String goodsId;
     @ApiModelProperty(value = "出售数量",name="soldNum", required = false)
     private double soldNum;
-    @ApiModelProperty(value = "出售价格",name="soldPrice", required = false)
+    @ApiModelProperty(value = "出售单价",name="soldPrice", required = false)
     private double soldPrice;
+    @ApiModelProperty(value = "出售总价",name="soldTotalPrice", required = false)
+    private double soldTotalPrice;
     @ApiModelProperty(value = "更新时间",name="updateTime", required = false)
     private Date updateTime;
     @ApiModelProperty(value = "已付多少",name="paidMoney", required = false)
@@ -99,6 +103,22 @@ public class OrderGoodsInfo implements java.io.Serializable{
 
 	public void setUnpaidMoney(double unpaidMoney) {
 		this.unpaidMoney = unpaidMoney;
+	}
+
+	public String getGoodsId() {
+		return goodsId;
+	}
+
+	public void setGoodsId(String goodsId) {
+		this.goodsId = goodsId;
+	}
+
+	public double getSoldTotalPrice() {
+		return soldTotalPrice;
+	}
+
+	public void setSoldTotalPrice(double soldTotalPrice) {
+		this.soldTotalPrice = soldTotalPrice;
 	}
     
     

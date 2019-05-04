@@ -47,8 +47,6 @@ public class Store implements java.io.Serializable {
 	@ApiModelProperty(value = "更新时间",name="updateTime", required = false)
 	private Date updateTime;
 
-	@ApiModelProperty(value = "是否现货，1有现货，0无现货",name="isSpot", required = false)
-	private String isSpot;
 
 	@Id
 	@Column(name = "id",  nullable = false, length = 50)
@@ -128,13 +126,6 @@ public class Store implements java.io.Serializable {
 		this.updateTime = updateTime;
 	}
 
-	public String getIsSpot() {
-		return isSpot;
-	}
-
-	public void setIsSpot(String isSpot) {
-		this.isSpot = isSpot;
-	}
 
 	public String getGoodsId() {
 		return goodsId;

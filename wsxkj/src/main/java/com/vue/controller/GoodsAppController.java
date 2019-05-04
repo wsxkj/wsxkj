@@ -85,7 +85,6 @@ public class GoodsAppController extends BaseController {
             store.setInPrice(Double.parseDouble(inPrice));
             store.setOutPrice(Double.parseDouble(outPrice));
             store.setSureDate(DateHelper.getStringDate(sureDate,"yyyy-MM-dd"));
-            store.setIsSpot(isSpot);
             store.setUpdateTime(new Date());
             storeService.saveInfo(store);
             rd.setCode(200);
@@ -134,7 +133,6 @@ public class GoodsAppController extends BaseController {
             store.setInPrice(Double.parseDouble(inPrice));
             store.setOutPrice(Double.parseDouble(outPrice));
             store.setSureDate(DateHelper.getStringDate(sureDate,"yyyy-MM-dd"));
-            store.setIsSpot(isSpot);
             store.setUpdateTime(new Date());
             storeService.saveInfo(store);
             rd.setCode(200);
