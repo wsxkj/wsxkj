@@ -100,5 +100,15 @@ public class Customer implements java.io.Serializable{
 		this.userId = userId;
 	}
     
+	@Override
+	public String toString() {
+		return "id:"+this.getId()+
+				",userId:"+this.getUserId()+
+				",nickname:"+this.nickname+
+				",wxh:"+this.wxh+
+				",receiver:"+this.receiver+
+				",address:"+this.address+
+				",phone:"+this.phone;
+	}
     
 }

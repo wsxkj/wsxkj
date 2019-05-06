@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.zpj.common.MsgUtil;
 import com.zpj.common.ResultData;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.zpj.common.BaseController;
+import com.zpj.sys.entity.LogInfo;
 import com.zpj.sys.entity.User;
+import com.zpj.sys.service.LogInfoService;
 import com.zpj.sys.service.UserService;
 
 import io.swagger.annotations.Api;
@@ -32,7 +35,8 @@ public class LoginAppController extends BaseController {
 	private UserService userService;
 	@Autowired
 	private IdCodeService idCodeService;
-
+	@Autowired
+	private LogInfoService logService;
 
 
 	@RequestMapping("/sendCode")
@@ -78,6 +82,15 @@ public class LoginAppController extends BaseController {
 			rd.setData(user);
 			rd.setMsg("登陆成功");
 			String token=JwtUtil.buildJsonByUser(user);
+			LogInfo loginfo=new LogInfo();
+	        loginfo.setId(UUID.randomUUID().toString());
+	        loginfo.setUsername(user.getId());
+	        loginfo.setCreatetime(new Date());
+	        loginfo.setType("登陆成功");
+	        loginfo.setDescription(user.toString());
+	        logService.saveLog(loginfo);
+			
+			System.out.println("phone:"+phone+";token:"+token);
 			rd.setToken(token);
 		}else{
 			rd.setCode(500);

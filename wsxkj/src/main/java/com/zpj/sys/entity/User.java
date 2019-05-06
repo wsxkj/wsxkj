@@ -82,6 +82,10 @@ public class User implements java.io.Serializable {
 	}
 
 	
-	
+	@Override
+	public String toString() {
+		StringBuffer sb=new StringBuffer(300);
+		return sb.append("id:"+this.id+",phone:"+this.phone+",wxid:"+this.wxid+",wxnickname:"+this.wxnickname+",lastLoginTime:"+this.lastLoginTime).toString();
+	}
 
 }

@@ -29,6 +29,9 @@ public class GoodsServiceImpl implements GoodsService {
 		if(null!=canshu.get("goodsType")&&!"".equalsIgnoreCase((String)canshu.get("goodsType"))){
 			param.put("goodsType-like", canshu.get("goodsType"));
 		}
+		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
+			param.put("userId-eq", canshu.get("userId"));
+		}
 		Map px=new HashMap();
 	    px.put("createtime", "desc");
 		return goodsDao.findPageDateSqlT(tablename, param,px , page, limit, Goods.class);
@@ -44,7 +47,7 @@ public class GoodsServiceImpl implements GoodsService {
 			}
 			LogInfo loginfo=new LogInfo();
 			loginfo.setId(UUID.randomUUID().toString());
-			loginfo.setUsername("朱培军");
+			loginfo.setUsername(user.getUserId());
 			loginfo.setCreatetime(new Date());
 			loginfo.setType("保存商品记录");
 			loginfo.setDescription(info.toString());

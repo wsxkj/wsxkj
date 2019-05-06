@@ -55,8 +55,7 @@ public class GoodsAppController extends BaseController {
                          @ApiParam(required = false, name = "inNum", value = "进货数量")@RequestParam("inNum")String inNum,
                          @ApiParam(required = false, name = "inPrice", value = "进货价格")@RequestParam("inPrice")String inPrice,
                          @ApiParam(required = false, name = "outPrice", value = "出货价格")@RequestParam("outPrice")String outPrice,
-                         @ApiParam(required = false, name = "sureDate", value = "保质日期")@RequestParam("sureDate")String sureDate,
-                         @ApiParam(required = false, name = "isSpot", value = "是否现货")@RequestParam("isSpot")String isSpot){
+                         @ApiParam(required = false, name = "sureDate", value = "保质日期")@RequestParam("sureDate")String sureDate){
         ResultData rd=new ResultData();
         try{
             User user= (User)request.getSession().getAttribute("jluser");
@@ -110,8 +109,7 @@ public class GoodsAppController extends BaseController {
                          @ApiParam(required = false, name = "inNum", value = "进货数量")@RequestParam("inNum")String inNum,
                          @ApiParam(required = false, name = "inPrice", value = "进货价格")@RequestParam("inPrice")String inPrice,
                          @ApiParam(required = false, name = "outPrice", value = "出货价格")@RequestParam("outPrice")String outPrice,
-                         @ApiParam(required = false, name = "sureDate", value = "保质日期")@RequestParam("sureDate")String sureDate,
-                         @ApiParam(required = false, name = "isSpot", value = "是否现货")@RequestParam("isSpot")String isSpot){
+                         @ApiParam(required = false, name = "sureDate", value = "保质日期")@RequestParam("sureDate")String sureDate){
         ResultData rd=new ResultData();
         try{
             User user= (User)request.getSession().getAttribute("jluser");

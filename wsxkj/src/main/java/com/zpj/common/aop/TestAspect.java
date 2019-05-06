@@ -125,7 +125,7 @@ public class TestAspect {
 	        String targetName = joinPoint.getTarget().getClass().getName();  
 	        String methodName = joinPoint.getSignature().getName();  
 	        Object[] arguments = joinPoint.getArgs();  
-	  
+	  		System.out.println(arguments);
 	        Class targetClass = Class.forName(targetName);  
 	        Method[] method = targetClass.getMethods();  
 	        Map<String,String> retMap = new HashMap<String,String>();
