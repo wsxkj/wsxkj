@@ -87,7 +87,6 @@ public class GoodsAppController extends BaseController {
             store.setUpdateTime(new Date());
             storeService.saveInfo(store);
             rd.setCode(200);
-            rd.setToken(token);
             rd.setMsg("查询成功");
         }catch (JwtException e){
             e.printStackTrace();
@@ -134,7 +133,6 @@ public class GoodsAppController extends BaseController {
             store.setUpdateTime(new Date());
             storeService.saveInfo(store);
             rd.setCode(200);
-            rd.setToken(token);
             rd.setMsg("查询成功");
         }catch (JwtException e){
             e.printStackTrace();
@@ -147,5 +145,5 @@ public class GoodsAppController extends BaseController {
         }
         this.jsonWrite2(rd);
     }
-
+     
 }

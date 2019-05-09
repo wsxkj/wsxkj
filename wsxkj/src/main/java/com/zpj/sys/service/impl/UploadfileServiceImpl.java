@@ -77,7 +77,7 @@ public class UploadfileServiceImpl implements UploadfileService{
 				String path = request.getSession().getServletContext().getRealPath("ueditor");
 				
 				File targetFile = new File(path, filename);  
-		        if(!targetFile.exists()){  
+		        if(!targetFile.exists()){
 		            targetFile.mkdirs();  
 		        }
 	        
@@ -86,6 +86,7 @@ public class UploadfileServiceImpl implements UploadfileService{
 	            //保存到数据库
 	            SysUploadFile fi = new SysUploadFile();
 	            fileUrl= request.getContextPath()+"/ueditor/"+filename;
+	            fi.setFileId(UUID.randomUUID().toString());
 	            fi.setFileName(filename);
 				fi.setFileAlias(originalname); //文件原始名称
 				fi.setFileUrl(fileUrl);
@@ -96,11 +97,11 @@ public class UploadfileServiceImpl implements UploadfileService{
 				fi.setCreateDate(new Date());
 				filedao.add(fi);
 			}
-            return fileUrl;
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-	        return null;
+	            return fileUrl;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
 	}
 
 	
@@ -125,7 +126,10 @@ public class UploadfileServiceImpl implements UploadfileService{
 		return "[]";
 	}
 
-
+	public void delFileByPath(String path){
+		String sql = "delete from SYS_UploadFile where fileurl='"+path+"'";
+		filedao.executeSql(sql);
+	}
 	
 	public void delFile(String fileid) {
 		//删除数据库数据

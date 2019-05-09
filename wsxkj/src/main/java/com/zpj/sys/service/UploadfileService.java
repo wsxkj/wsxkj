@@ -28,5 +28,14 @@ public interface UploadfileService {
 	String findFiles(String tableid, String modeltype);
 
 	void delFile(String fileid);
+	
+	/**
+	 * 根据路径删除附件对象
+	 * @Title delFileByPath
+	 * @param path
+	 * @author zpj
+	 * @time 2019年5月9日 上午11:28:21
+	 */
+	public void delFileByPath(String path);
 
 }

@@ -12,8 +12,8 @@ import java.util.List;
     */
     
 public class MyPage {
-	private int code=0;
-	private String msg="";
+//	private int code=0;
+//	private String msg="";
 	public List<?> data;
 	
 	public int count;
@@ -48,21 +48,21 @@ public class MyPage {
 		this.count = count;
 	}
 
-	public int getCode() {
-		return code;
-	}
-
-	public void setCode(int code) {
-		this.code = code;
-	}
-
-	public String getMsg() {
-		return msg;
-	}
-
-	public void setMsg(String msg) {
-		this.msg = msg;
-	}
+//	public int getCode() {
+//		return code;
+//	}
+//
+//	public void setCode(int code) {
+//		this.code = code;
+//	}
+//
+//	public String getMsg() {
+//		return msg;
+//	}
+//
+//	public void setMsg(String msg) {
+//		this.msg = msg;
+//	}
 	
 	
 	

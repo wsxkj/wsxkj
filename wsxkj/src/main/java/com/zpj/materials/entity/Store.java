@@ -27,8 +27,6 @@ public class Store implements java.io.Serializable {
 	private String id=UUIDGenerator.generatePk("store");
 	@ApiModelProperty(value = "用户表id",name="userId", required = false)
 	private String userId;
-//	@ApiModelProperty(value = "条形码，二维码",name="qrCode", required = false)
-//	private String qrCode;
 	@ApiModelProperty(value = "商品id",name="goodsId", required = false)
 	private String goodsId;
 	@ApiModelProperty(value = "进货日期",name="inDate", required = false)

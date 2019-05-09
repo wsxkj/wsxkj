@@ -25,6 +25,8 @@ public class GoodsBrand implements java.io.Serializable{
 	private String userId;
     @ApiModelProperty(value = "品牌名称",name="name", required = false)
     private String name;
+    @ApiModelProperty(value = "所属分类id",name="typeId", required = false)
+    private String typeId;
     @ApiModelProperty(value = "图片表id",name="pictureId", required = false)
     private String pictureId;
     @ApiModelProperty(value = "修改时间",name="updateTime", required = false)
@@ -73,4 +75,14 @@ public class GoodsBrand implements java.io.Serializable{
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public String getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(String typeId) {
+		this.typeId = typeId;
+	}
+    
+    
 }

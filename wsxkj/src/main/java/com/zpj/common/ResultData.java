@@ -5,7 +5,7 @@ public class ResultData<T> implements java.io.Serializable{
 	private String msg;
 	private int code;
 	private T data;
-	private String token;
+	private int count;
 	
 	public ResultData(){
 		
@@ -36,12 +36,13 @@ public class ResultData<T> implements java.io.Serializable{
 
 
 
-	public String getToken() {
-		return token;
+
+	public int getCount() {
+		return count;
 	}
 
-	public void setToken(String token) {
-		this.token = token;
+	public void setCount(int count) {
+		this.count = count;
 	}
 
 	public int getCode() {

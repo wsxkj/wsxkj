@@ -62,5 +62,10 @@ public class GoodsType implements java.io.Serializable{
 		this.userId = userId;
 	}
     
-    
+    @Override
+    public String toString() {
+    	StringBuffer sb=new StringBuffer(100);
+    	sb.append("id:"+this.id).append(",userId:"+this.userId+",name:"+this.name);
+    	return sb.toString();
+    }
 }

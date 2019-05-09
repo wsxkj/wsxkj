@@ -73,7 +73,7 @@ public class CustomerServiceImpl implements CustomerService {
         loginfo.setId(UUID.randomUUID().toString());
         loginfo.setUsername(user.getId());
         loginfo.setCreatetime(new Date());
-        loginfo.setType("保存客户信息记录");
+        loginfo.setType("删除客户信息记录");
         loginfo.setDescription(temp.toString());
         logDao.add(loginfo);
     }

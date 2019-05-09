@@ -53,6 +53,12 @@ public class LoginAppController extends BaseController {
 		ResultData rd=new ResultData<>();
 		rd.setCode(200);
 		rd.setMsg("验证码发送成功");
+		LogInfo loginfo=new LogInfo();
+        loginfo.setId(UUID.randomUUID().toString());
+        loginfo.setCreatetime(new Date());
+        loginfo.setType("发送手机验证码");
+        loginfo.setDescription("手机验证");
+        logService.saveLog(loginfo);
 		jsonWrite2(rd);
 	}
 
@@ -79,9 +85,9 @@ public class LoginAppController extends BaseController {
 			}
 			userService.saveInfo(user);
 			rd.setCode(200);
-			rd.setData(user);
 			rd.setMsg("登陆成功");
 			String token=JwtUtil.buildJsonByUser(user);
+			rd.setData(token);
 			LogInfo loginfo=new LogInfo();
 	        loginfo.setId(UUID.randomUUID().toString());
 	        loginfo.setUsername(user.getId());
@@ -89,9 +95,7 @@ public class LoginAppController extends BaseController {
 	        loginfo.setType("登陆成功");
 	        loginfo.setDescription(user.toString());
 	        logService.saveLog(loginfo);
-			
 			System.out.println("phone:"+phone+";token:"+token);
-			rd.setToken(token);
 		}else{
 			rd.setCode(500);
 			rd.setMsg("验证码错误");

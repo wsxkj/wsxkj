@@ -25,7 +25,7 @@ public class OrderInfo implements java.io.Serializable{
     private String customerId;
     @ApiModelProperty(value = "邮费",name="postage", required = false)
     private double postage;
-    @ApiModelProperty(value = "订单状态",name="state", required = false)
+    @ApiModelProperty(value = "订单状态0,1,2,3",name="state", required = false)
     private String state;
     @ApiModelProperty(value = "更新时间",name="updateTime", required = false)
     private Date updateTime;

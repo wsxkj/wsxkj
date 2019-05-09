@@ -4,6 +4,7 @@ import com.zpj.common.BaseController;
 import com.zpj.common.MyPage;
 import com.zpj.common.ResultData;
 import com.zpj.jwt.JwtUtil;
+import com.zpj.materials.entity.Customer;
 import com.zpj.materials.service.GoodsTypeService;
 import com.zpj.sys.entity.User;
 import io.jsonwebtoken.JwtException;
@@ -46,19 +47,19 @@ public class GoodsTypeAppController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "商品分类列表", notes = "商品分类列表", httpMethod = "POST")
     public void findGoodsTypeList(@ApiParam(required = false, name = "token", value = "token")@RequestParam("token")String token,
-                                  @ApiParam(required = false, name = "name", value = "名称")@RequestParam("name")String name,
+                                  @ApiParam(required = false, name = "name", value = "名称")@RequestParam(value="name",required=false)String name,
                                   @ApiParam(required = false, name = "cpage", value = "当前页")@RequestParam("cpage")String cpage,
                                   @ApiParam(required = false, name = "pagerow", value = "pagerow")@RequestParam("pagerow")String pagerow){
         ResultData rd=new ResultData();
         try{
             User user= (User)request.getSession().getAttribute("jluser");
             Map map=new HashMap();
-            map.put("name",name);
+            map.put("name",filterStr(name));
             map.put("userId",user.getId());
             MyPage pagedata = goodsTypeService.findPageData(map,Integer.parseInt(cpage),Integer.parseInt(pagerow));
-            rd.setData(pagedata);
+            rd.setData(pagedata.data);
+            rd.setCount(pagedata.count);
             rd.setCode(200);
-            rd.setToken(token);
             rd.setMsg("查询成功");
         }catch (JwtException e){
             e.printStackTrace();
@@ -68,6 +69,31 @@ public class GoodsTypeAppController extends BaseController {
             e.printStackTrace();
             rd.setCode(500);
             rd.setMsg("查询失败");
+        }
+        this.jsonWrite2(rd);
+    }
+    
+    
+    @RequestMapping("/delInfo")
+    @ResponseBody
+    @ApiOperation(value = "删除类型", notes = "删除类型", httpMethod = "POST" ,response = Customer.class)
+    public void delInfo(@ApiParam(required = false, name = "token", value = "token")@RequestParam("token")String token,
+                            @ApiParam(required = false, name = "id", value = "类型id主键")@RequestParam("id")String id
+                           ){
+        ResultData rd=new ResultData();
+        try{
+            User user= (User)request.getSession().getAttribute("jluser");
+            goodsTypeService.delInfo(id,user);
+            rd.setCode(200);
+            rd.setMsg("删除成功");
+        }catch (JwtException e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("token转码失败，token过期");
+        }catch (Exception e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("操作失败");
         }
         this.jsonWrite2(rd);
     }

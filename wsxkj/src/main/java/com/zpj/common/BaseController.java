@@ -188,12 +188,26 @@ public class BaseController {
 	}
 	
 	public boolean isNotNullObject(String str){
-		if(null!=str&&!"".equalsIgnoreCase(str)){
+		if(null!=str&&!"".equalsIgnoreCase(str)&&!"null".equalsIgnoreCase(str)){
 			return true;
 		}else{
 			return false;
 		}
 	}
 	
-    
+	/**
+	 * 过滤空数据
+	 * @Title filterStr
+	 * @param str
+	 * @return
+	 * @author zpj
+	 * @time 2019年5月8日 上午11:10:00
+	 */
+	public String filterStr(String str){
+		if(null!=str&&!"".equalsIgnoreCase(str)&&!"null".equalsIgnoreCase(str)){
+			return str;
+		}else{
+			return "";
+		}
+	}
 }

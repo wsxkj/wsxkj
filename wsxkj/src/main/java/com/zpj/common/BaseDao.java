@@ -8,6 +8,7 @@ import java.math.BigInteger;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -519,6 +520,9 @@ public class BaseDao<T extends Serializable> {
 //		sql.append("  offset " + (page - 1) * pagesize + " rows fetch next " + pagesize + " rows only");
 		sql.append("  limit " + (page - 1) * pagesize + " , " + pagesize + " ");
 		List<T> list = findBySqlT(sql.toString(), t);
+		if(null==list||list.size()==0){
+			list=new ArrayList();
+		}
 		return new MyPage(list, num);
 	}
 

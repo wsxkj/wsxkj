@@ -29,6 +29,9 @@ public class GoodsBrandServiceImpl implements GoodsBrandService {
         if(null!=canshu.get("name")&&!"".equalsIgnoreCase((String)canshu.get("name"))){
             param.put("name-like", canshu.get("name"));
         }
+        if(null!=canshu.get("typeId")&&!"".equalsIgnoreCase((String)canshu.get("typeId"))){
+            param.put("typeId-eq", canshu.get("typeId"));
+        }
         if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
             param.put("userId-eq", canshu.get("userId"));
         }

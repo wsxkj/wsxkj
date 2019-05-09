@@ -42,23 +42,25 @@ public class GoodsBrandAppController extends BaseController {
      * @author zpj
      * @date 2019/4/19 16:37
     */
-    @RequestMapping("/findGoodsTypeList")
+    @RequestMapping("/findGoodsBrandList")
     @ResponseBody
     @ApiOperation(value = "商品品牌列表", notes = "商品品牌列表", httpMethod = "POST")
     public void findGoodsBrandList(@ApiParam(required = false, name = "token", value = "token")@RequestParam("token")String token,
-                                  @ApiParam(required = false, name = "name", value = "名称")@RequestParam("name")String name,
+                                  @ApiParam(required = false, name = "name", value = "名称")@RequestParam(value="name",required=false)String name,
+                                  @ApiParam(required = false, name = "typeid", value = "分类id")@RequestParam(value="typeid",required=false)String typeid,
                                   @ApiParam(required = false, name = "cpage", value = "当前页")@RequestParam("cpage")String cpage,
                                   @ApiParam(required = false, name = "pagerow", value = "pagerow")@RequestParam("pagerow")String pagerow){
         ResultData rd=new ResultData();
         try{
             User user= (User)request.getSession().getAttribute("jluser");
             Map map=new HashMap();
-            map.put("name",name);
+            map.put("name",filterStr(name));
+            map.put("typeId", filterStr(typeid));
             map.put("userId",user.getId());
             MyPage pagedata = goodsBrandService.findPageData(map,Integer.parseInt(cpage),Integer.parseInt(pagerow));
-            rd.setData(pagedata);
+            rd.setData(pagedata.data);
+            rd.setCount(pagedata.count);
             rd.setCode(200);
-            rd.setToken(token);
             rd.setMsg("查询成功");
         }catch (JwtException e){
             e.printStackTrace();
