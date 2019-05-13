@@ -87,7 +87,7 @@ public class GoodsAppController extends BaseController {
             store.setUpdateTime(new Date());
             storeService.saveInfo(store);
             rd.setCode(200);
-            rd.setMsg("查询成功");
+            rd.setMsg("保存成功");
         }catch (JwtException e){
             e.printStackTrace();
             rd.setCode(500);
@@ -95,7 +95,7 @@ public class GoodsAppController extends BaseController {
         }catch (Exception e){
             e.printStackTrace();
             rd.setCode(500);
-            rd.setMsg("查询失败");
+            rd.setMsg("保存失败");
         }
         this.jsonWrite2(rd);
     }
@@ -133,7 +133,7 @@ public class GoodsAppController extends BaseController {
             store.setUpdateTime(new Date());
             storeService.saveInfo(store);
             rd.setCode(200);
-            rd.setMsg("查询成功");
+            rd.setMsg("保存成功");
         }catch (JwtException e){
             e.printStackTrace();
             rd.setCode(500);
@@ -141,7 +141,7 @@ public class GoodsAppController extends BaseController {
         }catch (Exception e){
             e.printStackTrace();
             rd.setCode(500);
-            rd.setMsg("查询失败");
+            rd.setMsg("保存失败");
         }
         this.jsonWrite2(rd);
     }

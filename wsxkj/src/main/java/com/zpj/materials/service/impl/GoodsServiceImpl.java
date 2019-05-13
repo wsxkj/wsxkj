@@ -39,15 +39,15 @@ public class GoodsServiceImpl implements GoodsService {
 
 //	@Log(type="保存",remark="保存商品信息")
 	public void saveInfo(Goods info) {
-			Goods user=this.findById(info.getId());
-			if(null!=user){
+			Goods gg=this.findById(info.getId());
+			if(null!=gg){
 				goodsDao.merge(info, String.valueOf(info.getId()));
 			}else{
 				goodsDao.add(info);
 			}
 			LogInfo loginfo=new LogInfo();
 			loginfo.setId(UUID.randomUUID().toString());
-			loginfo.setUsername(user.getUserId());
+			loginfo.setUsername(info.getUserId());
 			loginfo.setCreatetime(new Date());
 			loginfo.setType("保存商品记录");
 			loginfo.setDescription(info.toString());

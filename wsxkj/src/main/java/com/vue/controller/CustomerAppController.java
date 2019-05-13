@@ -40,19 +40,19 @@ public class CustomerAppController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "客户列表", notes = "客户列表", httpMethod = "POST")
     public void findGoodsBrandList(@ApiParam(required = false, name = "token", value = "token")@RequestParam("token")String token,
-                                   @ApiParam(required = false, name = "name", value = "名称")@RequestParam("name")String name,
+                                   @ApiParam(required = false, name = "name", value = "名称")@RequestParam(value="name",required=false)String name,
                                    @ApiParam(required = false, name = "cpage", value = "当前页")@RequestParam("cpage")String cpage,
                                    @ApiParam(required = false, name = "pagerow", value = "pagerow")@RequestParam("pagerow")String pagerow){
         ResultData rd=new ResultData();
         try{
             User user= (User)request.getSession().getAttribute("jluser");
             Map map=new HashMap();
-            map.put("name",name);
+            map.put("name",filterStr(name));
             map.put("userId",user.getId());
             MyPage pagedata = customerService.findPageData(map,Integer.parseInt(cpage),Integer.parseInt(pagerow));
-            rd.setData(pagedata);
+            rd.setData(pagedata.data);
+            rd.setCount(pagedata.count);
             rd.setCode(200);
-            rd.setToken(token);
             rd.setMsg("查询成功");
         }catch (JwtException e){
             e.printStackTrace();
@@ -89,7 +89,6 @@ public class CustomerAppController extends BaseController {
 
             customerService.saveInfo(customer);
             rd.setCode(200);
-            rd.setToken(token);
             rd.setMsg("查询成功");
         }catch (JwtException e){
             e.printStackTrace();
@@ -114,7 +113,6 @@ public class CustomerAppController extends BaseController {
             User user= (User)request.getSession().getAttribute("jluser");
             customerService.delInfo(id,user);
             rd.setCode(200);
-            rd.setToken(token);
             rd.setMsg("删除成功");
         }catch (JwtException e){
             e.printStackTrace();
