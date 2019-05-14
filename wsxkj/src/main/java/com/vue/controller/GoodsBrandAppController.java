@@ -45,7 +45,7 @@ public class GoodsBrandAppController extends BaseController {
     @RequestMapping("/findGoodsBrandList")
     @ResponseBody
     @ApiOperation(value = "商品品牌列表", notes = "商品品牌列表", httpMethod = "POST")
-    public void findGoodsBrandList(@ApiParam(required = false, name = "token", value = "token")@RequestParam("token")String token,
+    public void findGoodsBrandList(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
                                   @ApiParam(required = false, name = "name", value = "名称")@RequestParam(value="name",required=false)String name,
                                   @ApiParam(required = false, name = "typeid", value = "分类id")@RequestParam(value="typeid",required=false)String typeid,
                                   @ApiParam(required = false, name = "cpage", value = "当前页")@RequestParam("cpage")String cpage,

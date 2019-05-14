@@ -46,16 +46,16 @@ public class GoodsAppController extends BaseController {
     @RequestMapping("/saveNewInfo")
     @ResponseBody
     @ApiOperation(value = "新商品保存", notes = "新商品保存", httpMethod = "POST" ,response = Goods.class)
-    public void saveNewInfo(@ApiParam(required = false, name = "token", value = "token")@RequestParam("token")String token,
-                         @ApiParam(required = false, name = "name", value = "名称")@RequestParam("name")String name,
-                         @ApiParam(required = false, name = "qrCode", value = "条形码")@RequestParam("qrCode")String qrCode,
-                         @ApiParam(required = false, name = "picture", value = "图片路径")@RequestParam("picture")String picture,
-                         @ApiParam(required = false, name = "goodsType", value = "商品类型")@RequestParam("goodsType")String goodsType,
-                         @ApiParam(required = false, name = "goodsBrand", value = "商品品牌")@RequestParam("goodsBrand")String goodsBrand,
-                         @ApiParam(required = false, name = "inNum", value = "进货数量")@RequestParam("inNum")String inNum,
-                         @ApiParam(required = false, name = "inPrice", value = "进货价格")@RequestParam("inPrice")String inPrice,
-                         @ApiParam(required = false, name = "outPrice", value = "出货价格")@RequestParam("outPrice")String outPrice,
-                         @ApiParam(required = false, name = "sureDate", value = "保质日期")@RequestParam("sureDate")String sureDate){
+    public void saveNewInfo(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
+                         @ApiParam(required = true, name = "name", value = "名称")@RequestParam("name")String name,
+                         @ApiParam(required = false, name = "qrCode", value = "条形码")@RequestParam(value="qrCode",required = false)String qrCode,
+                         @ApiParam(required = false, name = "picture", value = "图片路径")@RequestParam(value="picture",required = false)String picture,
+                         @ApiParam(required = true, name = "goodsType", value = "商品类型")@RequestParam("goodsType")String goodsType,
+                         @ApiParam(required = true, name = "goodsBrand", value = "商品品牌")@RequestParam("goodsBrand")String goodsBrand,
+                         @ApiParam(required = true, name = "inNum", value = "进货数量")@RequestParam("inNum")String inNum,
+                         @ApiParam(required = true, name = "inPrice", value = "进货价格")@RequestParam("inPrice")String inPrice,
+                         @ApiParam(required = true, name = "outPrice", value = "出货价格")@RequestParam("outPrice")String outPrice,
+                         @ApiParam(required = false, name = "sureDate", value = "保质日期")@RequestParam(value="sureDate",required = false)String sureDate){
         ResultData rd=new ResultData();
         try{
             User user= (User)request.getSession().getAttribute("jluser");
@@ -83,7 +83,9 @@ public class GoodsAppController extends BaseController {
             store.setStoreNum(innum);
             store.setInPrice(Double.parseDouble(inPrice));
             store.setOutPrice(Double.parseDouble(outPrice));
-            store.setSureDate(DateHelper.getStringDate(sureDate,"yyyy-MM-dd"));
+            if(judgeStr(sureDate)){
+            	store.setSureDate(DateHelper.getStringDate(sureDate,"yyyy-MM-dd"));
+            }
             store.setUpdateTime(new Date());
             storeService.saveInfo(store);
             rd.setCode(200);
@@ -103,12 +105,12 @@ public class GoodsAppController extends BaseController {
     @RequestMapping("/saveOldInfo")
     @ResponseBody
     @ApiOperation(value = "老商品保存", notes = "老商品保存", httpMethod = "POST")
-    public void saveOldInfo(@ApiParam(required = false, name = "token", value = "token")@RequestParam("token")String token,
-                         @ApiParam(required = false, name = "goodsId", value = "商品id")@RequestParam("goodsId")String goodsId,
-                         @ApiParam(required = false, name = "inNum", value = "进货数量")@RequestParam("inNum")String inNum,
-                         @ApiParam(required = false, name = "inPrice", value = "进货价格")@RequestParam("inPrice")String inPrice,
-                         @ApiParam(required = false, name = "outPrice", value = "出货价格")@RequestParam("outPrice")String outPrice,
-                         @ApiParam(required = false, name = "sureDate", value = "保质日期")@RequestParam("sureDate")String sureDate){
+    public void saveOldInfo(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
+                         @ApiParam(required = true, name = "goodsId", value = "商品id")@RequestParam("goodsId")String goodsId,
+                         @ApiParam(required = true, name = "inNum", value = "进货数量")@RequestParam("inNum")String inNum,
+                         @ApiParam(required = true, name = "inPrice", value = "进货价格")@RequestParam("inPrice")String inPrice,
+                         @ApiParam(required = true, name = "outPrice", value = "出货价格")@RequestParam("outPrice")String outPrice,
+                         @ApiParam(required = false, name = "sureDate", value = "保质日期")@RequestParam(value="sureDate",required = false)String sureDate){
         ResultData rd=new ResultData();
         try{
             User user= (User)request.getSession().getAttribute("jluser");
@@ -129,7 +131,9 @@ public class GoodsAppController extends BaseController {
             store.setStoreNum(innum);
             store.setInPrice(Double.parseDouble(inPrice));
             store.setOutPrice(Double.parseDouble(outPrice));
-            store.setSureDate(DateHelper.getStringDate(sureDate,"yyyy-MM-dd"));
+            if(judgeStr(sureDate)){
+            	store.setSureDate(DateHelper.getStringDate(sureDate,"yyyy-MM-dd"));
+            }
             store.setUpdateTime(new Date());
             storeService.saveInfo(store);
             rd.setCode(200);

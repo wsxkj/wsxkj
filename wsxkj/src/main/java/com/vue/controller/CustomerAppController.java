@@ -39,10 +39,10 @@ public class CustomerAppController extends BaseController {
     @RequestMapping("/findCustomerList")
     @ResponseBody
     @ApiOperation(value = "客户列表", notes = "客户列表", httpMethod = "POST")
-    public void findGoodsBrandList(@ApiParam(required = false, name = "token", value = "token")@RequestParam("token")String token,
+    public void findGoodsBrandList(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
                                    @ApiParam(required = false, name = "name", value = "名称")@RequestParam(value="name",required=false)String name,
-                                   @ApiParam(required = false, name = "cpage", value = "当前页")@RequestParam("cpage")String cpage,
-                                   @ApiParam(required = false, name = "pagerow", value = "pagerow")@RequestParam("pagerow")String pagerow){
+                                   @ApiParam(required = true, name = "cpage", value = "当前页")@RequestParam("cpage")String cpage,
+                                   @ApiParam(required = true, name = "pagerow", value = "pagerow")@RequestParam("pagerow")String pagerow){
         ResultData rd=new ResultData();
         try{
             User user= (User)request.getSession().getAttribute("jluser");
@@ -69,7 +69,7 @@ public class CustomerAppController extends BaseController {
     @RequestMapping("/saveInfo")
     @ResponseBody
     @ApiOperation(value = "保存客户", notes = "保存客户", httpMethod = "POST" ,response = Customer.class)
-    public void saveInfo(@ApiParam(required = false, name = "token", value = "token")@RequestParam("token")String token,
+    public void saveInfo(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
                             @ApiParam(required = false, name = "nickname", value = "微信昵称")@RequestParam("nickname")String nickname,
                             @ApiParam(required = false, name = "wxh", value = "微信号")@RequestParam("wxh")String wxh,
                             @ApiParam(required = false, name = "receiver", value = "收货姓名")@RequestParam("receiver")String receiver,
@@ -89,7 +89,7 @@ public class CustomerAppController extends BaseController {
 
             customerService.saveInfo(customer);
             rd.setCode(200);
-            rd.setMsg("查询成功");
+            rd.setMsg("保存成功");
         }catch (JwtException e){
             e.printStackTrace();
             rd.setCode(500);
@@ -105,8 +105,8 @@ public class CustomerAppController extends BaseController {
     @RequestMapping("/delInfo")
     @ResponseBody
     @ApiOperation(value = "删除客户", notes = "删除客户", httpMethod = "POST" ,response = Customer.class)
-    public void delInfo(@ApiParam(required = false, name = "token", value = "token")@RequestParam("token")String token,
-                            @ApiParam(required = false, name = "id", value = "客户id主键")@RequestParam("id")String id
+    public void delInfo(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
+                            @ApiParam(required = true, name = "id", value = "客户id主键")@RequestParam("id")String id
                            ){
         ResultData rd=new ResultData();
         try{

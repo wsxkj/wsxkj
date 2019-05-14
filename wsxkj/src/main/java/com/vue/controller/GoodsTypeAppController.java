@@ -46,10 +46,10 @@ public class GoodsTypeAppController extends BaseController {
     @RequestMapping("/findGoodsTypeList")
     @ResponseBody
     @ApiOperation(value = "商品分类列表", notes = "商品分类列表", httpMethod = "POST")
-    public void findGoodsTypeList(@ApiParam(required = false, name = "token", value = "token")@RequestParam("token")String token,
+    public void findGoodsTypeList(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
                                   @ApiParam(required = false, name = "name", value = "名称")@RequestParam(value="name",required=false)String name,
-                                  @ApiParam(required = false, name = "cpage", value = "当前页")@RequestParam("cpage")String cpage,
-                                  @ApiParam(required = false, name = "pagerow", value = "pagerow")@RequestParam("pagerow")String pagerow){
+                                  @ApiParam(required = true, name = "cpage", value = "当前页")@RequestParam("cpage")String cpage,
+                                  @ApiParam(required = true, name = "pagerow", value = "pagerow")@RequestParam("pagerow")String pagerow){
         ResultData rd=new ResultData();
         try{
             User user= (User)request.getSession().getAttribute("jluser");
@@ -77,8 +77,8 @@ public class GoodsTypeAppController extends BaseController {
     @RequestMapping("/delInfo")
     @ResponseBody
     @ApiOperation(value = "删除类型", notes = "删除类型", httpMethod = "POST" ,response = Customer.class)
-    public void delInfo(@ApiParam(required = false, name = "token", value = "token")@RequestParam("token")String token,
-                            @ApiParam(required = false, name = "id", value = "类型id主键")@RequestParam("id")String id
+    public void delInfo(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
+                            @ApiParam(required = true, name = "id", value = "类型id主键")@RequestParam("id")String id
                            ){
         ResultData rd=new ResultData();
         try{

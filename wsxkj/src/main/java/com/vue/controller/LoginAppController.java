@@ -70,7 +70,8 @@ public class LoginAppController extends BaseController {
 						   @ApiParam(required = false, name = "yzm", value = "验证码")@RequestParam("yzm")String yzm
 						   ){
 		IdCodeInfo ici=idCodeService.findInfoByPhone(phone);
-		ResultData rd=new ResultData<>();
+//		ResultData rd=new ResultData<>();
+		Map retMap=new HashMap();
 		if(ici.getYzm().equalsIgnoreCase(yzm)){
 			User user=userService.findUserByPhone(phone);
 			if(null!=user){
@@ -84,10 +85,12 @@ public class LoginAppController extends BaseController {
 				user.setPhone(phone);
 			}
 			userService.saveInfo(user);
-			rd.setCode(200);
-			rd.setMsg("登陆成功");
+			retMap.put("code", 200);
+			retMap.put("msg", "登陆成功");
 			String token=JwtUtil.buildJsonByUser(user);
-			rd.setData(token);
+			user.setToken(token);
+			retMap.put("data", user);
+			
 			LogInfo loginfo=new LogInfo();
 	        loginfo.setId(UUID.randomUUID().toString());
 	        loginfo.setUsername(user.getId());
@@ -97,10 +100,32 @@ public class LoginAppController extends BaseController {
 	        logService.saveLog(loginfo);
 			System.out.println("phone:"+phone+";token:"+token);
 		}else{
-			rd.setCode(500);
-			rd.setMsg("验证码错误");
+			retMap.put("code",500);
+			retMap.put("msg", "验证码错误");
 		}
-		jsonWrite2(rd);
+		jsonWrite2(retMap);
 
+	}
+	
+	@RequestMapping("/getNewToken")
+	@ResponseBody
+	@ApiOperation(value = "根据id更新token", notes = "根据id更新token", httpMethod = "POST",response=User.class)
+	public void getNewToken(@ApiParam(required = true, name = "id", value = "id")@RequestParam("id")String id
+						   ){
+		Map retMap=new HashMap();
+		User user=null;
+		try{
+			user=userService.findById(id);
+			retMap.put("code", 200);
+			retMap.put("msg", "更新token成功");
+			String token=JwtUtil.buildJsonByUser(user);
+			user.setToken(token);
+			retMap.put("data", user);
+		}catch (Exception e) {
+			e.printStackTrace();
+			retMap.put("code",500);
+			retMap.put("msg", "该用户不存在");
+		}
+		jsonWrite2(retMap);
 	}
 }

@@ -32,4 +32,14 @@ public class OrderServiceImpl implements OrderService{
     public void saveInfo(OrderInfo info){
     	orderDao.add(info);
     }
+
+    public OrderInfo findById(String id){
+        return orderDao.get(id,OrderInfo.class);
+    }
+
+    public void deleteInfo(String id){
+        OrderInfo oi=orderDao.get(id,OrderInfo.class);
+        if(null!=oi)
+            orderDao.delete(oi);
+    }
 }

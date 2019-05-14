@@ -31,5 +31,16 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
         px.put("updateTime", "desc");
         return orderGoodsDao.findPageDateSqlT(tablename, param,px , page, limit, OrderGoodsInfo.class);
 	}
-
+    public void saveInfo(OrderGoodsInfo orderGoodsInfo){
+        orderGoodsDao.add(orderGoodsInfo);
+    }
+    public void deleteInfoByOrderGoodsId(String orderId){
+        orderGoodsDao.executeSql("delete from "+tablename+" where orderId='"+orderId+"'");
+    }
+    public void deleteInfo(String id){
+	    OrderGoodsInfo ogi=orderGoodsDao.get(id,OrderGoodsInfo.class);
+	    if(null!=ogi){
+            orderGoodsDao.delete(ogi);
+        }
+    }
 }

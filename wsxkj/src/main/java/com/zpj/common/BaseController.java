@@ -210,4 +210,19 @@ public class BaseController {
 			return "";
 		}
 	}
+	/**
+	 * 判断空字符串
+	 * @Title judgeStr
+	 * @param str
+	 * @return
+	 * @author zpj
+	 * @time 2019年5月14日 上午9:42:51
+	 */
+	public boolean judgeStr(String str){
+		if(null!=str&&!"".equalsIgnoreCase(str)&&!"null".equalsIgnoreCase(str)){
+			return true;
+		}else{
+			return false;
+		}
+	}
 }

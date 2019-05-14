@@ -37,7 +37,8 @@ public class User implements java.io.Serializable {
 	@ApiModelProperty(value = "更新时间",name="updateTime", required =  false)
 	private Date updateTime;
 	
-	
+	@ApiModelProperty(value = "token",name="token", required =  false)
+	private String token;
 
 	@Id
 	@Column(name = "id", unique = true, nullable = false ,length=36)
@@ -81,6 +82,14 @@ public class User implements java.io.Serializable {
 		this.updateTime = updateTime;
 	}
 
+	
+	@Transient
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
 	
 	@Override
 	public String toString() {

@@ -29,7 +29,8 @@ public class OrderInfo implements java.io.Serializable{
     private String state;
     @ApiModelProperty(value = "更新时间",name="updateTime", required = false)
     private Date updateTime;
-
+    @ApiModelProperty(value = "物流单号",name="trackingNo", required = false)
+    private String trackingNo;
     @Id
     public String getId() {
         return id;
@@ -82,4 +83,13 @@ public class OrderInfo implements java.io.Serializable{
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public String getTrackingNo() {
+		return trackingNo;
+	}
+
+	public void setTrackingNo(String trackingNo) {
+		this.trackingNo = trackingNo;
+	}
+    
 }
