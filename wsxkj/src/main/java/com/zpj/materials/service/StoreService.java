@@ -12,4 +12,7 @@ public interface StoreService {
      * @date 2019/4/19 17:17
     */
     public void saveInfo(Store store);
+    
+    
+    public Store findById(String id);
 }

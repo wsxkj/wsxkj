@@ -5,6 +5,7 @@ import com.zpj.common.DateHelper;
 import com.zpj.common.MyPage;
 import com.zpj.common.ResultData;
 import com.zpj.jwt.JwtUtil;
+import com.zpj.materials.entity.Customer;
 import com.zpj.materials.entity.Goods;
 import com.zpj.materials.entity.Store;
 import com.zpj.materials.service.GoodsService;
@@ -149,5 +150,30 @@ public class GoodsAppController extends BaseController {
         }
         this.jsonWrite2(rd);
     }
+    
+    @RequestMapping("/delInfo")
+    @ResponseBody
+    @ApiOperation(value = "删除商品信息", notes = "删除商品信息", httpMethod = "POST" ,response = Customer.class)
+    public void deleteInfo(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
+                            @ApiParam(required = true, name = "id", value = "商品id主键")@RequestParam("id")String id
+                           ){
+        ResultData rd=new ResultData();
+        try{
+
+        	goodsService.deleteInfo(id);
+            rd.setCode(200);
+            rd.setMsg("删除成功");
+        }catch (JwtException e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("token转码失败，token过期");
+        }catch (Exception e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("操作失败");
+        }
+        this.jsonWrite2(rd);
+    }
+    
      
 }

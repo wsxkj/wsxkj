@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.zpj.common.BaseDao;
 import com.zpj.common.MyPage;
+import com.zpj.common.aop.Log;
 import com.zpj.materials.entity.OrderGoodsInfo;
 import com.zpj.materials.service.OrderGoodsService;
 import com.zpj.sys.entity.LogInfo;
@@ -31,12 +32,15 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
         px.put("updateTime", "desc");
         return orderGoodsDao.findPageDateSqlT(tablename, param,px , page, limit, OrderGoodsInfo.class);
 	}
+	@Log(type="保存",remark="保存订单商品信息")
     public void saveInfo(OrderGoodsInfo orderGoodsInfo){
         orderGoodsDao.add(orderGoodsInfo);
     }
-    public void deleteInfoByOrderGoodsId(String orderId){
+	
+    public void deleteOrderGoodsInfoByOrderId(String orderId){
         orderGoodsDao.executeSql("delete from "+tablename+" where orderId='"+orderId+"'");
     }
+    
     public void deleteInfo(String id){
 	    OrderGoodsInfo ogi=orderGoodsDao.get(id,OrderGoodsInfo.class);
 	    if(null!=ogi){

@@ -17,5 +17,7 @@ public interface CustomerService {
 
     void saveInfo(Customer customer);
     
-    void delInfo(String id,User user);
+    void delInfo(Customer customer);
+    
+    Customer findById(String id);
 }

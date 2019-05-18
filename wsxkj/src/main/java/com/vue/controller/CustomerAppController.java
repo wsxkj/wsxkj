@@ -70,22 +70,31 @@ public class CustomerAppController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "保存客户", notes = "保存客户", httpMethod = "POST" ,response = Customer.class)
     public void saveInfo(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
-                            @ApiParam(required = false, name = "nickname", value = "微信昵称")@RequestParam("nickname")String nickname,
-                            @ApiParam(required = false, name = "wxh", value = "微信号")@RequestParam("wxh")String wxh,
-                            @ApiParam(required = false, name = "receiver", value = "收货姓名")@RequestParam("receiver")String receiver,
-                            @ApiParam(required = false, name = "address", value = "收货地址")@RequestParam("address")String address,
-                            @ApiParam(required = false, name = "phone", value = "手机号码")@RequestParam("phone")String phone
+				    		@ApiParam(required = false, name = "id", value = "客户主键id")@RequestParam(value="id",required=false)String id,
+				            @ApiParam(required = true, name = "nickname", value = "微信昵称")@RequestParam("nickname")String nickname,
+                            @ApiParam(required = false, name = "wxh", value = "微信号")@RequestParam(value="wxh",required=false)String wxh,
+                            @ApiParam(required = false, name = "receiver", value = "收货姓名")@RequestParam(value="receiver",required=false)String receiver,
+                            @ApiParam(required = false, name = "address", value = "收货地址")@RequestParam(value="address",required=false)String address,
+                            @ApiParam(required = false, name = "phone", value = "手机号码")@RequestParam(value="phone",required=false)String phone
                            ){
         ResultData rd=new ResultData();
         try{
             User user= (User)request.getSession().getAttribute("jluser");
             Map map=new HashMap();
-            //保存新商品信息
-            Customer customer=new Customer();
+            Customer customer=null;
+            //保存新客户信息
+            if(judgeStr(id)){
+            	customer=customerService.findById(id);
+            }else{
+            	customer=new Customer();
+            }
             customer.setUserId(user.getId());
             customer.setAddress(address);
             customer.setNickname(nickname);
             customer.setWxh(wxh);
+            customer.setPhone(phone);
+            customer.setReceiver(receiver);
+            customer.setUpdateTime(new Date());
 
             customerService.saveInfo(customer);
             rd.setCode(200);
@@ -110,8 +119,9 @@ public class CustomerAppController extends BaseController {
                            ){
         ResultData rd=new ResultData();
         try{
-            User user= (User)request.getSession().getAttribute("jluser");
-            customerService.delInfo(id,user);
+            Customer c=customerService.findById(id);
+            if(null!=c)
+            	customerService.delInfo(c);
             rd.setCode(200);
             rd.setMsg("删除成功");
         }catch (JwtException e){

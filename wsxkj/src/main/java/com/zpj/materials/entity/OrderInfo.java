@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /*
  * @ClassName: OrderInfo
@@ -31,6 +32,9 @@ public class OrderInfo implements java.io.Serializable{
     private Date updateTime;
     @ApiModelProperty(value = "物流单号",name="trackingNo", required = false)
     private String trackingNo;
+    
+    private List<OrderGoodsInfo>  goodsList;//订单下面挂的商品list
+    
     @Id
     public String getId() {
         return id;
@@ -91,5 +95,16 @@ public class OrderInfo implements java.io.Serializable{
 	public void setTrackingNo(String trackingNo) {
 		this.trackingNo = trackingNo;
 	}
+
+	@Transient
+	public List<OrderGoodsInfo> getGoodsList() {
+		return goodsList;
+	}
+
+	public void setGoodsList(List<OrderGoodsInfo> goodsList) {
+		this.goodsList = goodsList;
+	}
     
+	
+	
 }

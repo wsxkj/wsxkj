@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.zpj.common.MyPage;
 import com.zpj.materials.entity.OrderInfo;
+import com.zpj.sys.entity.User;
 
 public interface OrderService {
 	MyPage findPageData(Map param, Integer page, Integer limit);
@@ -13,5 +14,7 @@ public interface OrderService {
 	public OrderInfo findById(String id);
 
 	public void deleteInfo(String id);
+	
+	public void saveOrderMultiInfo(String id,String customerid,String state,String trackingNo,String orderGoods,String postage,User user);
 
 }

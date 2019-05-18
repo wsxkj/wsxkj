@@ -52,29 +52,12 @@ public class CustomerServiceImpl implements CustomerService {
         }else{
             customerBaseDao.add(info);
         }
-        LogInfo loginfo=new LogInfo();
-        loginfo.setId(UUID.randomUUID().toString());
-        loginfo.setUsername(info.getUserId());
-        loginfo.setCreatetime(new Date());
-        loginfo.setType("保存客户信息记录");
-        loginfo.setDescription(info.toString());
-        logDao.add(loginfo);
     }
     public Customer findById(String id) {
         return customerBaseDao.get(id,Customer.class);
     }
-    
-    public void delInfo(String id,User user){
-    	Customer temp=this.findById(id);
-    	if(null!=temp){
-    		customerBaseDao.delete(temp);
-    	}
-    	LogInfo loginfo=new LogInfo();
-        loginfo.setId(UUID.randomUUID().toString());
-        loginfo.setUsername(user.getId());
-        loginfo.setCreatetime(new Date());
-        loginfo.setType("删除客户信息记录");
-        loginfo.setDescription(temp.toString());
-        logDao.add(loginfo);
+    @Log(type="删除",remark="删除客户信息")
+    public void delInfo(Customer customer){
+    	customerBaseDao.delete(customer);
     }
 }

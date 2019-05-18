@@ -82,7 +82,7 @@ public class GoodsController extends BaseController{
 	@RequestMapping("/doDel")
 	@ResponseBody
 	public void doDel(String ids){
-		goodsService.delete(ids);
+//		goodsService.delete(ids);
 		Map map=new HashMap();
 		map.put("flag", true);
 		jsonWrite2(map);

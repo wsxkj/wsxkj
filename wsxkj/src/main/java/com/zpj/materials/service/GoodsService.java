@@ -11,7 +11,7 @@ public interface GoodsService {
 	
 	void saveInfo(Goods info);
 
-	void delete(String deleteID);
+	void deleteInfo(String deleteID);
 	
 	public Goods findById(String id);
 }

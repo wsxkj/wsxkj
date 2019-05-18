@@ -2,6 +2,7 @@ package com.zpj.materials.service.impl;
 
 import com.zpj.common.BaseDao;
 import com.zpj.common.MyPage;
+import com.zpj.common.aop.Log;
 import com.zpj.materials.entity.Customer;
 import com.zpj.materials.entity.Goods;
 import com.zpj.materials.entity.GoodsType;
@@ -49,7 +50,7 @@ public class GoodsTypeServiceImpl implements GoodsTypeService {
     }
 
 
-	@Override
+    @Log(type="保存",remark="保存商品类型信息")
 	public void saveInfo(GoodsType gt) {
 		goodsTypeDao.add(gt);
 	}

@@ -106,7 +106,7 @@ public class TestAspect {
         	loginfo.setUsername(userinfo.getPhone());
         	loginfo.setCreatetime(new Date());
         	loginfo.setType((String)tmap.get("type"));
-        	loginfo.setDescription(userinfo.getPhone()+"  在"+(String)tmap.get("remark")+","+result);
+        	loginfo.setDescription(userinfo.getPhone()+"  在"+(String)tmap.get("remark")+"。具体信息："+(String)tmap.get("param"));
         	logService.saveLog(loginfo);
         }
 	}
@@ -137,6 +137,7 @@ public class TestAspect {
 	                    if(methodCache!=null){
 	                    	retMap.put("remark", methodCache.remark());  
 	                    	retMap.put("type", methodCache.type());
+	                    	retMap.put("param", arguments[0].toString());
 	                    }
 	                    break;
 	                }  
