@@ -1,5 +1,6 @@
 package com.zpj.materials.service.impl;
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -44,10 +45,41 @@ public class OrderServiceImpl implements OrderService{
         if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
             param.put("userId-eq", canshu.get("userId"));
         }
+        if(null!=canshu.get("state")&&!"".equalsIgnoreCase((String)canshu.get("state"))){
+            param.put("state-eq", canshu.get("state"));
+        }
         Map px=new HashMap();
         px.put("updateTime", "desc");
-        return orderDao.findPageDateSqlT(tablename, param,px , page, limit, OrderInfo.class);
+        return orderDao.findPageDateSqlT(tablename,"", param,px , page, limit, OrderInfo.class);
     }
+    
+    public MyPage findPageDataMuti(Map canshu, Integer page, Integer limit){
+    	StringBuffer sql=new StringBuffer(200).append("select o.*,c.address as customerAddress,c.nickname as customerNickname,c.phone as customerPhone ");
+    	StringBuffer sqlcount =new StringBuffer(100).append("select count(*) as num,1  ");
+    	StringBuffer wheresql=new StringBuffer(100);
+    	wheresql.append("  from "+tablename +" o left join jl_material_customer_info c on o.customerId=c.id where 1=1 ");
+    	if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
+    		wheresql.append(" and o.userId='"+canshu.get("userId")+"' ");
+        }
+        if(null!=canshu.get("state")&&!"".equalsIgnoreCase((String)canshu.get("state"))){
+        	wheresql.append(" and o.state ='"+canshu.get("state")+"' ");
+        }
+        sql.append(wheresql).append(" order by o.updateTime desc ");
+    	List list=orderDao.findMapObjBySql(sql.toString(), null, page, limit);
+    	
+    	sqlcount.append(wheresql);
+		List<Object[]> lt = orderDao.findBySql(sqlcount.toString());
+		int num=0;
+		if (lt != null) {
+			num=Integer.parseInt(((BigInteger) lt.get(0)[0]).toString());
+		}
+    	
+    	MyPage my=new MyPage();
+    	my.setData(list);
+    	my.setCount(num);
+    	return my;
+    }
+    
     @Log(type="保存",remark="保存订单信息")
     public void saveInfo(OrderInfo info){
     	orderDao.add(info);
@@ -84,13 +116,15 @@ public class OrderServiceImpl implements OrderService{
             oi.setUserId(user.getId());
             oi.setState(state);
             oi.setPostage(Double.valueOf(filterStr(postage)));
+            oi.setTrackingNo(trackingNo);
+            oi.setUpdateTime(new Date());
             //订单表保存
             this.saveInfo(oi);
-
+//            orderGoods="[{\"id\":\"\",\"orderId\":\"\",\"goodsId\":\"GOODS_19513174669990\",\"storeId\":\"STORE_19513212995202\",\"soldNum\":\"1\",\"soldPrice\":\"100\",\"soldTotalPrice\":\"100\",\"paidMoney\":\"100\",\"unpaidMoney\":\"0\"}]";
 //            orderGoods="[{id:\"1\",goodsId:\"1\",storeId:\"asdfd\",soldNum:\"1\",soldPrice:\"100\",soldTotalPrice:\"200\",paidMoney:\"50\",unpaidMoney:\"150\"},{id:\"2\",goodsId:\"2\",storeId:\"df\",soldNum:\"2\",soldPrice:\"300\",soldTotalPrice:\"600\",paidMoney:\"500\",unpaidMoney:\"100\"}]";
             JSONArray jsonArray=JSONArray.fromObject(orderGoods);
             JSONObject jsonObject;
-            StringBuffer sql=new StringBuffer(500);
+//            StringBuffer sql=new StringBuffer(2000);
             //订单商品信息保存
             if(!updateflag){          
                 //新增订单
@@ -109,42 +143,41 @@ public class OrderServiceImpl implements OrderService{
                     orderGoodsService.saveInfo(ogi);
 
 
-
-                    if(judgeStr(String.valueOf(jsonObject.get("storeId")))){
-                        double soldNum=Double.parseDouble(String.valueOf(jsonObject.get("soldNum")));
-                        sql.append("update jl_material_store_info set storeNum=storeNum-"+soldNum+" where id='"+String.valueOf(jsonObject.get("storeId"))+"';");
-                    }
                     if(judgeStr(String.valueOf(jsonObject.get("goodsId")))){
                         double soldNum=Double.parseDouble(String.valueOf(jsonObject.get("soldNum")));
-                        sql.append("update jl_material_goods_info set storeNum=storeNum-"+soldNum+" where id='"+String.valueOf(jsonObject.get("goodsId"))+"';");
+                        orderDao.executeSql(" update jl_material_goods_info set storeNum=(storeNum-"+soldNum+") where id='"+String.valueOf(jsonObject.get("goodsId"))+"' ");
+                        
                     }
+                    if(judgeStr(String.valueOf(jsonObject.get("storeId")))){
+                        double soldNum=Double.parseDouble(String.valueOf(jsonObject.get("soldNum")));
+                        orderDao.executeSql(" update jl_material_store_info set storeNum=(storeNum-"+soldNum+") where id='"+String.valueOf(jsonObject.get("storeId"))+"' ");
+                        
+                    }
+                    
                 }
-                orderDao.executeSql(sql.toString());
             }else{
                 //修改订单
 
                 Map param=new HashMap();
                 param.put("userId",user.getId());
                 param.put("orderId",id);
-                MyPage mp=orderGoodsService.findPageData(param,1,20);
+                MyPage mp=orderGoodsService.findPageData(param,1,50);
                 List<OrderGoodsInfo> list =(List<OrderGoodsInfo>)mp.getData();
                 for(int m=0;m<list.size();m++){
                     if(judgeStr(list.get(m).getStoreId())){
                         double soldNum=list.get(m).getSoldNum();
-                        sql.append("update jl_material_store_info set storeNum=storeNum+"+soldNum+" where id='"+list.get(m).getStoreId()+"';");
+                        orderDao.executeSql(" update jl_material_store_info set storeNum=storeNum+"+soldNum+" where id='"+list.get(m).getStoreId()+"' ");
                     }
                     if(judgeStr(list.get(m).getGoodsId())){
                         double soldNum=list.get(m).getSoldNum();
-                        sql.append("update jl_material_goods_info set storeNum=storeNum+"+soldNum+" where id='"+list.get(m).getGoodsId()+"';");
+                        orderDao.executeSql(" update jl_material_goods_info set storeNum=storeNum+"+soldNum+" where id='"+list.get(m).getGoodsId()+"' ");
                     }
                 }
                 //修改库存
                 //原先的ordergoods数据删除
-                orderDao.executeSql(sql.toString());
                 orderGoodsService.deleteOrderGoodsInfoByOrderId(id);
 
 
-                sql=new StringBuffer(500);
 
                 for (int n=0;n<jsonArray.size();n++){
                     jsonObject=(JSONObject)jsonArray.get(n);
@@ -164,11 +197,11 @@ public class OrderServiceImpl implements OrderService{
 
                     if(judgeStr(String.valueOf(jsonObject.get("storeId")))){
                         double soldNum=Double.parseDouble(String.valueOf(jsonObject.get("soldNum")));
-                        sql.append("update jl_material_store_info set storeNum=storeNum-"+soldNum+" where id='"+String.valueOf(jsonObject.get("storeId"))+"';");
+                        orderDao.executeSql(" update jl_material_store_info set storeNum=storeNum-"+soldNum+" where id='"+String.valueOf(jsonObject.get("storeId"))+"' ");
                     }
                     if(judgeStr(String.valueOf(jsonObject.get("goodsId")))){
                         double soldNum=Double.parseDouble(String.valueOf(jsonObject.get("soldNum")));
-                        sql.append("update jl_material_goods_info set storeNum=storeNum-"+soldNum+" where id='"+String.valueOf(jsonObject.get("goodsId"))+"';");
+                        orderDao.executeSql(" update jl_material_goods_info set storeNum=storeNum-"+soldNum+" where id='"+String.valueOf(jsonObject.get("goodsId"))+"' ");
                     }
                 }
             }

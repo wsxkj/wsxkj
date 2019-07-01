@@ -52,4 +52,10 @@ public class GoodsBrandPicture implements java.io.Serializable{
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+    @Override
+	public String toString() {
+		return "id:"+this.getId()+
+				",pictureURL:"+this.getPictureURL();
+
+	}
 }

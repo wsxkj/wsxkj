@@ -48,23 +48,24 @@ public class SetCharacterFilter implements Filter{
 				}
 	        } 
 		}else{
-			//手机请求
-			if(str_href.indexOf("app")>-1){
-				if(str_href.indexOf("app/login")>-1||str_href.indexOf("app/file")>-1){
-					chain.doFilter(request, response);
-				}else{
-					String token=req.getParameter("token");
-					User user= JwtUtil.getUserByJson(token);
-					if(null!=user){
-						req.getSession().setAttribute("jluser",user);
-						chain.doFilter(request, response);
-					}else{
-						req.getRequestDispatcher("/404.jsp").forward(req, res);
-					}
-				}
-			}else{
-				chain.doFilter(request, response);
-			}
+			chain.doFilter(request, response);
+//			//手机请求
+//			if(str_href.indexOf("app")>-1){
+//				if(str_href.indexOf("app/login")>-1||str_href.indexOf("app/file")>-1){
+//					chain.doFilter(request, response);
+//				}else{
+//					String token=req.getParameter("token");
+//					User user= JwtUtil.getUserByJson(token);
+//					if(null!=user){
+//						req.getSession().setAttribute("jluser",user);
+//						chain.doFilter(request, response);
+//					}else{
+//						req.getRequestDispatcher("/404.jsp").forward(req, res);
+//					}
+//				}
+//			}else{
+//				chain.doFilter(request, response);
+//			}
 		}
 	}
 	public boolean judgeIsPass(String spath){

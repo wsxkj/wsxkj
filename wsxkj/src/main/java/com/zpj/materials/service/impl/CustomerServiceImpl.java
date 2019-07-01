@@ -42,7 +42,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
         Map px=new HashMap();
         px.put("updateTime", "desc");
-        return customerBaseDao.findPageDateSqlT(tablename, param,px , page, limit, Customer.class);
+        return customerBaseDao.findPageDateSqlT(tablename,"", param,px , page, limit, Customer.class);
     }
     @Log(type="保存",remark="保存客户信息")
     public void saveInfo(Customer info) {

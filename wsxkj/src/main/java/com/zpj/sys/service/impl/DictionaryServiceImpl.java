@@ -61,7 +61,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 		condition.put("parentTypeid-self", "parentTypeid<>0");
 		Map<String,Object> px=new HashMap();
 		px.put("orderNum", "asc");
-		MyPage mp= dtDao.findPageDateSqlT("sys_dictionary_type", condition, px, 1, 500, DictionaryType.class);
+		MyPage mp= dtDao.findPageDateSqlT("sys_dictionary_type","", condition, px, 1, 500, DictionaryType.class);
 		return (List<DictionaryType>)mp.getData();
 	}
 	
@@ -170,14 +170,14 @@ public void saveDictionaryTypeByPhone(DictionaryType dt,String oldType){
 		param.put("typeCode-eq", typeCode);
 		Map px=new HashMap();
 	    px.put("itemOrder", "asc");
-		return diDao.findPageDateSqlT(tablename_item, param,px , page, limit, DictionaryItem.class);
+		return diDao.findPageDateSqlT(tablename_item,"", param,px , page, limit, DictionaryItem.class);
 	}
 	
 	public List<DictionaryItem> findAllDictionaryItem(){
 		Map<String,Object> param=new HashMap<String,Object>();
 		Map px=new HashMap();
 	    px.put("itemOrder", "asc");
-	    MyPage mp=diDao.findPageDateSqlT(tablename_item, param,px , 1, 1000, DictionaryItem.class);
+	    MyPage mp=diDao.findPageDateSqlT(tablename_item,"", param,px , 1, 1000, DictionaryItem.class);
 		return (List<DictionaryItem>)mp.getData();
 	}
 	

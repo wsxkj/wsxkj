@@ -45,7 +45,7 @@ public class CustomerAppController extends BaseController {
                                    @ApiParam(required = true, name = "pagerow", value = "pagerow")@RequestParam("pagerow")String pagerow){
         ResultData rd=new ResultData();
         try{
-            User user= (User)request.getSession().getAttribute("jluser");
+            User user= getCurrentUser();
             Map map=new HashMap();
             map.put("name",filterStr(name));
             map.put("userId",user.getId());
@@ -79,7 +79,7 @@ public class CustomerAppController extends BaseController {
                            ){
         ResultData rd=new ResultData();
         try{
-            User user= (User)request.getSession().getAttribute("jluser");
+            User user= getCurrentUser();
             Map map=new HashMap();
             Customer customer=null;
             //保存新客户信息

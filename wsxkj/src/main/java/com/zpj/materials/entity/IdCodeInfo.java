@@ -69,6 +69,11 @@ public class IdCodeInfo implements java.io.Serializable{
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
-	
+	@Override
+    public String toString() {
+    	StringBuffer sb=new StringBuffer(100);
+    	sb.append("id:"+this.id).append(",phone:"+this.phone+",yzm:"+this.yzm);
+    	return sb.toString();
+    }
 	
 }

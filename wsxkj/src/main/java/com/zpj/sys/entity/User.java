@@ -36,6 +36,10 @@ public class User implements java.io.Serializable {
 	private Date lastLoginTime;
 	@ApiModelProperty(value = "更新时间",name="updateTime", required =  false)
 	private Date updateTime;
+	@ApiModelProperty(value = "会员等级",name="levelId", required =  false)
+	private String levelId;
+	
+	
 	
 	@ApiModelProperty(value = "token",name="token", required =  false)
 	private String token;
@@ -83,6 +87,14 @@ public class User implements java.io.Serializable {
 	}
 
 	
+	
+	
+	public String getLevelId() {
+		return levelId;
+	}
+	public void setLevelId(String levelId) {
+		this.levelId = levelId;
+	}
 	@Transient
 	public String getToken() {
 		return token;
@@ -91,10 +103,12 @@ public class User implements java.io.Serializable {
 		this.token = token;
 	}
 	
+	
+	
 	@Override
 	public String toString() {
 		StringBuffer sb=new StringBuffer(300);
-		return sb.append("id:"+this.id+",phone:"+this.phone+",wxid:"+this.wxid+",wxnickname:"+this.wxnickname+",lastLoginTime:"+this.lastLoginTime).toString();
+		return sb.append("id:"+this.id+",phone:"+this.phone+",wxid:"+this.wxid+",wxnickname:"+this.wxnickname+",lastLoginTime:"+this.lastLoginTime+",levelId:"+this.getLevelId()).toString();
 	}
 
 }

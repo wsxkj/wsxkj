@@ -123,7 +123,12 @@
 <!--     <bean id="redisHttpSessionConfiguration" class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"> -->
 <!--         <property name="maxInactiveIntervalInSeconds" value="1800" /> -->
 <!--     </bean> -->
-    
+
+    <!--     redis缓存功能的bean -->
+    <!--     <bean id="redisUtil" class="com.zpj.common.redis.RedisUtil"> -->
+    <!-- 		<property name="redisTemplate" ref="redisTemplate" /> -->
+    <!-- 	</bean> -->
+
     <!-- Spring aop事务管理 -->
     <!-- 打开aop 注解 -->
     <aop:aspectj-autoproxy proxy-target-class="true"/>
@@ -131,7 +136,7 @@
     <aop:config proxy-target-class="true" >
         <!-- 配置切入点 -->
         <aop:pointcut id="transactionPointcut"
-            expression="execution(* com.*.service.*.*(..))"  />
+            expression="execution(* com.zpj.*.service.*.*(..))"  />
         <!-- 指定在txAdvice切入点应用txAdvice事务增强处理 -->
         <aop:advisor pointcut-ref="transactionPointcut"    advice-ref="transactionAdvice" />
    

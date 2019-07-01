@@ -20,6 +20,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.zpj.common.BaseDao;
+import com.zpj.jwt.JwtUtil;
 import com.zpj.sys.entity.LogInfo;
 import com.zpj.sys.entity.User;
 import com.zpj.sys.service.LogInfoService;
@@ -97,7 +98,11 @@ public class TestAspect {
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 		User userinfo=null;
         if(request!=null){
-	         userinfo = (User) request.getSession().getAttribute("jluser");
+        	String token=request.getParameter("token");
+        	if(null!=token&&!"".equalsIgnoreCase(token)){
+        		userinfo= JwtUtil.getUserByJson(token);
+        	}
+//	         userinfo = (User) request.getSession().getAttribute("jluser");
         }
 		Map tmap = getMthodRemark(pjp);
 		if(userinfo!=null){
@@ -125,7 +130,7 @@ public class TestAspect {
 	        String targetName = joinPoint.getTarget().getClass().getName();  
 	        String methodName = joinPoint.getSignature().getName();  
 	        Object[] arguments = joinPoint.getArgs();  
-	  		System.out.println(arguments);
+//	  		System.out.println(arguments);
 	        Class targetClass = Class.forName(targetName);  
 	        Method[] method = targetClass.getMethods();  
 	        Map<String,String> retMap = new HashMap<String,String>();

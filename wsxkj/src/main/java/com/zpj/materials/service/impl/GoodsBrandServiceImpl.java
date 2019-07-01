@@ -38,6 +38,6 @@ public class GoodsBrandServiceImpl implements GoodsBrandService {
 
         Map px=new HashMap();
         px.put("updateTime", "desc");
-        return goodsBrandDao.findPageDateSqlT(tablename, param,px , page, limit, GoodsBrand.class);
+        return goodsBrandDao.findPageDateSqlT(tablename,"", param,px , page, limit, GoodsBrand.class);
     }
 }

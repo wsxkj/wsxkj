@@ -51,20 +51,20 @@ public class OrderAppController extends BaseController{
                                    @ApiParam(required = true, name = "pagerow", value = "pagerow")@RequestParam("pagerow")String pagerow){
         ResultData rd=new ResultData();
         try{
-            User user= (User)request.getSession().getAttribute("jluser");
+            User user= getCurrentUser();
             Map map=new HashMap();
             map.put("userId",user.getId());
             map.put("state", filterStr(state));
-            MyPage pagedata = orderService.findPageData(map,Integer.parseInt(cpage),Integer.parseInt(pagerow));
-            List<OrderInfo> list= (List<OrderInfo>)pagedata.data;
-            OrderInfo toi=null;
+            MyPage pagedata = orderService.findPageDataMuti(map,Integer.parseInt(cpage),Integer.parseInt(pagerow));
+            List<Map> list= (List<Map>)pagedata.data;
+            Map toi=null;
             MyPage tp=null;
             for(int i=0;i<list.size();i++){
             	toi =list.get(i);
             	map =new HashMap();
-            	map.put("orderId", toi.getId());
-            	tp = orderGoodsService.findPageData(map,1,20);
-            	toi.setGoodsList((List<OrderGoodsInfo>)tp.data);
+            	map.put("orderId", toi.get("id"));
+            	tp = orderGoodsService.findPageDataMuti(map,1,20);
+            	toi.put("goodsList", tp.data);
             }
             rd.setData(list);
             rd.setCount(pagedata.count);
@@ -82,35 +82,35 @@ public class OrderAppController extends BaseController{
         this.jsonWrite2(rd);
     }
 
-//	@RequestMapping("/findOrderGoodsList")
-//    @ResponseBody
-//    @ApiOperation(value = "订单商品列表", notes = "订单商品列表", httpMethod = "POST")
-//    public void findOrderGoodsList(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
-//						    		@ApiParam(required = false, name = "orderid", value = "订单id")@RequestParam(value="orderid",required=false)String orderid,
-//						            @ApiParam(required = true, name = "cpage", value = "当前页")@RequestParam("cpage")String cpage,
-//                                   @ApiParam(required = true, name = "pagerow", value = "pagerow")@RequestParam("pagerow")String pagerow){
-//        ResultData rd=new ResultData();
-//        try{
-//            User user= (User)request.getSession().getAttribute("jluser");
-//            Map map=new HashMap();
-//            map.put("userId",user.getId());
-//            map.put("orderId", filterStr(orderid));
-//            MyPage pagedata = orderGoodsService.findPageData(map,Integer.parseInt(cpage),Integer.parseInt(pagerow));
-//            rd.setData(pagedata.data);
-//            rd.setCount(pagedata.count);
-//            rd.setCode(200);
-//            rd.setMsg("查询成功");
-//        }catch (JwtException e){
-//            e.printStackTrace();
-//            rd.setCode(500);
-//            rd.setMsg("token转码失败，token过期");
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            rd.setCode(500);
-//            rd.setMsg("查询失败");
-//        }
-//        this.jsonWrite2(rd);
-//    }
+	@RequestMapping("/findOrderListByGoodsId")
+    @ResponseBody
+    @ApiOperation(value = "根据商品id获取存在该商品订单列表", notes = "根据商品id获取存在该商品订单列表", httpMethod = "POST")
+    public void findOrderListByGoodsId(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
+						    		@ApiParam(required = true, name = "goodsId", value = "商品id")@RequestParam(value="goodsId")String goodsId,
+						            @ApiParam(required = true, name = "cpage", value = "当前页")@RequestParam("cpage")String cpage,
+                                   @ApiParam(required = true, name = "pagerow", value = "pagerow")@RequestParam("pagerow")String pagerow){
+        ResultData rd=new ResultData();
+        try{
+            User user= getCurrentUser();
+            Map map=new HashMap();
+            map.put("userId",user.getId());
+            map.put("goodsId", filterStr(goodsId));
+            List list = orderGoodsService.findOrderListByGoodsId(map,Integer.parseInt(cpage),Integer.parseInt(pagerow));
+            rd.setData(list);
+            rd.setCount(list.size());
+            rd.setCode(200);
+            rd.setMsg("查询成功");
+        }catch (JwtException e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("token转码失败，token过期");
+        }catch (Exception e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("查询失败");
+        }
+        this.jsonWrite2(rd);
+    }
 
     @RequestMapping("/deleteOrderInfo")
     @ResponseBody
@@ -119,6 +119,7 @@ public class OrderAppController extends BaseController{
                                 @ApiParam(required = true, name = "id", value = "订单id")@RequestParam("id")String id) {
         ResultData rd=new ResultData();
         try{
+        	User user= getCurrentUser();
             orderService.deleteInfo(id);
             orderGoodsService.deleteOrderGoodsInfoByOrderId(id);
             rd.setCode(200);
@@ -148,7 +149,7 @@ public class OrderAppController extends BaseController{
 						            ){
         ResultData rd=new ResultData();
         try{
-            User user= (User)request.getSession().getAttribute("jluser");
+            User user= getCurrentUser();
             orderService.saveOrderMultiInfo(id,customerid,state,trackingNo,orderGoods,postage,user);
             rd.setCode(200);
             rd.setMsg("保存成功");

@@ -121,5 +121,12 @@ public class OrderGoodsInfo implements java.io.Serializable{
 		this.soldTotalPrice = soldTotalPrice;
 	}
     
-    
+	@Override
+    public String toString() {
+    	StringBuffer sb=new StringBuffer(100);
+    	sb.append("id:"+this.id).append(",orderId:"+this.orderId+",goodsId:"+this.goodsId+",storeId:"+this.getStoreId()+
+    	",soldNum:"+this.getSoldNum()+",soldPrice:"+this.getSoldPrice()+",soldTotalPrice:"+this.getSoldTotalPrice()+
+    	",paidMoney:"+this.getPaidMoney()+",unpaidMoney:"+this.getUnpaidMoney());
+    	return sb.toString();
+    }
 }

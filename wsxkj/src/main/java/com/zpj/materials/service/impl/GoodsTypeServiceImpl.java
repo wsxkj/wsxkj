@@ -46,7 +46,7 @@ public class GoodsTypeServiceImpl implements GoodsTypeService {
 
         Map px=new HashMap();
         px.put("updateTime", "desc");
-        return goodsTypeDao.findPageDateSqlT(tablename, param,px , page, limit, GoodsType.class);
+        return goodsTypeDao.findPageDateSqlT(tablename,"", param,px , page, limit, GoodsType.class);
     }
 
 

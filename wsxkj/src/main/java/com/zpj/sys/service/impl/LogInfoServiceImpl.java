@@ -24,7 +24,7 @@ public class LogInfoServiceImpl implements LogInfoService {
 		Map<String,Object> param=new HashMap<String,Object>();
 		Map px=new HashMap();
 		px.put("createtime", "desc");
-		return logDao.findPageDateSqlT("sys_log_info", param,px , page, limit, LogInfo.class);
+		return logDao.findPageDateSqlT("sys_log_info","", param,px , page, limit, LogInfo.class);
 	}
 
 	public LogInfo findById(String id){

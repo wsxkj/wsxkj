@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.InitBinder;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.zpj.jwt.JwtUtil;
+import com.zpj.sys.entity.User;
+
+import io.jsonwebtoken.JwtException;
 
 public class BaseController {
 	//返回的json变量
@@ -224,5 +228,24 @@ public class BaseController {
 		}else{
 			return false;
 		}
+	}
+	
+	/**
+	 * 返回当前用户
+	 * @Title getCurrentUser
+	 * @return
+	 * @author zpj
+	 * @time 2019年5月27日 下午4:09:40
+	 */
+	public User getCurrentUser() throws JwtException{
+		String token=request.getParameter("token");
+		User user =null;
+		if(null!=token&&!"".equalsIgnoreCase(token)){
+			user= JwtUtil.getUserByJson(token);
+			if(null==user){
+				throw new JwtException("用户未登陆");
+			}
+		}
+		return user;
 	}
 }

@@ -13,11 +13,11 @@ import java.util.Random;
 
 public class MsgUtil {
 	public static void main(String[] args) {
-
+        MsgUtil.sendMsg("8888","18962862897");
 	}
 
 	public static void sendMsg(String yzm,String phone){
-        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "<accessKeyId>", "<accessSecret>");
+        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAIn1xLz01BcmER", "HQReR4XNoQWXN1T9UiMGTQyg4bbUcb");
         IAcsClient client = new DefaultAcsClient(profile);
 
         CommonRequest request = new CommonRequest();
@@ -29,7 +29,7 @@ public class MsgUtil {
         request.putQueryParameter("RegionId", "cn-hangzhou");
         request.putQueryParameter("PhoneNumbers", phone);
         request.putQueryParameter("SignName", "微商小会计");
-        request.putQueryParameter("TemplateCode", "SMS_163530571");
+        request.putQueryParameter("TemplateCode", "SMS_163845223");
         request.putQueryParameter("TemplateParam", "{\"code\":\""+yzm+"\"}");
         try {
             CommonResponse response = client.getCommonResponse(request);
@@ -50,7 +50,7 @@ public class MsgUtil {
     */
 	public static String generateYzm(){
 
-        String str="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        String str="0123456789";
         StringBuilder uuid=new StringBuilder(5);
         for(int i=0;i<4;i++) {
             uuid.append(str.charAt(new Random().nextInt(str.length())));

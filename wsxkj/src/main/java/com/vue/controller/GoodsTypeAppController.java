@@ -52,7 +52,7 @@ public class GoodsTypeAppController extends BaseController {
                                   @ApiParam(required = true, name = "pagerow", value = "pagerow")@RequestParam("pagerow")String pagerow){
         ResultData rd=new ResultData();
         try{
-            User user= (User)request.getSession().getAttribute("jluser");
+            User user= getCurrentUser();
             Map map=new HashMap();
             map.put("name",filterStr(name));
             map.put("userId",user.getId());
@@ -82,7 +82,7 @@ public class GoodsTypeAppController extends BaseController {
                            ){
         ResultData rd=new ResultData();
         try{
-            User user= (User)request.getSession().getAttribute("jluser");
+            User user= getCurrentUser();
             goodsTypeService.delInfo(id,user);
             rd.setCode(200);
             rd.setMsg("删除成功");

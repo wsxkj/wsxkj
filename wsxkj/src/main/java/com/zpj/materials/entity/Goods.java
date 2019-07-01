@@ -32,13 +32,32 @@ public class Goods implements java.io.Serializable{
 	private String goodsType;
 	@ApiModelProperty(value = "商品品牌",name="goodsBrand", required = false)
 	private String goodsBrand;
-	@ApiModelProperty(value = "创建时间",name="createTime", required = false)
-	private Date createTime=new Date();
 	@ApiModelProperty(value = "修改时间",name="updateTime", required = false)
 	private Date updateTime;
 	@ApiModelProperty(value = "总库存数量",name="storeNum", required = false)
 	private double storeNum;
+	
+	@ApiModelProperty(value = "总进货数量",name="totalInNum", required = false)
+	private double totalInNum;
+	@ApiModelProperty(value = "总售出数量",name="totalSoldNum", required = false)
+	private double totalSoldNum;
+	@ApiModelProperty(value = "总售出额",name="totoalSoldPrice", required = false)
+	private double totoalSoldPrice;
 
+	@ApiModelProperty(value = "售价最高价",name="maxOutPrice", required = false)
+	private double maxOutPrice;
+	
+	@ApiModelProperty(value = "售价最低价",name="minOutPrice", required = false)
+	private double minOutPrice;
+	
+	@ApiModelProperty(value = "进价最高价",name="maxInPrice", required = false)
+	private double maxInPrice;
+	
+	@ApiModelProperty(value = "进价最低价",name="minInPrice", required = false)
+	private double minInPrice;
+	
+	
+	
 	
 	@Id
 	@Column(name = "id",  nullable = false, length=50)
@@ -94,15 +113,6 @@ public class Goods implements java.io.Serializable{
 		this.goodsBrand = goodsBrand;
 	}
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "createTime", length=7)
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "updateTime", length=7)
 	public Date getUpdateTime() {
 		return updateTime;
@@ -120,10 +130,66 @@ public class Goods implements java.io.Serializable{
 		this.storeNum = storeNum;
 	}
 
+	
+	
+	
+	
+	
 	@Override
 	public String toString() {
 		return "id:"+this.getId()+
 				",name:"+this.getName();
 
 	}
+	@Transient
+	public double getMaxOutPrice() {
+		return maxOutPrice;
+	}
+	public void setMaxOutPrice(double maxOutPrice) {
+		this.maxOutPrice = maxOutPrice;
+	}
+	@Transient
+	public double getMinOutPrice() {
+		return minOutPrice;
+	}
+	public void setMinOutPrice(double minOutPrice) {
+		this.minOutPrice = minOutPrice;
+	}
+	@Transient
+	public double getMaxInPrice() {
+		return maxInPrice;
+	}
+	public void setMaxInPrice(double maxInPrice) {
+		this.maxInPrice = maxInPrice;
+	}
+	@Transient
+	public double getMinInPrice() {
+		return minInPrice;
+	}
+	public void setMinInPrice(double minInPrice) {
+		this.minInPrice = minInPrice;
+	}
+	@Transient
+	public double getTotalInNum() {
+		return totalInNum;
+	}
+	public void setTotalInNum(double totalInNum) {
+		this.totalInNum = totalInNum;
+	}
+	@Transient
+	public double getTotalSoldNum() {
+		return totalSoldNum;
+	}
+	public void setTotalSoldNum(double totalSoldNum) {
+		this.totalSoldNum = totalSoldNum;
+	}
+	@Transient
+	public double getTotoalSoldPrice() {
+		return totoalSoldPrice;
+	}
+	public void setTotoalSoldPrice(double totoalSoldPrice) {
+		this.totoalSoldPrice = totoalSoldPrice;
+	}
+	
+	
 }

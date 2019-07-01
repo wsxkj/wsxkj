@@ -83,6 +83,11 @@ public class GoodsBrand implements java.io.Serializable{
 	public void setTypeId(String typeId) {
 		this.typeId = typeId;
 	}
-    
+	@Override
+	public String toString() {
+		return "id:"+this.getId()+
+				",name:"+this.getName();
+
+	}
     
 }

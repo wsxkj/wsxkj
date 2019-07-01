@@ -32,7 +32,7 @@ public class LogAppController extends BaseController {
     @ApiOperation(value = "日志列表", notes = "日志列表", httpMethod = "GET")
     public void findList(String cpage,String pagerow,String loginId,String isAdmin){
         Map param=getRequestMap();
-        User user=(User)getSession().getAttribute("jluser");
+        User user=getCurrentUser();
         MyPage pagedata = logInfoService.findPageData(Integer.parseInt(cpage),Integer.parseInt(pagerow));
         Map map=new HashMap();
         if(null==pagedata.getData()){

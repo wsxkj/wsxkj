@@ -441,6 +441,7 @@ public class BaseDao<T extends Serializable> {
 	 * 单表查询分页
 	 * @Title findPageDateSqlT
 	 * @param tablename
+	 * @param column
 	 * @param conditions
 	 * @param px
 	 * @param page
@@ -451,10 +452,23 @@ public class BaseDao<T extends Serializable> {
 	 * @time 2018年3月7日 下午1:09:43
 	 */
 
-	public MyPage findPageDateSqlT(String tablename, Map<String, Object> conditions, Map<String, Object> px,
+	public MyPage findPageDateSqlT(String tablename, String columns,Map<String, Object> conditions, Map<String, Object> px,
 			Integer page, Integer pagesize, Class<T> t) {
-		StringBuffer sql = new StringBuffer();
-		sql.append("select * from ").append(tablename).append(" where 1=1 ");
+		StringBuffer sql = new StringBuffer(500);
+		sql.append("select ");
+		if(null!=columns&&!columns.equalsIgnoreCase("")){
+			String[] cols=columns.split(",");
+			for(int n=0;n<cols.length;n++){
+				if(n>0){
+					sql.append(",");
+				}
+				sql.append(cols[n]);
+			}
+		}else{
+			sql.append(" * ");
+		}
+		
+		sql.append(" from ").append(tablename).append(" where 1=1 ");
 		String key;
 		String value;
 		if (conditions != null) {
@@ -582,6 +596,7 @@ public class BaseDao<T extends Serializable> {
 			session.createSQLQuery(sql).executeUpdate();
 		} catch (RuntimeException e) {
 			e.printStackTrace();
+			throw e;
 		}
 	}
 

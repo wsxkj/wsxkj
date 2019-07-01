@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 //		  }
 //		}
 		
-		return userDao.findPageDateSqlT("sys_userinfo", param,px , page, limit, User.class);
+		return userDao.findPageDateSqlT("sys_userinfo","", param,px , page, limit, User.class);
 	}
 
 	@Log(type="保存",remark="保存用户信息")

@@ -52,7 +52,7 @@ public class GoodsBrandAppController extends BaseController {
                                   @ApiParam(required = false, name = "pagerow", value = "pagerow")@RequestParam("pagerow")String pagerow){
         ResultData rd=new ResultData();
         try{
-            User user= (User)request.getSession().getAttribute("jluser");
+            User user= getCurrentUser();
             Map map=new HashMap();
             map.put("name",filterStr(name));
             map.put("typeId", filterStr(typeid));

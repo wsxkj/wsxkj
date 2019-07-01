@@ -132,4 +132,13 @@ public class Store implements java.io.Serializable {
 	public void setGoodsId(String goodsId) {
 		this.goodsId = goodsId;
 	}
+	
+	@Override
+    public String toString() {
+    	StringBuffer sb=new StringBuffer(100);
+    	sb.append("id:"+this.id).append(",userId:"+this.userId+",goodsId:"+this.getGoodsId()+
+    			",inNum:"+this.getInNum()+",inPrice:"+this.getInPrice()+",outPirce:"+this.getOutPrice()+
+    			",storeNum"+this.getStoreNum()+",inDate:"+this.getInDate()+",sureDate:"+this.getSureDate());
+    	return sb.toString();
+    }
 }

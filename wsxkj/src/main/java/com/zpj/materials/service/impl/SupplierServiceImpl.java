@@ -28,7 +28,7 @@ public class SupplierServiceImpl implements SupplierService {
 		param.put("name-like", username);
 		Map px=new HashMap();
 	    px.put("createtime", "desc");
-		return supplierDao.findPageDateSqlT(tablename, param,px , page, limit, Supplier.class);
+		return supplierDao.findPageDateSqlT(tablename,"", param,px , page, limit, Supplier.class);
 	}
 
 	@Log(type="保存",remark="保存供货商信息")

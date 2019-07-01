@@ -26,7 +26,7 @@ public class OrderInfo implements java.io.Serializable{
     private String customerId;
     @ApiModelProperty(value = "邮费",name="postage", required = false)
     private double postage;
-    @ApiModelProperty(value = "订单状态0,1,2,3",name="state", required = false)
+    @ApiModelProperty(value = "订单状态0,1,2,3。0表示已发货，1表示未发货现货，2表示未发货缺货",name="state", required = false)
     private String state;
     @ApiModelProperty(value = "更新时间",name="updateTime", required = false)
     private Date updateTime;
@@ -106,5 +106,11 @@ public class OrderInfo implements java.io.Serializable{
 	}
     
 	
-	
+	@Override
+    public String toString() {
+    	StringBuffer sb=new StringBuffer(100);
+    	sb.append("id:"+this.id).append(",userId:"+this.userId+",customerId:"+this.getCustomerId()+
+    			",postage:"+this.getPostage()+",state:"+this.getState()+",trackNo:"+this.getTrackingNo());
+    	return sb.toString();
+    }
 }
