@@ -440,9 +440,9 @@ public class BaseDao<T extends Serializable> {
 	/**
 	 * 单表查询分页
 	 * @Title findPageDateSqlT
-	 * @param tablename
-	 * @param column
-	 * @param conditions
+	 * @param tablename 表名
+	 * @param columns  需要查询的字段名，多个用逗号分割
+	 * @param conditions   条件
 	 * @param px
 	 * @param page
 	 * @param pagesize

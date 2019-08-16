@@ -13,4 +13,6 @@ public interface GoodsTypeService {
     void saveInfo(GoodsType gt);
     
     void delInfo(String id,User user);
+
+    public GoodsType findById(String id);
 }

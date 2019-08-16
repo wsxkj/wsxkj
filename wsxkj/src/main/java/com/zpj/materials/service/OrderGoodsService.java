@@ -57,4 +57,17 @@ public interface OrderGoodsService {
 
 
 	public void deleteInfo(String id);
+
+	/*
+	 * @MethodName: findFourData
+	 * @Description: TODO(查询四项数据)
+	 * @params [param]
+	 * @return java.util.Map
+	 * @author zpj
+	 * @date 2019/8/13 16:54
+	*/
+	public Map findFourData(Map param);
+
+
+
 }

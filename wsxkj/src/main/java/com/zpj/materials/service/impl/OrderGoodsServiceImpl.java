@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zpj.materials.entity.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +26,70 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
 	@Autowired
 	private BaseDao<OrderGoodsInfo> orderGoodsDao;
 	private String tablename="jl_material_order_goods_info";
+
+	@Autowired
+	private BaseDao<OrderInfo> orderDao;
+	private String tablename_order="jl_material_order_info";
+
+
     @Autowired
     private BaseDao<LogInfo> logDao;
+	@Autowired
+	private BaseDao<Store> storeBaseDao;
+    /*
+     * @MethodName: findFourData
+     * @Description: TODO(获取今日销售额，净利润，进货件数，出售件数)
+     * @params [canshu]
+     * @return java.util.Map
+     * @author zpj
+     * @date 2019/8/13 17:11
+    */
+	public Map findFourData(Map canshu){
+		StringBuilder sql=new StringBuilder(200);
+		sql.append("select a.soldNum,a.soldPrice,a.soldTotalPrice,b.inPrice,b.outPrice  from "+tablename +" a left join  jl_material_store_info b on a.storeId=b.id  where 1=1 ");
+		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
+			sql.append(" and userId='"+canshu.get("userId")+"'") ;
+		}
+		if(null!=canshu.get("today")&&!"".equalsIgnoreCase((String)canshu.get("today"))){
+			sql.append(" and updateTime like '"+canshu.get("startTime")+"%'") ;
+		}
+		float totalSoldMoney=0;//今日销售总额
+		float inMoney=0;//净利润
+		int inNum=0;//进货数量
+		int outNum=0;//出货数量
+		Map tempMap=new HashMap();
+		List  list=orderGoodsDao.findMapObjBySqlNoPage(sql.toString());
+		if(list!=null&&list.size()>0){
+
+			for (int i = 0; i < list.size(); i++) {
+				tempMap=(Map)list.get(i);
+				totalSoldMoney+=((Integer)tempMap.get("soldTotalPrice"));
+				float totalbuyMoney=((Integer)tempMap.get("soldNum"))*((Integer)tempMap.get("inPrice"));
+				inMoney+=(totalSoldMoney-totalbuyMoney);
+				outNum+=((Integer)tempMap.get("soldNum"));
+			}
+		}
+		sql=new StringBuilder(200);
+		sql.append(" select inNum,inDate from jl_material_store_info where 1=1 ");
+		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
+			sql.append(" and userId='"+canshu.get("userId")+"'") ;
+		}
+		if(null!=canshu.get("today")&&!"".equalsIgnoreCase((String)canshu.get("today"))){
+			sql.append(" and updateTime like '"+canshu.get("startTime")+"%'") ;
+		}
+		List  list1 =storeBaseDao.findMapObjBySqlNoPage(sql.toString());
+		for (int k = 0; k <list1.size() ; k++) {
+			tempMap=(Map)list1.get(k);
+			inNum+=(Integer)tempMap.get("inNum");
+		}
+
+		Map retMap=new HashMap();
+		retMap.put("soldmoney",totalSoldMoney);
+		retMap.put("inmoney",inMoney);
+		retMap.put("innum",inNum);
+		retMap.put("outnum",outNum);
+		return retMap;
+	}
 
     public int  findOrderGoodsOutCount(Map canshu){
         Map param=new HashMap();
@@ -145,7 +208,7 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
             orderGoodsDao.delete(ogi);
         }
     }
-    
+
     /**
 	 * 判断空字符串
 	 * @Title judgeStr

@@ -5,6 +5,8 @@ import com.zpj.common.MyPage;
 import com.zpj.common.ResultData;
 import com.zpj.jwt.JwtUtil;
 import com.zpj.materials.entity.Customer;
+import com.zpj.materials.entity.Goods;
+import com.zpj.materials.entity.GoodsType;
 import com.zpj.materials.service.GoodsTypeService;
 import com.zpj.sys.entity.User;
 import io.jsonwebtoken.JwtException;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,13 +75,45 @@ public class GoodsTypeAppController extends BaseController {
         }
         this.jsonWrite2(rd);
     }
-    
+
+    @RequestMapping("/saveInfo")
+    @ResponseBody
+    @ApiOperation(value = "保存商品类型", notes = "保存商品类型", httpMethod = "POST" ,response = GoodsType.class)
+    public void saveInfo(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
+                        @ApiParam( required = false ,name = "id", value = "类型id主键")@RequestParam(value="id",required = false)String id,
+                         @ApiParam( required = true ,name = "name", value = "名称")@RequestParam(value="name",required = true)String name
+    ){
+        ResultData rd=new ResultData();
+        try{
+            User user= getCurrentUser();
+            GoodsType goodsType=new GoodsType();
+            if(judgeStr(id)){
+                goodsType.setId(id);
+            }
+            goodsType.setName(name);
+            goodsType.setUpdateTime(new Date());
+            goodsType.setUserId(user.getId());
+            goodsTypeService.saveInfo(goodsType);
+
+            rd.setCode(200);
+            rd.setMsg("保存成功");
+        }catch (JwtException e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("token转码失败，token过期");
+        }catch (Exception e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("保存失败");
+        }
+        this.jsonWrite2(rd);
+    }
     
     @RequestMapping("/delInfo")
     @ResponseBody
-    @ApiOperation(value = "删除类型", notes = "删除类型", httpMethod = "POST" ,response = Customer.class)
+    @ApiOperation(value = "删除类型", notes = "删除类型", httpMethod = "POST" ,response = GoodsType.class)
     public void delInfo(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
-                            @ApiParam(required = true, name = "id", value = "类型id主键")@RequestParam("id")String id
+                            @ApiParam(required = true, name = "id", value = "类型id主键")@RequestParam(value="id",required = true)String id
                            ){
         ResultData rd=new ResultData();
         try{

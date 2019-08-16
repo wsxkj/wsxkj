@@ -61,6 +61,11 @@ public class OrderServiceImpl implements OrderService{
     	if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
     		wheresql.append(" and o.userId='"+canshu.get("userId")+"' ");
         }
+
+        if(null!=canshu.get("time")&&!"".equalsIgnoreCase((String)canshu.get("time"))){
+            wheresql.append(" and o.updateTime like '"+canshu.get("time")+"%' ");
+        }
+
         if(null!=canshu.get("state")&&!"".equalsIgnoreCase((String)canshu.get("state"))){
         	wheresql.append(" and o.state ='"+canshu.get("state")+"' ");
         }
@@ -211,8 +216,8 @@ public class OrderServiceImpl implements OrderService{
             throw new RuntimeException();
         }
     }
-    
-    
+
+
     /**
 	 * 过滤空数据
 	 * @Title filterStr

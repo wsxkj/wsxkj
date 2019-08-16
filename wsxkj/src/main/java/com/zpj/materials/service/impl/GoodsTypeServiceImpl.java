@@ -3,8 +3,6 @@ package com.zpj.materials.service.impl;
 import com.zpj.common.BaseDao;
 import com.zpj.common.MyPage;
 import com.zpj.common.aop.Log;
-import com.zpj.materials.entity.Customer;
-import com.zpj.materials.entity.Goods;
 import com.zpj.materials.entity.GoodsType;
 import com.zpj.materials.service.GoodsTypeService;
 import com.zpj.sys.entity.LogInfo;
@@ -52,7 +50,12 @@ public class GoodsTypeServiceImpl implements GoodsTypeService {
 
     @Log(type="保存",remark="保存商品类型信息")
 	public void saveInfo(GoodsType gt) {
-		goodsTypeDao.add(gt);
+		GoodsType temp=findById(gt.getId());
+		if(null!=temp){
+			goodsTypeDao.merge(gt,gt.getId());
+		}else{
+			goodsTypeDao.add(gt);
+		}
 	}
 	
 	public GoodsType findById(String id){
