@@ -682,21 +682,21 @@ public class DateHelper
 		return 	day;
 	}
 	
-	public static void main(String[] args) throws Exception
-	{  
-		System.out.println(getMonthDay(-1,"yyyyMMdd","20100228")); 
-		System.out.println(getMonthDay(-1,"yyyyMMdd","20100131"));
-		System.out.println(getMonthDay(-1,"yyyyMMdd","20100331"));
-		System.out.println(getMonthDay(-1,"yyyyMMdd","20100430"));
-		System.out.println(getMonthDay(-1,"yyyyMMdd","20100402"));
-		System.out.println(getMonthDay(-1,"yyyyMMdd","20100217"));
-		int a = getWeekIndexOfYear("2012-05-15");
-		System.out.println(a);
-		System.out.println(getFirstDayOfWeek("2012", "20", "yyyy-MM-dd"));
-		System.out.println(getTwoDayBefore("yyyy-MM-dd"));
-		
-		System.out.println(DateHelper.getStringDate("2013-12-27", "yyyy-MM-dd"));
-	}
+//	public static void main(String[] args) throws Exception
+//	{  
+//		System.out.println(getMonthDay(-1,"yyyyMMdd","20100228")); 
+//		System.out.println(getMonthDay(-1,"yyyyMMdd","20100131"));
+//		System.out.println(getMonthDay(-1,"yyyyMMdd","20100331"));
+//		System.out.println(getMonthDay(-1,"yyyyMMdd","20100430"));
+//		System.out.println(getMonthDay(-1,"yyyyMMdd","20100402"));
+//		System.out.println(getMonthDay(-1,"yyyyMMdd","20100217"));
+//		int a = getWeekIndexOfYear("2012-05-15");
+//		System.out.println(a);
+//		System.out.println(getFirstDayOfWeek("2012", "20", "yyyy-MM-dd"));
+//		System.out.println(getTwoDayBefore("yyyy-MM-dd"));
+//		
+//		System.out.println(DateHelper.getStringDate("2013-12-27", "yyyy-MM-dd"));
+//	}
 
 	/**
 	 *  eg: getHourList("8:00","10:00","HH:mm",30) 
@@ -940,6 +940,49 @@ public class DateHelper
 	    }
 	    return true;
 	  }
-	
-	 
+
+	public static List<String> getDayByMonth(int yearParam,int monthParam){
+		List list = new ArrayList();
+		Calendar aCalendar = Calendar.getInstance(Locale.CHINA);
+		aCalendar.set(yearParam,monthParam,1);
+		int year = aCalendar.get(Calendar.YEAR);//年份
+		int month = aCalendar.get(Calendar.MONTH);// + 1;//月份
+		int day = aCalendar.getActualMaximum(Calendar.DATE);
+		for (int i = 1; i <= day; i++) {
+		String aDate=null;
+		if(month<10&&i<10){
+			aDate = String.valueOf(year)+"-0"+month+"-0"+i;
+		}
+		if(month<10&&i>=10){
+			aDate = String.valueOf(year)+"-0"+month+"-"+i;
+		}
+		if(month>=10&&i<10){
+			aDate = String.valueOf(year)+"-"+month+"-0"+i;
+		}
+		if(month>=10&&i>=10){
+			aDate = String.valueOf(year)+"-"+month+"-"+i;
+		}
+		list.add(aDate);
+		}
+		return list;
+}
+
+	public static void main(String[] args) {
+		NextMonthToday(6);
+	}
+	public static Date NextMonthToday(int month){
+		//获取下个月的日期（上个月的今天）
+		Calendar cal = Calendar.getInstance();
+
+		cal.setTime(new Date());
+		cal.add(Calendar.MONTH, month);
+		int year3 = cal.get(Calendar.YEAR);
+		int month3 = cal.get(Calendar.MONTH)+1;
+		int day3 = cal.get(Calendar.DAY_OF_MONTH);
+		Date date3 = cal.getTime();
+		SimpleDateFormat format3= new SimpleDateFormat("yyyy-MM-dd");
+		String dateStringYYYYMMDD3 = format3.format(date3);
+		System.out.println(dateStringYYYYMMDD3);
+		return date3;
+	}
 }

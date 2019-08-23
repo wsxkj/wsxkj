@@ -48,10 +48,10 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
 		StringBuilder sql=new StringBuilder(200);
 		sql.append("select a.soldNum,a.soldPrice,a.soldTotalPrice,b.inPrice,b.outPrice  from "+tablename +" a left join  jl_material_store_info b on a.storeId=b.id  where 1=1 ");
 		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
-			sql.append(" and userId='"+canshu.get("userId")+"'") ;
+			sql.append(" and b.userId='"+canshu.get("userId")+"'") ;
 		}
-		if(null!=canshu.get("today")&&!"".equalsIgnoreCase((String)canshu.get("today"))){
-			sql.append(" and updateTime like '"+canshu.get("startTime")+"%'") ;
+		if(null!=canshu.get("time")&&!"".equalsIgnoreCase((String)canshu.get("time"))){
+			sql.append(" and a.updateTime like '"+canshu.get("time")+"%'") ;
 		}
 		float totalSoldMoney=0;//今日销售总额
 		float inMoney=0;//净利润
@@ -63,10 +63,10 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
 
 			for (int i = 0; i < list.size(); i++) {
 				tempMap=(Map)list.get(i);
-				totalSoldMoney+=((Integer)tempMap.get("soldTotalPrice"));
-				float totalbuyMoney=((Integer)tempMap.get("soldNum"))*((Integer)tempMap.get("inPrice"));
+				totalSoldMoney+=((Double)tempMap.get("soldTotalPrice"));
+				Double totalbuyMoney=((Double)tempMap.get("soldNum"))*((Double)tempMap.get("inPrice"));
 				inMoney+=(totalSoldMoney-totalbuyMoney);
-				outNum+=((Integer)tempMap.get("soldNum"));
+				outNum+=((Double)tempMap.get("soldNum"));
 			}
 		}
 		sql=new StringBuilder(200);
@@ -74,13 +74,13 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
 		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
 			sql.append(" and userId='"+canshu.get("userId")+"'") ;
 		}
-		if(null!=canshu.get("today")&&!"".equalsIgnoreCase((String)canshu.get("today"))){
-			sql.append(" and updateTime like '"+canshu.get("startTime")+"%'") ;
+		if(null!=canshu.get("time")&&!"".equalsIgnoreCase((String)canshu.get("time"))){
+			sql.append(" and inDate like '"+canshu.get("time")+"%'") ;
 		}
 		List  list1 =storeBaseDao.findMapObjBySqlNoPage(sql.toString());
 		for (int k = 0; k <list1.size() ; k++) {
 			tempMap=(Map)list1.get(k);
-			inNum+=(Integer)tempMap.get("inNum");
+			inNum+=(Double)tempMap.get("inNum");
 		}
 
 		Map retMap=new HashMap();
@@ -88,6 +88,7 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
 		retMap.put("inmoney",inMoney);
 		retMap.put("innum",inNum);
 		retMap.put("outnum",outNum);
+		retMap.put("date",canshu.get("time"));
 		return retMap;
 	}
 

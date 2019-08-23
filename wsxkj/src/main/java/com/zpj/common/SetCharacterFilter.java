@@ -86,6 +86,7 @@ public class SetCharacterFilter implements Filter{
     			.getWebApplicationContext(config.getServletContext());
     	this.filterConfig=config;
 		this.endcoding = filterConfig.getInitParameter("encoding");
+//		PropertyHelper.init();
 	}
     private String getCurrentURL(HttpServletRequest request) {
 		StringBuffer sb = new StringBuffer();

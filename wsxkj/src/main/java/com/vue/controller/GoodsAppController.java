@@ -201,6 +201,8 @@ public class GoodsAppController extends BaseController {
         this.jsonWrite2(rd);
     }
     
+    
+    
     @RequestMapping("/delInfo")
     @ResponseBody
     @ApiOperation(value = "删除商品信息", notes = "删除商品信息", httpMethod = "POST" ,response = Customer.class)

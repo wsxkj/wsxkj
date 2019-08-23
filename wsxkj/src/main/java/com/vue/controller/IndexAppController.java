@@ -94,7 +94,7 @@ public class IndexAppController extends BaseController{
             User user= getCurrentUser();
 
             Map param=new HashMap();
-            param.put("today", DateHelper.getDateString(new Date(),"yyyy-MM-dd"));
+            param.put("time", DateHelper.getDateString(new Date(),"yyyy-MM-dd"));
             param.put("userId",user.getId());
 
             Map retMap=orderGoodsService.findFourData(param);
@@ -117,7 +117,7 @@ public class IndexAppController extends BaseController{
     @ResponseBody
     @ApiOperation(value = "首页获取今日订单列表", notes = "首页获取今日订单列表", httpMethod = "POST" )
     public void getOrderDataByTime(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
-                                   @ApiParam(required = false, name = "state", value = "订单状态‘1’获取已发货订单，传‘23’获取未发货订单")@RequestParam(value="state",required = false)String state
+                                   @ApiParam(required = false, name = "state", value = "订单状态‘0’获取已发货订单，传‘12’获取未发货订单")@RequestParam(value="state",required = false)String state
     ){
         ResultData rd=new ResultData();
         try{
@@ -126,7 +126,7 @@ public class IndexAppController extends BaseController{
             map.put("userId",user.getId());
             map.put("state", filterStr(state));
             map.put("time",DateHelper.getDateString(new Date(),"yyyy-MM-dd"));
-            MyPage pagedata = orderService.findPageDataMuti(map,1,3);
+            MyPage pagedata = orderService.findPageDataMuti(map,1,50);
             List<Map> list= (List<Map>)pagedata.data;
             Map toi=null;
             MyPage tp=null;
@@ -134,7 +134,7 @@ public class IndexAppController extends BaseController{
                 toi =list.get(i);
                 map =new HashMap();
                 map.put("orderId", toi.get("id"));
-                tp = orderGoodsService.findPageDataMuti(map,1,20);
+                tp = orderGoodsService.findPageDataMuti(map,1,50);
                 toi.put("goodsList", tp.data);
             }
             rd.setData(list);
@@ -153,4 +153,92 @@ public class IndexAppController extends BaseController{
         this.jsonWrite2(rd);
     }
 
+
+    @RequestMapping("/getSumDataByMonthDay")
+    @ResponseBody
+    @ApiOperation(value = "首页获取某个月每天的销售额，净利润，进货件数，出售件数", notes = "首页获取某个月每天的销售额，净利润，进货件数，出售件数", httpMethod = "POST" )
+    public void getSumDataByMonthDay(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
+                                   @ApiParam(required = false, name = "yuefen", value = "例如2019年7月份 传'2019-07'")@RequestParam(value="yuefen",required = false)String yuefen
+    ){
+        ResultData rd=new ResultData();
+        try{
+            User user= getCurrentUser();
+            Map map=new HashMap();
+            map.put("userId",user.getId());
+            if(!judgeStr(yuefen)){
+                map.put("time",DateHelper.getDateString(new Date(),"yyyy-MM"));
+            }else{
+                map.put("time",yuefen);
+            }
+            List<Map> list = orderService.findPageDataMutiGroupByMonthDay(map);
+            rd.setData(list);
+            rd.setCode(200);
+            rd.setMsg("查询成功");
+        }catch (JwtException e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("token转码失败，token过期");
+        }catch (Exception e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("查询失败");
+        }
+        this.jsonWrite2(rd);
+    }
+    
+    @RequestMapping("/getSumDataByMonth")
+    @ResponseBody
+    @ApiOperation(value = "获取某月销售额和净利润", notes = "获取某月销售额和净利润", httpMethod = "POST" )
+    public void getSumDataByMonth(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
+    		@ApiParam(required = false, name = "yuefen", value = "例如2019年7月份 传'2019-07'")@RequestParam(value="yuefen",required = false)String yuefen    ){
+    	ResultData rd=new ResultData();
+        try{
+            User user= getCurrentUser();
+            Map map=new HashMap();
+            map.put("userId",user.getId());
+            if(!judgeStr(yuefen)){
+                map.put("time",DateHelper.getDateString(new Date(),"yyyy-MM"));
+            }else{
+                map.put("time",yuefen);
+            }
+            rd.setData(orderService.findPageDataMutiGroupByMonth(map));
+            rd.setCode(200);
+            rd.setMsg("查询成功");
+        }catch (JwtException e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("token转码失败，token过期");
+        }catch (Exception e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("查询失败");
+        }
+        this.jsonWrite2(rd);
+    }
+    
+    
+    
+    @RequestMapping("/getSumDataAll")
+    @ResponseBody
+    @ApiOperation(value = "获取总销售额、总净利润、总出售件数，总进货件数", notes = "获取总销售额、总净利润、总出售件数，总进货件数", httpMethod = "POST" )
+    public void getSumDataAll(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token){
+    	ResultData rd=new ResultData();
+        try{
+            User user= getCurrentUser();
+            Map map=new HashMap();
+            map.put("userId",user.getId());
+            rd.setData(orderService.findMutiSumDataAll(map));
+            rd.setCode(200);
+            rd.setMsg("查询成功");
+        }catch (JwtException e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("token转码失败，token过期");
+        }catch (Exception e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("查询失败");
+        }
+        this.jsonWrite2(rd);
+    }
 }

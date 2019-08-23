@@ -70,7 +70,15 @@ public class StoreServiceImpl implements StoreService {
     
     @Log(type="保存",remark="保存库存信息")
     public void saveInfo(Store store){
-        storeBaseDao.add(store);
+    	if(null!=storeBaseDao.get(store.getId(), Store.class)){
+    		storeBaseDao.merge(store, store.getId());
+    	}else{
+    		storeBaseDao.add(store);
+    	}
+    }
+    @Log(type="删除",remark="删除库存信息")
+    public void delInfo(String id){
+    	storeBaseDao.executeSql("delete from "+tablename+" where id='"+id+"'");
     }
     
     public Store findById(String id){

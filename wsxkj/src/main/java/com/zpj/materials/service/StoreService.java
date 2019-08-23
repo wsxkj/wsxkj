@@ -33,6 +33,8 @@ public interface StoreService {
     
     public Store findById(String id);
     
+    public void delInfo(String id);
+    
     /**
      * 查询库存数量
      * @Title findStoreInCount

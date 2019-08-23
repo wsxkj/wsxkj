@@ -36,10 +36,21 @@ public class User implements java.io.Serializable {
 	private Date lastLoginTime;
 	@ApiModelProperty(value = "更新时间",name="updateTime", required =  false)
 	private Date updateTime;
-	@ApiModelProperty(value = "会员等级",name="levelId", required =  false)
+	@ApiModelProperty(value = "会员等级表,主键id",name="levelId", required =  false)
 	private String levelId;
-	
-	
+	@ApiModelProperty(value = "会员等级0,1,2，3,4",name="levelId", required =  false)
+	private int level;
+	@ApiModelProperty(value = "物流调用接口次数",name="levelId", required =  false)
+	private int maxtime;
+
+	@ApiModelProperty(value = "会员开始时间",name="levelId", required =  false)
+	private Date startTime;
+	@ApiModelProperty(value = "会员结束时间",name="levelId", required =  false)
+	private Date endTime;
+	@ApiModelProperty(value = "是否过期，0未过期，1已过期",name="levelId", required =  false)
+	private String isExpire;
+
+
 	
 	@ApiModelProperty(value = "token",name="token", required =  false)
 	private String token;
@@ -102,9 +113,48 @@ public class User implements java.io.Serializable {
 	public void setToken(String token) {
 		this.token = token;
 	}
-	
-	
-	
+
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	public int getMaxtime() {
+		return maxtime;
+	}
+
+	public void setMaxtime(int maxtime) {
+		this.maxtime = maxtime;
+	}
+
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+
+	public String getIsExpire() {
+		return isExpire;
+	}
+
+	public void setIsExpire(String isExpire) {
+		this.isExpire = isExpire;
+	}
+
 	@Override
 	public String toString() {
 		StringBuffer sb=new StringBuffer(300);

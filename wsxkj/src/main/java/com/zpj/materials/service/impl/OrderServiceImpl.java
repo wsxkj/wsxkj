@@ -1,11 +1,9 @@
 package com.zpj.materials.service.impl;
 
 import java.math.BigInteger;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.zpj.common.DateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,7 +65,12 @@ public class OrderServiceImpl implements OrderService{
         }
 
         if(null!=canshu.get("state")&&!"".equalsIgnoreCase((String)canshu.get("state"))){
-        	wheresql.append(" and o.state ='"+canshu.get("state")+"' ");
+        	String state=(String)canshu.get("state");
+        	if(state.equalsIgnoreCase("12")){
+        		wheresql.append(" and ( o.state ='1' or o.state ='2' ) ");
+        	}else{
+        		wheresql.append(" and o.state ='"+canshu.get("state")+"' ");
+        	}
         }
         sql.append(wheresql).append(" order by o.updateTime desc ");
     	List list=orderDao.findMapObjBySql(sql.toString(), null, page, limit);
@@ -84,6 +87,155 @@ public class OrderServiceImpl implements OrderService{
     	my.setCount(num);
     	return my;
     }
+    
+    public Map findPageDataMutiGroupByMonth(Map canshu){
+    	Map retmap=new HashMap();
+    	StringBuilder sql=new StringBuilder(200);
+    	
+		sql.append("select select sum(t.stp) as xse,DATE_FORMAT(t.updateTime,'%Y-%m') as time,sum(itp) as jlr from ( select a.soldTotalPrice as stp,a.updateTime,(a.soldNum*b.inPrice) as itp  from jl_material_order_goods_info a left join  jl_material_store_info b on a.storeId=b.id  where 1=1 ");
+		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
+			sql.append(" and b.userId='"+canshu.get("userId")+"'") ;
+		}
+		if(null!=canshu.get("time")&&!"".equalsIgnoreCase((String)canshu.get("time"))){
+			sql.append(" and a.updateTime like '"+canshu.get("time")+"%'") ;
+		}
+		sql.append(") t group by DATE_FORMAT(updateTime,'%Y-%m') ");
+		List list=orderDao.findMapObjBySqlNoPage(sql.toString());
+		if(null!=list&&list.size()>0){
+			retmap=(Map)list.get(0);
+		}else{
+			retmap.put("xse", "0");
+			retmap.put("time", canshu.get("time"));
+			retmap.put("jlr", "0");
+		}
+		
+    	return retmap;
+    }
+
+
+    public Map findMutiSumDataAll(Map canshu){
+    	List retList=new ArrayList<>();
+    	StringBuilder sql=new StringBuilder(200);
+    	//查询总销售额，总净利润，总出售件数
+		sql.append(" select sum(a.soldTotalPrice) as soldmoney,sum(a.soldNum*b.inPrice) as inmoney , sum(a.soldNum) as outnum  from jl_material_order_goods_info a left join  jl_material_store_info b on a.storeId=b.id  where 1=1 ");
+		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
+			sql.append(" and b.userId='"+canshu.get("userId")+"'") ;
+		}
+		List<Map> list=orderDao.findMapObjBySqlNoPage(sql.toString());
+		//进货件数
+		sql=new StringBuilder(200);
+		sql.append("select SUM(inNum) as innum from jl_material_store_info ");
+		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
+			sql.append(" and b.userId='"+canshu.get("userId")+"'") ;
+		}
+		List<Map> list2=orderDao.findMapObjBySqlNoPage(sql.toString());
+		Map retMap=new HashMap();
+		if(null!=list&&list.size()>0){
+			retMap.put("soldmoney",list.get(0).get("soldmoney"));
+			retMap.put("inmoney",list.get(0).get("inmoney"));
+			retMap.put("outnum",list.get(0).get("outnum"));
+		}else{
+			retMap.put("soldmoney","0");
+			retMap.put("inmoney","0");
+			retMap.put("outnum","0");
+		}
+		if(null!=list2&&list2.size()>0){
+			retMap.put("innum",list2.get(0).get("innum"));
+		}else{
+			retMap.put("innum","0");
+		}
+		return retMap;
+    }
+    
+    public List findPageDataMutiGroupByMonthDay(Map canshu){
+    	List retList=new ArrayList<>();
+    	StringBuilder sql=new StringBuilder(200);
+    	//查询销售额，日期，净利润，出售件数
+		sql.append(" select sum(t.stp) as soldmoney,DATE_FORMAT(t.updateTime,'%Y-%m-%d') as time,sum(itp) as inmoney,sum(t.chl) as outnum from ( select a.soldTotalPrice as stp,a.updateTime,(a.soldNum*b.inPrice) as itp , a.soldNum as chl  from jl_material_order_goods_info a left join  jl_material_store_info b on a.storeId=b.id  where 1=1 ");
+		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
+			sql.append(" and b.userId='"+canshu.get("userId")+"'") ;
+		}
+		if(null!=canshu.get("time")&&!"".equalsIgnoreCase((String)canshu.get("time"))){
+			sql.append(" and a.updateTime like '"+canshu.get("time")+"%'") ;
+		}
+		sql.append(") t group by DATE_FORMAT(updateTime,'%Y-%m-%d') ");
+		List<Map> list=orderDao.findMapObjBySqlNoPage(sql.toString());
+		//进货件数
+		sql=new StringBuilder(200);
+		sql.append("select DATE_FORMAT(inDate,'%Y-%m-%d') as time ,SUM(inNum) as innum from jl_material_store_info ");
+		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
+			sql.append(" and b.userId='"+canshu.get("userId")+"'") ;
+		}
+		if(null!=canshu.get("time")&&!"".equalsIgnoreCase((String)canshu.get("time"))){
+			sql.append(" and a.updateTime like '"+canshu.get("time")+"%'") ;
+		}
+		sql.append(" GROUP BY DATE_FORMAT(inDate,'%Y-%m-%d') ");
+		
+		List<Map> list2=orderDao.findMapObjBySqlNoPage(sql.toString());
+		
+		//获取某个月每一天的日期list
+		String time=(String)canshu.get("time");
+	    int year=Integer.parseInt(time.split("-")[0]);
+	    String ms=time.split("-")[1];
+	    if(ms.substring(0,1).equalsIgnoreCase("0")){
+	       ms=ms.substring(1,2);
+	    }
+	    int month=Integer.parseInt(ms);
+	    List<String> dayList=DateHelper.getDayByMonth(year,month);
+	    
+	    //根据每一天进行循环
+	    Map retMap=new HashMap();
+	    for(int n=0;n<dayList.size();n++){
+	    	retMap=new HashMap();
+	    	retMap.put("date", dayList.get(n));
+	    	if(null!=list&&list.size()>0){
+	    		for(int p=0;p<list.size();p++){
+		    		if(null!=list.get(p).get("time")&&dayList.get(n).equals((String)list.get(p).get("time"))){
+		    			retMap.put("soldmoney",list.get(p).get("soldmoney"));
+						retMap.put("inmoney",list.get(p).get("inmoney"));
+						retMap.put("outnum",list.get(p).get("outnum"));
+						break;
+		    		}
+		    	}
+	    	}else{
+	    		retMap.put("soldmoney","0");
+				retMap.put("inmoney","0");
+				retMap.put("outnum","0");
+	    	}
+	    	if(null!=list2&&list2.size()>0){
+	    		for(int q=0;q<list2.size();q++){
+	    			if(null!=list2.get(q).get("time")&&dayList.get(n).equals((String)list2.get(q).get("time"))){
+	    				retMap.put("innum",list2.get(q).get("innum"));
+	    				break;
+	    			}
+	    		}
+	    	}else{
+	    		retMap.put("innum","0");
+	    	}
+	    	retList.add(retMap);
+	    }
+		return retList;
+		
+		//循环请求的方法.....慢
+//        List retList=new ArrayList();
+//        String time=(String)canshu.get("time");
+//        int year=Integer.parseInt(time.split("-")[0]);
+//        String ms=time.split("-")[1];
+//        if(ms.substring(0,1).equalsIgnoreCase("0")){
+//            ms=ms.substring(1,2);
+//        }
+//        int month=Integer.parseInt(ms);
+//        List list=DateHelper.getDayByMonth(Integer.parseInt(time.split("-")[0]),month);
+//        Map tempMap=new HashMap();
+//        for(int m=0;m<list.size();m++){
+//            tempMap=new HashMap();
+//            tempMap.put("userId",canshu.get("userId"));
+//            tempMap.put("time",list.get(m));
+//            retList.add(orderGoodsService.findFourData(tempMap));
+//        }
+//		return retList;
+    }
+
     
     @Log(type="保存",remark="保存订单信息")
     public void saveInfo(OrderInfo info){

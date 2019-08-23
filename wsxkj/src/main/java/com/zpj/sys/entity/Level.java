@@ -12,12 +12,15 @@ import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 @Table(name = "sys_level")
-@ApiModel(value = "用户表", description = "用户信息表")
+@ApiModel(value = "等级表", description = "等级表")
 public class Level implements java.io.Serializable{
 	@ApiModelProperty(value = "主键",name="id", required = true)
 	private String id= UUIDGenerator.generatePk("level");
 	@ApiModelProperty(value = "等级0,1,2,3,4",name="level", required = true)
 	private int level;
+
+	@ApiModelProperty(value = "名称",name="name", required = true)
+	private String name;
 	@ApiModelProperty(value = "使用时间，可使用天数",name="days", required = true)
 	private int days;
 	@ApiModelProperty(value = "可调用接口次数",name="maxtime", required = true)
@@ -57,8 +60,12 @@ public class Level implements java.io.Serializable{
 	public void setMoney(int money) {
 		this.money = money;
 	}
-	
-	
-	
-	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }

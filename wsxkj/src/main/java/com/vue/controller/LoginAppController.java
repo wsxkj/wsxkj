@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.zpj.common.MsgUtil;
+import com.zpj.common.PropertyHelper;
 import com.zpj.common.ResultData;
 import com.zpj.jwt.JwtUtil;
 import com.zpj.materials.entity.IdCodeInfo;
@@ -38,6 +39,8 @@ public class LoginAppController extends BaseController {
 	@Autowired
 	private LogInfoService logService;
 
+	
+	
 
 	@RequestMapping("/sendCode")
 	@ResponseBody
@@ -72,18 +75,36 @@ public class LoginAppController extends BaseController {
 		IdCodeInfo ici=idCodeService.findInfoByPhone(phone);
 //		ResultData rd=new ResultData<>();
 		Map retMap=new HashMap();
+		Date now=new Date();
 		if(ici.getYzm().equalsIgnoreCase(yzm)){
 			User user=userService.findUserByPhone(phone);
 			if(null!=user){
 				user.setLastLoginTime(user.getUpdateTime());
-				user.setUpdateTime(new Date());
-
+				user.setUpdateTime(now);
+				
+				if(user.getLevel()>0&&user.getLevel()<4){
+//					Date starttime=user.getStartTime();
+					Date endtime=user.getEndTime();
+					if(now.compareTo(endtime)<0){
+						user.setIsExpire("0");
+					}else{
+						user.setIsExpire("1");
+					}
+				}
 			}else{
+				//第一次登陆时设置默认
 				user=new User();
-				user.setUpdateTime(new Date());
-				user.setLastLoginTime(new Date());
+				user.setUpdateTime(now);
+				user.setLastLoginTime(now);
 				user.setPhone(phone);
+				//默认普通会员
+				user.setLevelId("LEVEL_19822103696886");
+				user.setLevel(0);
+				user.setIsExpire("0");
+				user.setMaxtime(0);
+				user.setStartTime(now);
 			}
+
 			userService.saveInfo(user);
 			retMap.put("code", 200);
 			retMap.put("msg", "登陆成功");
@@ -114,8 +135,18 @@ public class LoginAppController extends BaseController {
 						   ){
 		Map retMap=new HashMap();
 		User user=null;
+		Date now=new Date();
 		try{
 			user=userService.findById(id);
+			if(user.getLevel()>0&&user.getLevel()<4){
+				Date endtime=user.getEndTime();
+				if(now.compareTo(endtime)<0){
+					user.setIsExpire("0");
+				}else{
+					user.setIsExpire("1");
+				}
+			}
+			userService.saveInfo(user);
 			retMap.put("code", 200);
 			retMap.put("msg", "更新token成功");
 			String token=JwtUtil.buildJsonByUser(user);
@@ -128,4 +159,36 @@ public class LoginAppController extends BaseController {
 		}
 		jsonWrite2(retMap);
 	}
+	
+	@RequestMapping("/getVersion")
+	@ResponseBody
+	@ApiOperation(value = "获取app版本信息", notes = "获取app版本信息", httpMethod = "POST",response=ResultData.class)
+	public void getVersion(@ApiParam(required = true, name = "version", value = "version，填‘ios’或者‘android’")@RequestParam("version")String version
+						   ){
+		ResultData rd=new ResultData<>();
+		Map map=new HashMap();
+		try{
+			Map params=PropertyHelper.getPhonePropertiesValue();
+			if(version.equalsIgnoreCase("ios")){
+				map.put("version", params.get("ios.latestversion"));
+				map.put("downloadaddress", params.get("ios.downloadaddress"));
+				map.put("forceupdate", params.get("ios.forceupdate"));
+			}else if(version.equalsIgnoreCase("android")){
+				map.put("version", params.get("android.latestversion"));
+				map.put("downloadaddress", params.get("android.downloadaddress"));
+				map.put("forceupdate", params.get("android.forceupdate"));
+			}
+			System.out.println(map);
+			rd.setData(map);
+			rd.setCode(200);
+			rd.setMsg("获取版本信息成功");
+		}catch (Exception e) {
+			e.printStackTrace();
+			rd.setCode(500);
+			rd.setMsg("获取版本信息失败");
+		}
+		jsonWrite2(rd);
+	}
+	
+	
 }
