@@ -33,4 +33,14 @@ public interface UserService {
 	*/
 	public User findUserByPhone(String phone);
 	
+	/**
+	 * 查询手机号码跟密码
+	 * @Title findUserByPhoneAndPassword
+	 * @param phone
+	 * @param password
+	 * @return
+	 * @author zpj
+	 * @time 2019年8月29日 下午2:38:00
+	 */
+	public User findUserByPhoneAndPassword(String phone,String password);
 }

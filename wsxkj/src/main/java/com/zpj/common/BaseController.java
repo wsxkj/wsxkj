@@ -242,6 +242,15 @@ public class BaseController {
 		User user =null;
 		if(null!=token&&!"".equalsIgnoreCase(token)){
 			user= JwtUtil.getUserByJson(token);
+			if(user.getLevel()>0&&user.getLevel()<4){
+				Date endtime=user.getEndTime();
+				Date now=new Date();
+				if(now.compareTo(endtime)<0){
+					user.setIsExpire("0");
+				}else{
+					user.setIsExpire("1");
+				}
+			}
 			if(null==user){
 				throw new JwtException("用户未登陆");
 			}

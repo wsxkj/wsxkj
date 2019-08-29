@@ -47,6 +47,7 @@ public class LevelAppController extends BaseController{
         	Level le=levelService.findInfoById(level);
         	user.setLevel(level);
         	user.setLevelId(le.getId());
+        	user.setLevelName(le.getName());
         	user.setMaxtime(le.getMaxtime());
         	user.setStartTime(new Date());
         	if(level==0){

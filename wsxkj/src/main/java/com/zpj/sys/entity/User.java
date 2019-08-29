@@ -38,18 +38,22 @@ public class User implements java.io.Serializable {
 	private Date updateTime;
 	@ApiModelProperty(value = "会员等级表,主键id",name="levelId", required =  false)
 	private String levelId;
-	@ApiModelProperty(value = "会员等级0,1,2，3,4",name="levelId", required =  false)
+	@ApiModelProperty(value = "会员等级0,1,2，3,4",name="level", required =  false)
 	private int level;
-	@ApiModelProperty(value = "物流调用接口次数",name="levelId", required =  false)
+	@ApiModelProperty(value = "会员等级名称",name="levelName", required =  false)
+	private String levelName;
+	@ApiModelProperty(value = "物流调用接口次数",name="maxtime", required =  false)
 	private int maxtime;
 
-	@ApiModelProperty(value = "会员开始时间",name="levelId", required =  false)
+	@ApiModelProperty(value = "会员开始时间",name="startTime", required =  false)
 	private Date startTime;
-	@ApiModelProperty(value = "会员结束时间",name="levelId", required =  false)
+	@ApiModelProperty(value = "会员结束时间",name="endTime", required =  false)
 	private Date endTime;
-	@ApiModelProperty(value = "是否过期，0未过期，1已过期",name="levelId", required =  false)
+	@ApiModelProperty(value = "是否过期，0未过期，1已过期",name="isExpire", required =  false)
 	private String isExpire;
 
+	@ApiModelProperty(value = "临时密码",name="password", required =  false)
+	private String password;
 
 	
 	@ApiModelProperty(value = "token",name="token", required =  false)
@@ -155,6 +159,20 @@ public class User implements java.io.Serializable {
 		this.isExpire = isExpire;
 	}
 
+	
+	
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getLevelName() {
+		return levelName;
+	}
+	public void setLevelName(String levelName) {
+		this.levelName = levelName;
+	}
 	@Override
 	public String toString() {
 		StringBuffer sb=new StringBuffer(300);

@@ -162,12 +162,12 @@ public class OrderServiceImpl implements OrderService{
 		List<Map> list=orderDao.findMapObjBySqlNoPage(sql.toString());
 		//进货件数
 		sql=new StringBuilder(200);
-		sql.append("select DATE_FORMAT(inDate,'%Y-%m-%d') as time ,SUM(inNum) as innum from jl_material_store_info ");
+		sql.append("select DATE_FORMAT(inDate,'%Y-%m-%d') as time ,SUM(inNum) as innum from jl_material_store_info where 1=1 ");
 		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
-			sql.append(" and b.userId='"+canshu.get("userId")+"'") ;
+			sql.append(" and userId='"+canshu.get("userId")+"'") ;
 		}
 		if(null!=canshu.get("time")&&!"".equalsIgnoreCase((String)canshu.get("time"))){
-			sql.append(" and a.updateTime like '"+canshu.get("time")+"%'") ;
+			sql.append(" and updateTime like '"+canshu.get("time")+"%'") ;
 		}
 		sql.append(" GROUP BY DATE_FORMAT(inDate,'%Y-%m-%d') ");
 		
@@ -189,25 +189,38 @@ public class OrderServiceImpl implements OrderService{
 	    	retMap=new HashMap();
 	    	retMap.put("date", dayList.get(n));
 	    	if(null!=list&&list.size()>0){
+	    		boolean flag=false;
 	    		for(int p=0;p<list.size();p++){
 		    		if(null!=list.get(p).get("time")&&dayList.get(n).equals((String)list.get(p).get("time"))){
 		    			retMap.put("soldmoney",list.get(p).get("soldmoney"));
 						retMap.put("inmoney",list.get(p).get("inmoney"));
 						retMap.put("outnum",list.get(p).get("outnum"));
+						flag=true;
 						break;
 		    		}
 		    	}
+	    		if(!flag){
+	    			retMap.put("soldmoney","0");
+					retMap.put("inmoney","0");
+					retMap.put("outnum","0");
+	    		}
+	    		
 	    	}else{
 	    		retMap.put("soldmoney","0");
 				retMap.put("inmoney","0");
 				retMap.put("outnum","0");
 	    	}
 	    	if(null!=list2&&list2.size()>0){
+	    		boolean flag=false;
 	    		for(int q=0;q<list2.size();q++){
 	    			if(null!=list2.get(q).get("time")&&dayList.get(n).equals((String)list2.get(q).get("time"))){
 	    				retMap.put("innum",list2.get(q).get("innum"));
+	    				flag=true;
 	    				break;
 	    			}
+	    		}
+	    		if(!flag){
+	    			retMap.put("innum","0");
 	    		}
 	    	}else{
 	    		retMap.put("innum","0");

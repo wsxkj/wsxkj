@@ -101,32 +101,46 @@ public class GoodsServiceImpl implements GoodsService {
 
 	public Goods findById(String id) {
 		Goods g=goodsDao.get(id,Goods.class);
+		if(null==g){
+			return null;
+		}
 		//售价最高价和最低价
-		StringBuffer sql=new StringBuffer(100).append("select * from (select MIN(outPrice) as minp,MAX(outPrice) as maxp,goodsId from jl_material_store_info GROUP BY goodsId ) t  where t.goodsId='"+id+"' ");
+		StringBuffer sql=new StringBuffer(100).append("select ifnull(minp,0) as minp,ifnull(maxp,0) as maxp from (select MIN(outPrice) as minp,MAX(outPrice) as maxp,goodsId from jl_material_store_info GROUP BY goodsId ) t  where t.goodsId='"+id+"' ");
 		List<Map> list=goodsDao.findMapObjBySqlNoPage(sql.toString());
 		if(null!=list&&list.size()>0){
 			g.setMaxOutPrice((double)list.get(0).get("maxp"));
 			g.setMinOutPrice((double)list.get(0).get("minp"));
+		}else{
+			g.setMaxOutPrice(0);
+			g.setMinOutPrice(0);
 		}
 		//进价最高价和最低价
-		sql=new StringBuffer(100).append("select * from (select MIN(inPrice) as minp,MAX(inPrice) as maxp,goodsId from jl_material_store_info GROUP BY goodsId ) t  where t.goodsId='"+id+"' ");
+		sql=new StringBuffer(100).append("select ifnull(minp,0) as minp ,ifnull(maxp,0) as maxp from (select MIN(inPrice) as minp,MAX(inPrice) as maxp,goodsId from jl_material_store_info GROUP BY goodsId ) t  where t.goodsId='"+id+"' ");
 		list=goodsDao.findMapObjBySqlNoPage(sql.toString());
 		if(null!=list&&list.size()>0){
 			g.setMaxInPrice((double)list.get(0).get("maxp"));
 			g.setMinInPrice((double)list.get(0).get("minp"));
+		}else{
+			g.setMaxInPrice(0);
+			g.setMinInPrice(0);
 		}
 		//进货总数
-		sql=new StringBuffer(100).append("select sum(inNum) as totalInNum,goodsId from jl_material_store_info   where goodsId='"+id+"' ");
+		sql=new StringBuffer(100).append("select ifnull(sum(inNum),0) as totalInNum,goodsId from jl_material_store_info   where goodsId='"+id+"' ");
 		list=goodsDao.findMapObjBySqlNoPage(sql.toString());
 		if(null!=list&&list.size()>0){
 			g.setTotalInNum((double)list.get(0).get("totalInNum"));
+		}else{
+			g.setTotalInNum(0);
 		}
 		//销售总数量和总销售额
-		sql=new StringBuffer(100).append("select sum(soldNum) as totalSoldNum,sum(soldTotalPrice) as totalSoldPrice,goodsId from jl_material_order_goods_info  where goodsId='"+id+"' ");
+		sql=new StringBuffer(100).append("select ifnull(sum(soldNum),0) as totalSoldNum,ifnull(sum(soldTotalPrice),0) as totalSoldPrice,goodsId from jl_material_order_goods_info  where goodsId='"+id+"' ");
 		list=goodsDao.findMapObjBySqlNoPage(sql.toString());
 		if(null!=list&&list.size()>0){
 			g.setTotalSoldNum((double)list.get(0).get("totalSoldNum"));
 			g.setTotoalSoldPrice((double)list.get(0).get("totalSoldPrice"));
+		}else{
+			g.setTotalSoldNum(0);
+			g.setTotoalSoldPrice(0);
 		}
 		return g;
 	}	

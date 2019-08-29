@@ -93,5 +93,15 @@ public class UserServiceImpl implements UserService {
 		return null;
 	}
 
+	@Override
+	public User findUserByPhoneAndPassword(String phone, String password) {
+		StringBuffer sql=new StringBuffer("select * from "+tableName+" where phone='"+phone+"' and password='"+password+"'");
+		List<User> userlist=userDao.findBySqlT(sql.toString(), User.class);
+		if(null!=userlist&&userlist.size()>0){
+			return userlist.get(0);
+		}
+		return null;
+	}
+
 	
 }

@@ -42,7 +42,7 @@ public class StoreServiceImpl implements StoreService {
     public List findMultiData(Map canshu, Integer page, Integer limit){
 
         StringBuilder sql=new StringBuilder(100);
-        sql.append("select g.picture,g.name,s.inDate ,s.inNum ,s.inPrice from "+tablename +" s left join jl_material_goods_info g on s.goodsId=g.id   where 1=1 ");
+        sql.append("select g.picture,g.name,s.inDate ,s.inNum ,s.inPrice,s.outPrice,s.sureDate,s.id as storeId from "+tablename +" s left join jl_material_goods_info g on s.goodsId=g.id   where 1=1 ");
         if(null!=canshu.get("mdate")&&!"".equalsIgnoreCase((String)canshu.get("mdate"))){
             sql.append(" and s.inDate like '"+canshu.get("mdate")+"%' " );
         }

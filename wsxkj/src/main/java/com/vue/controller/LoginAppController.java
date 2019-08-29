@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.zpj.common.BaseController;
+import com.zpj.sys.entity.Level;
 import com.zpj.sys.entity.LogInfo;
 import com.zpj.sys.entity.User;
+import com.zpj.sys.service.LevelService;
 import com.zpj.sys.service.LogInfoService;
 import com.zpj.sys.service.UserService;
 
@@ -38,7 +40,8 @@ public class LoginAppController extends BaseController {
 	private IdCodeService idCodeService;
 	@Autowired
 	private LogInfoService logService;
-
+	@Autowired
+	private LevelService levelService;
 	
 	
 
@@ -81,9 +84,9 @@ public class LoginAppController extends BaseController {
 			if(null!=user){
 				user.setLastLoginTime(user.getUpdateTime());
 				user.setUpdateTime(now);
-				
+				Level lv=levelService.findInfoById(user.getLevel());
+				user.setLevelName(lv.getName());
 				if(user.getLevel()>0&&user.getLevel()<4){
-//					Date starttime=user.getStartTime();
 					Date endtime=user.getEndTime();
 					if(now.compareTo(endtime)<0){
 						user.setIsExpire("0");
@@ -100,11 +103,12 @@ public class LoginAppController extends BaseController {
 				//默认普通会员
 				user.setLevelId("LEVEL_19822103696886");
 				user.setLevel(0);
+				user.setLevelName("普通会员");
 				user.setIsExpire("0");
 				user.setMaxtime(0);
 				user.setStartTime(now);
 			}
-
+			user.setPassword(MsgUtil.generatePassword(6));
 			userService.saveInfo(user);
 			retMap.put("code", 200);
 			retMap.put("msg", "登陆成功");
@@ -131,27 +135,34 @@ public class LoginAppController extends BaseController {
 	@RequestMapping("/getNewToken")
 	@ResponseBody
 	@ApiOperation(value = "根据id更新token", notes = "根据id更新token", httpMethod = "POST",response=User.class)
-	public void getNewToken(@ApiParam(required = true, name = "id", value = "id")@RequestParam("id")String id
-						   ){
+	public void getNewToken(@ApiParam(required = true, name = "phone", value = "phone")@RequestParam("phone")String phone,
+			@ApiParam(required = true, name = "password", value = "password")@RequestParam("password")String password
+			   ){
 		Map retMap=new HashMap();
 		User user=null;
 		Date now=new Date();
 		try{
-			user=userService.findById(id);
-			if(user.getLevel()>0&&user.getLevel()<4){
-				Date endtime=user.getEndTime();
-				if(now.compareTo(endtime)<0){
-					user.setIsExpire("0");
-				}else{
-					user.setIsExpire("1");
+			user=userService.findUserByPhoneAndPassword(phone,password);
+			if(null!=user){
+				if(user.getLevel()>0&&user.getLevel()<4){
+					Date endtime=user.getEndTime();
+					if(now.compareTo(endtime)<0){
+						user.setIsExpire("0");
+					}else{
+						user.setIsExpire("1");
+					}
 				}
+				userService.saveInfo(user);
+				retMap.put("code", 200);
+				retMap.put("msg", "更新token成功");
+				String token=JwtUtil.buildJsonByUser(user);
+				user.setToken(token);
+				retMap.put("data", user);
+			}else{
+				retMap.put("code", 500);
+				retMap.put("msg", "更新token失败，密码已过期，请重新登陆");
+				retMap.put("data", null);
 			}
-			userService.saveInfo(user);
-			retMap.put("code", 200);
-			retMap.put("msg", "更新token成功");
-			String token=JwtUtil.buildJsonByUser(user);
-			user.setToken(token);
-			retMap.put("data", user);
 		}catch (Exception e) {
 			e.printStackTrace();
 			retMap.put("code",500);
