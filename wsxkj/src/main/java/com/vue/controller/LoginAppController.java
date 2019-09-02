@@ -93,6 +93,8 @@ public class LoginAppController extends BaseController {
 					}else{
 						user.setIsExpire("1");
 					}
+				}else{
+					user.setIsExpire("0");
 				}
 			}else{
 				//第一次登陆时设置默认
@@ -128,7 +130,7 @@ public class LoginAppController extends BaseController {
 			retMap.put("code",500);
 			retMap.put("msg", "验证码错误");
 		}
-		jsonWrite2(retMap);
+		jsonWrite3(retMap);
 
 	}
 	

@@ -15,12 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
+import com.alibaba.fastjson.serializer.SerializeConfig;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.zpj.jwt.JwtUtil;
 import com.zpj.sys.entity.User;
 
 import io.jsonwebtoken.JwtException;
+import net.sf.json.JSONObject;
 
 public class BaseController {
 	//返回的json变量
@@ -180,6 +183,25 @@ public class BaseController {
 		try{
 			Gson gson =  new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create(); 
 			String str = gson.toJson(object);
+			response.setCharacterEncoding("utf-8");
+			response.setContentType("text/html;charset=UTF-8");	
+			response.setHeader("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
+			response.setHeader("Access-Control-Allow-Origin", "*");
+			response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");  
+			response.getWriter().write(str);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void jsonWrite3(Object object){		
+		try{
+//			Gson gson =  new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create(); 
+//			SerializeConfig config = new SerializeConfig();
+//			config.put(Date.class, new DateJsonSerializer());
+			com.alibaba.fastjson.JSON.DEFFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+			String str=com.alibaba.fastjson.JSON.toJSONString(object, SerializerFeature.WriteMapNullValue,SerializerFeature.WriteDateUseDateFormat);
+			//			String str = gson.toJson(object);
 			response.setCharacterEncoding("utf-8");
 			response.setContentType("text/html;charset=UTF-8");	
 			response.setHeader("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
