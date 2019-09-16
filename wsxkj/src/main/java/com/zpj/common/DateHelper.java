@@ -985,4 +985,49 @@ public class DateHelper
 		System.out.println(dateStringYYYYMMDD3);
 		return date3;
 	}
+	
+	/**
+     * 获取两个日期的间隔时间（分钟）
+     * @param date1
+     * @param date2
+     * @return
+     */
+    public static long getDiffMinute(Date date1, Date date2){
+        double minute = ((double)(date1.getTime()-date2.getTime()))/(60*1000);
+        long m = (long) Math.ceil(minute);
+        return m;
+    }
+    
+    /**
+     * 获取两个日期的间隔时间（秒）
+     * @param date1
+     * @param date2
+     * @return
+     */
+    public static long getDiffSecond(Date date1, Date date2){
+        return (date1.getTime()-date2.getTime())/(1000);
+    }
+    
+    /**
+     * 获取两个日期的间隔时间（秒）
+     * @param date1
+     * @param date2
+     * @return
+     */
+    public static long getDiffSecond(long date1, long date2){
+        return (date1-date2)/(1000);
+    }
+    
+    /**
+     * 获取两个日期的间隔时间（天）
+     * @param date1
+     * @param date2
+     * @return
+     */
+    public static long getDiffDay(Date date1, Date date2){
+        double day = ((double)(date1.getTime()-date2.getTime()))/(24*60*60*1000);
+        long m = (long) Math.ceil(day);
+        
+        return m;
+    }
 }

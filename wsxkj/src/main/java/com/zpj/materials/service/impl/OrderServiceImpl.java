@@ -92,7 +92,7 @@ public class OrderServiceImpl implements OrderService{
     	Map retmap=new HashMap();
     	StringBuilder sql=new StringBuilder(200);
     	
-		sql.append("select select sum(t.stp) as xse,DATE_FORMAT(t.updateTime,'%Y-%m') as time,sum(itp) as jlr from ( select a.soldTotalPrice as stp,a.updateTime,(a.soldNum*b.inPrice) as itp  from jl_material_order_goods_info a left join  jl_material_store_info b on a.storeId=b.id  where 1=1 ");
+		sql.append(" select sum(t.stp) as xse,DATE_FORMAT(t.updateTime,'%Y-%m') as time,sum(itp) as jlr from ( select a.soldTotalPrice as stp,a.updateTime,(a.soldNum*b.inPrice) as itp  from jl_material_order_goods_info a left join  jl_material_store_info b on a.storeId=b.id  where 1=1 ");
 		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
 			sql.append(" and b.userId='"+canshu.get("userId")+"'") ;
 		}
@@ -126,7 +126,7 @@ public class OrderServiceImpl implements OrderService{
 		sql=new StringBuilder(200);
 		sql.append("select SUM(inNum) as innum from jl_material_store_info ");
 		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
-			sql.append(" and b.userId='"+canshu.get("userId")+"'") ;
+			sql.append(" and userId='"+canshu.get("userId")+"'") ;
 		}
 		List<Map> list2=orderDao.findMapObjBySqlNoPage(sql.toString());
 		Map retMap=new HashMap();

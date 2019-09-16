@@ -37,13 +37,13 @@ public class Goods implements java.io.Serializable{
 	@ApiModelProperty(value = "总库存数量",name="storeNum", required = false)
 	private double storeNum;
 	
+	/***********稍后设置填充临时值用**开始************/
 	@ApiModelProperty(value = "总进货数量",name="totalInNum", required = false)
 	private double totalInNum;
 	@ApiModelProperty(value = "总售出数量",name="totalSoldNum", required = false)
 	private double totalSoldNum;
 	@ApiModelProperty(value = "总售出额",name="totoalSoldPrice", required = false)
 	private double totoalSoldPrice;
-
 	@ApiModelProperty(value = "售价最高价",name="maxOutPrice", required = false)
 	private double maxOutPrice;
 	
@@ -55,7 +55,7 @@ public class Goods implements java.io.Serializable{
 	
 	@ApiModelProperty(value = "进价最低价",name="minInPrice", required = false)
 	private double minInPrice;
-	
+	/***********稍后设置填充临时值用**结束************/
 	
 	
 	

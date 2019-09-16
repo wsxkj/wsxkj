@@ -18,8 +18,14 @@ public class IdCodeSerivceImpl implements IdCodeService{
 
 	@Override
 	public void saveInfo(IdCodeInfo ici) {
-		iciDao.executeSql("delete from "+tableName +" where phone='"+ici.getPhone()+"'");
-		iciDao.add(ici);
+		//防止重复
+		IdCodeInfo temp=this.findInfoByPhone(ici.getPhone());
+		if(null==temp){
+			iciDao.add(ici);
+		}else{
+			ici.setId(temp.getId());
+			iciDao.update(ici);
+		}
 	}
 
 	public IdCodeInfo findInfoByPhone(String phone){
