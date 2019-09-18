@@ -55,6 +55,14 @@ public class Goods implements java.io.Serializable{
 	
 	@ApiModelProperty(value = "进价最低价",name="minInPrice", required = false)
 	private double minInPrice;
+	
+	@ApiModelProperty(value = "商品分类中文",name="minInPrice", required = false)
+	private String goodsTypeName;
+	
+	@ApiModelProperty(value = "商品品牌中文",name="minInPrice", required = false)
+	private String goodsBrandName;
+	
+	
 	/***********稍后设置填充临时值用**结束************/
 	
 	
@@ -189,6 +197,20 @@ public class Goods implements java.io.Serializable{
 	}
 	public void setTotoalSoldPrice(double totoalSoldPrice) {
 		this.totoalSoldPrice = totoalSoldPrice;
+	}
+	@Transient
+	public String getGoodsTypeName() {
+		return goodsTypeName;
+	}
+	public void setGoodsTypeName(String goodsTypeName) {
+		this.goodsTypeName = goodsTypeName;
+	}
+	@Transient
+	public String getGoodsBrandName() {
+		return goodsBrandName;
+	}
+	public void setGoodsBrandName(String goodsBrandName) {
+		this.goodsBrandName = goodsBrandName;
 	}
 	
 	

@@ -23,7 +23,7 @@ public class StoreServiceImpl implements StoreService {
 
     public Map findStatisticsData(Map canshu){
         StringBuilder sql=new StringBuilder(100);
-        sql.append("select sum(inNum) as totalInNum ,sum(inPrice) as totalInPrice from "+tablename +" s left join jl_material_goods_info g on s.goodsId=g.id   where 1=1 ");
+        sql.append("select sum(inNum) as totalInNum ,sum(inNum*inPrice) as totalInPrice from "+tablename +" s left join jl_material_goods_info g on s.goodsId=g.id   where 1=1 ");
         if(null!=canshu.get("mdate")&&!"".equalsIgnoreCase((String)canshu.get("mdate"))){
             sql.append(" and s.inDate like '"+canshu.get("mdate")+"%' " );
         }

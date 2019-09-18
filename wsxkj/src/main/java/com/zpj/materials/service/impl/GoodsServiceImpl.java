@@ -10,6 +10,8 @@ import com.zpj.common.BaseDao;
 import com.zpj.common.MyPage;
 import com.zpj.common.aop.Log;
 import com.zpj.materials.entity.Goods;
+import com.zpj.materials.entity.GoodsBrand;
+import com.zpj.materials.entity.GoodsType;
 import com.zpj.materials.service.GoodsService;
 @Service
 public class GoodsServiceImpl implements GoodsService {
@@ -19,6 +21,11 @@ public class GoodsServiceImpl implements GoodsService {
 	@Autowired
 	private BaseDao<LogInfo> logDao;
 
+	@Autowired
+	private BaseDao<GoodsType> goodsTypeDao;
+	@Autowired
+    private BaseDao<GoodsBrand> goodsBrandDao;
+	
 	private String tablename="jl_material_goods_info";
 	
 	@Override
@@ -142,6 +149,12 @@ public class GoodsServiceImpl implements GoodsService {
 			g.setTotalSoldNum(0);
 			g.setTotoalSoldPrice(0);
 		}
+		
+		GoodsType gt=goodsTypeDao.get(g.getGoodsType(), GoodsType.class);
+		if(gt!=null) g.setGoodsTypeName(gt.getName());
+		GoodsBrand gb=goodsBrandDao.get(g.getGoodsBrand(),GoodsBrand.class);
+		if(gb!=null) g.setGoodsBrandName(gb.getName());
+		
 		return g;
 	}	
 
