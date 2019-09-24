@@ -52,8 +52,7 @@ public class GoodsAppController extends BaseController {
                          @ApiParam(required = false, name = "qrCode", value = "条形码")@RequestParam(value="qrCode",required = false)String qrCode,
                          @ApiParam(required = false, name = "picture", value = "图片路径")@RequestParam(value="picture",required = false)String picture,
                          @ApiParam(required = true, name = "goodsType", value = "商品类型")@RequestParam("goodsType")String goodsType,
-                         @ApiParam(required = true, name = "goodsBrand", value = "商品品牌")@RequestParam("goodsBrand")String goodsBrand,
-                         @ApiParam(required = false, name = "sureDate", value = "保质日期")@RequestParam(value="sureDate",required = false)String sureDate){
+                         @ApiParam(required = true, name = "goodsBrand", value = "商品品牌")@RequestParam("goodsBrand")String goodsBrand){
         ResultData rd=new ResultData();
         try{
             User user= getCurrentUser();
