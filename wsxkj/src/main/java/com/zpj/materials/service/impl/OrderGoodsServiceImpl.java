@@ -132,7 +132,7 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
 	}
 	
 	public MyPage findPageDataMuti(Map canshu, Integer page, Integer limit){
-		StringBuffer sql=new StringBuffer(200).append("select o.*,c.name as goodsName,c.picture as goodsPicture,s.updateTime as storeTime ");
+		StringBuffer sql=new StringBuffer(200).append("select o.*,c.name as goodsName,c.picture as goodsPicture,s.updateTime as storeTime,s.inDate as inDate ");
     	StringBuffer sqlcount =new StringBuffer(100).append("select count(*) as num,1  ");
     	StringBuffer wheresql=new StringBuffer(100);
     	wheresql.append("  from "+tablename +" o left join jl_material_goods_info c on o.goodsId=c.id left join jl_material_store_info s on s.id=o.storeId where 1=1 ");
@@ -177,7 +177,7 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
         orderGoodsDao.add(orderGoodsInfo);
     }
 	
-    public void deleteOrderGoodsInfoByOrderId(String orderId){
+    public void deleteOrderGoodsInfoByOrderId(String orderId) throws RuntimeException{
     	try{
 	    	Map param=new HashMap();
 	        param.put("orderId",orderId);

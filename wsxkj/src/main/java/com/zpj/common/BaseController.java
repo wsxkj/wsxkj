@@ -260,23 +260,24 @@ public class BaseController {
 	 * @time 2019年5月27日 下午4:09:40
 	 */
 	public User getCurrentUser() throws JwtException{
-		String token=request.getParameter("token");
-		User user =null;
-		if(null!=token&&!"".equalsIgnoreCase(token)){
-			user= JwtUtil.getUserByJson(token);
-			if(user.getLevel()>0&&user.getLevel()<4){
-				Date endtime=user.getEndTime();
-				Date now=new Date();
-				if(now.compareTo(endtime)<0){
-					user.setIsExpire("0");
-				}else{
-					user.setIsExpire("1");
-				}
-			}
-			if(null==user){
-				throw new JwtException("用户未登陆");
-			}
-		}
+//		String token=request.getParameter("token");
+//		User user =null;
+//		if(null!=token&&!"".equalsIgnoreCase(token)){
+//			user= JwtUtil.getUserByJson(token);
+//			if(user.getLevel()>0&&user.getLevel()<4){
+//				Date endtime=user.getEndTime();
+//				Date now=new Date();
+//				if(now.compareTo(endtime)<0){
+//					user.setIsExpire("0");
+//				}else{
+//					user.setIsExpire("1");
+//				}
+//			}
+//			if(null==user){
+//				throw new JwtException("用户未登陆");
+//			}
+//		}
+		User user=(User)request.getSession().getAttribute("jluser");
 		return user;
 	}
 }

@@ -45,7 +45,7 @@ public interface OrderGoodsService {
 	int  findOrderGoodsOutCount(Map param);
 
 	public void saveInfo(OrderGoodsInfo orderGoodsInfo);
-	/*
+	/**
 	 * @MethodName: deleteOrderGoodsInfoByOrderId
 	 * @Description: TODO(根据订单id删除订单商品信息)
 	 * @params [orderId]
@@ -53,12 +53,12 @@ public interface OrderGoodsService {
 	 * @author zpj
 	 * @date 2019/5/18 14:17
 	*/
-	public void deleteOrderGoodsInfoByOrderId(String orderId);
+	public void deleteOrderGoodsInfoByOrderId(String orderId) throws RuntimeException;
 
 
 	public void deleteInfo(String id);
 
-	/*
+	/**
 	 * @MethodName: findFourData
 	 * @Description: TODO(查询四项数据)
 	 * @params [param]

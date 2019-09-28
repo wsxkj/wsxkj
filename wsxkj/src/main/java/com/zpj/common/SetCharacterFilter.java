@@ -1,6 +1,7 @@
 package com.zpj.common;
 
 import java.io.IOException;
+import java.util.Date;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -11,17 +12,22 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.zpj.jwt.JwtUtil;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.zpj.sys.entity.User;
 
+import io.jsonwebtoken.JwtException;
+
 
 public class SetCharacterFilter implements Filter{
 
 	protected String endcoding = "UTF-8";
 	protected FilterConfig filterConfig = null;
+	public Gson gson =  new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create(); 
 	
 	
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -37,50 +43,68 @@ public class SetCharacterFilter implements Filter{
 		String str_href = this.getCurrentURL(req);	
 		boolean flag=judgeIsPass(str_href);
 		if(flag){
-			if(str_href.equalsIgnoreCase("/")||str_href.equalsIgnoreCase("/checkLogin")||str_href.equalsIgnoreCase("/logOut")){
-					chain.doFilter(request, response);
-	        }else{
-	        	User curruser= (User) req.getSession().getAttribute("jluser");
-	        	if(null!=curruser){
+			//直接通过
+			chain.doFilter(request, response);
+		}else{
+//			//手机请求
+			if(str_href.indexOf("app")>-1){
+				if(str_href.indexOf("app/login")>-1||str_href.indexOf("app/file")>-1){
 					chain.doFilter(request, response);
 				}else{
-					req.getRequestDispatcher("/404.jsp").forward(req, res);
+					User user=getCurrentUser(req);
+					if(user==null){
+						ResultData rd=new ResultData();
+						rd.setCode(500);
+			            rd.setMsg("token转码失败，token过期，请重新登陆。");
+			            res.setCharacterEncoding("utf-8");
+			            res.setContentType("text/html;charset=UTF-8");	
+			            res.setHeader("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
+			            res.setHeader("Access-Control-Allow-Origin", "*");
+			            res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");  
+			            res.getWriter().write(gson.toJson(rd));
+					}else{
+						req.getSession().setAttribute("jluser",user);
+						chain.doFilter(request, response);
+					}
 				}
-	        } 
-		}else{
-			chain.doFilter(request, response);
-//			//手机请求
-//			if(str_href.indexOf("app")>-1){
-//				if(str_href.indexOf("app/login")>-1||str_href.indexOf("app/file")>-1){
-//					chain.doFilter(request, response);
-//				}else{
-//					String token=req.getParameter("token");
-//					User user= JwtUtil.getUserByJson(token);
-//					if(null!=user){
-//						req.getSession().setAttribute("jluser",user);
-//						chain.doFilter(request, response);
-//					}else{
-//						req.getRequestDispatcher("/404.jsp").forward(req, res);
-//					}
-//				}
-//			}else{
-//				chain.doFilter(request, response);
-//			}
+			}else{
+				chain.doFilter(request, response);
+			}
 		}
 	}
 	public boolean judgeIsPass(String spath){
-		String[] urls = {"downloadApp","controller.jsp","file","v2","api-docs","swagger","druid","app","404","500",".js",".css",".ico",".jpeg",".bmp",".jpg",".png",".gif",".htm",".html",".woff",".woff2",".ttf",".mp3",".mp4",".mov",".avi"};
-        boolean flag = true;
+		String[] urls = {"downloadApp","controller.jsp","file","v2","api-docs","swagger","druid","404","500",".js",".css",".ico",".jpeg",".bmp",".jpg",".png",".gif",".htm",".html",".woff",".woff2",".ttf",".mp3",".mp4",".mov",".avi"};
+        boolean flag = false;
     	for (String str : urls) {
             if (spath.indexOf(str) != -1) {
-                flag =false;
+                flag =true;
                 break;
             }
         }
     	return flag;
         
 	}
-	
+	public User getCurrentUser(HttpServletRequest request) throws JwtException{
+		String token=request.getParameter("token");
+		User user =null;
+		if(null!=token&&!"".equalsIgnoreCase(token)){
+			user= JwtUtil.getUserByJson(token);
+			if(user.getLevel()>0&&user.getLevel()<4){
+				Date endtime=user.getEndTime();
+				Date now=new Date();
+				if(now.compareTo(endtime)<0){
+					user.setIsExpire("0");
+				}else{
+					user.setIsExpire("1");
+				}
+			}
+			
+		}
+//		if(null==user){
+//			throw new JwtException("用户未登陆");
+//		}
+		return user;
+	}
     public void init(FilterConfig config) throws ServletException {
     	ApplicationContext ac = WebApplicationContextUtils
     			.getWebApplicationContext(config.getServletContext());

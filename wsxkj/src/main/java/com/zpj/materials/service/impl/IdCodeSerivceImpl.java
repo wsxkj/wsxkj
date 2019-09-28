@@ -20,12 +20,10 @@ public class IdCodeSerivceImpl implements IdCodeService{
 	public void saveInfo(IdCodeInfo ici) {
 		//防止重复
 		IdCodeInfo temp=this.findInfoByPhone(ici.getPhone());
-		if(null==temp){
-			iciDao.add(ici);
-		}else{
-			ici.setId(temp.getId());
-			iciDao.update(ici);
+		if(null!=temp){
+			iciDao.delete(temp);
 		}
+		iciDao.add(ici);
 	}
 
 	public IdCodeInfo findInfoByPhone(String phone){

@@ -1,5 +1,7 @@
 package com.vue.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -119,9 +121,8 @@ public class OrderAppController extends BaseController{
                                 @ApiParam(required = true, name = "id", value = "订单id")@RequestParam("id")String id) {
         ResultData rd=new ResultData();
         try{
-        	User user= getCurrentUser();
-            orderService.deleteInfo(id);
             orderGoodsService.deleteOrderGoodsInfoByOrderId(id);
+            orderService.deleteInfo(id);
             rd.setCode(200);
             rd.setMsg("删除成功");
         }catch (JwtException e){
@@ -133,7 +134,7 @@ public class OrderAppController extends BaseController{
             rd.setCode(500);
             rd.setMsg("删除失败");
         }
-
+        this.jsonWrite2(rd);
     }
 
     @RequestMapping("/saveOrder")
