@@ -1,6 +1,5 @@
 package com.vue.controller;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -141,7 +140,7 @@ public class OrderAppController extends BaseController{
     @ResponseBody
     @ApiOperation(value = "保存订单", notes = "保存订单", httpMethod = "POST")
     public void saveOrder(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
-                                      @ApiParam(required = false, name = "id", value = "订单id")@RequestParam(value="customerid")String id,
+                                      @ApiParam(required = false, name = "id", value = "订单id")@RequestParam(value="id",required = false)String id,
                                       @ApiParam(required = true, name = "customerid", value = "客户id")@RequestParam(value="customerid")String customerid,
 						    		@ApiParam(required = false, name = "state", value = "订单状态0,1,2,3")@RequestParam(value="state",required = false)String state,
 						    		@ApiParam(required = false, name = "trackingNo", value = "物流单号")@RequestParam(value="trackingNo",required = false)String trackingNo,

@@ -190,7 +190,9 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
 	            }
 	            if(judgeStr(list.get(m).getGoodsId())){
 	                double soldNum=list.get(m).getSoldNum();
-	                orderGoodsDao.executeSql(" update jl_material_goods_info set storeNum=storeNum+"+soldNum+" where id='"+list.get(m).getGoodsId()+"' ");
+	                if(judgeStr(list.get(m).getStoreId())){
+	                	orderGoodsDao.executeSql(" update jl_material_goods_info set storeNum=storeNum+"+soldNum+" where id='"+list.get(m).getGoodsId()+"' ");
+	                }
 	            }
 	        }
 	        //修改库存
