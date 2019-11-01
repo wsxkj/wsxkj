@@ -91,8 +91,11 @@ public class OrderServiceImpl implements OrderService{
     public Map findPageDataMutiGroupByMonth(Map canshu){
     	Map retmap=new HashMap();
     	StringBuilder sql=new StringBuilder(200);
-    	
+    	/* 潘 删除 
 		sql.append(" select sum(t.stp) as xse,DATE_FORMAT(t.updateTime,'%Y-%m') as time,sum(itp) as jlr from ( select a.soldTotalPrice as stp,a.updateTime,(a.soldNum*b.inPrice) as itp  from jl_material_order_goods_info a left join  jl_material_store_info b on a.storeId=b.id  where 1=1 ");
+		*/
+		/* 潘 新增  */
+    	sql.append(" select sum(t.stp) as xse,DATE_FORMAT(t.updateTime,'%Y-%m') as time,sum(itp) as jlr from ( select a.soldTotalPrice as stp,a.updateTime,(a.soldNum*(a.soldPrice - b.inPrice)) as itp  from jl_material_order_goods_info a left join  jl_material_store_info b on a.storeId=b.id  where 1=1 ");
 		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
 			sql.append(" and b.userId='"+canshu.get("userId")+"'") ;
 		}
@@ -117,7 +120,11 @@ public class OrderServiceImpl implements OrderService{
     	List retList=new ArrayList<>();
     	StringBuilder sql=new StringBuilder(200);
     	//查询总销售额，总净利润，总出售件数
+    	/* 潘 删除 
 		sql.append(" select sum(a.soldTotalPrice) as soldmoney,sum(a.soldNum*b.inPrice) as inmoney , sum(a.soldNum) as outnum  from jl_material_order_goods_info a left join  jl_material_store_info b on a.storeId=b.id  where 1=1 ");
+		*/
+		/* 潘 新增  */
+    	sql.append(" select sum(a.soldTotalPrice) as soldmoney,sum(a.soldNum*(a.soldPrice - b.inPrice)) as inmoney , sum(a.soldNum) as outnum  from jl_material_order_goods_info a left join  jl_material_store_info b on a.storeId=b.id  where 1=1 ");
 		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
 			sql.append(" and b.userId='"+canshu.get("userId")+"'") ;
 		}
@@ -151,7 +158,11 @@ public class OrderServiceImpl implements OrderService{
     	List retList=new ArrayList<>();
     	StringBuilder sql=new StringBuilder(200);
     	//查询销售额，日期，净利润，出售件数
+    	/* 潘 删除
 		sql.append(" select sum(t.stp) as soldmoney,DATE_FORMAT(t.updateTime,'%Y-%m-%d') as time,sum(itp) as inmoney,sum(t.chl) as outnum from ( select a.soldTotalPrice as stp,a.updateTime,(a.soldNum*b.inPrice) as itp , a.soldNum as chl  from jl_material_order_goods_info a left join  jl_material_store_info b on a.storeId=b.id  where 1=1 ");
+		*/
+    	/* 潘 新增  */
+    	sql.append(" select sum(t.stp) as soldmoney,DATE_FORMAT(t.updateTime,'%Y-%m-%d') as time,sum(itp) as inmoney,sum(t.chl) as outnum from ( select a.soldTotalPrice as stp,a.updateTime,(a.soldNum*(a.soldPrice - b.inPrice)) as itp , a.soldNum as chl  from jl_material_order_goods_info a left join  jl_material_store_info b on a.storeId=b.id  where 1=1 ");
 		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
 			sql.append(" and b.userId='"+canshu.get("userId")+"'") ;
 		}
