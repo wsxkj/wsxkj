@@ -2,6 +2,7 @@ package com.zpj.materials.service.impl;
 
 import com.zpj.common.BaseDao;
 import com.zpj.common.MyPage;
+import com.zpj.materials.entity.Goods;
 import com.zpj.materials.entity.GoodsBrand;
 import com.zpj.materials.entity.GoodsBrandPicture;
 import com.zpj.materials.service.GoodsBrandService;
@@ -23,6 +24,8 @@ import java.util.*;
 public class GoodsBrandServiceImpl implements GoodsBrandService {
     @Autowired
     private BaseDao<GoodsBrand> goodsBrandDao;
+    @Autowired
+	private BaseDao<Goods> goodsDao;
     @Autowired
     private BaseDao<LogInfo> logDao;
     private String tablename="jl_material_goods_brand_info";
@@ -67,18 +70,27 @@ public class GoodsBrandServiceImpl implements GoodsBrandService {
             goodsBrandDao.add(goodsBrand);
         }
     }
-    public void delInfo(String id, User user){
+    public int delInfo(String id, User user){
         GoodsBrand temp=this.findById(id);
         if(null!=temp){
-            goodsBrandDao.delete(temp);
-            LogInfo loginfo=new LogInfo();
-            loginfo.setId(UUID.randomUUID().toString());
-            loginfo.setUsername(user.getId());
-            loginfo.setCreatetime(new Date());
-            loginfo.setType("删除商品品牌信息");
-            loginfo.setDescription(temp.toString());
-            logDao.add(loginfo);
+        	List list=goodsDao.findMapObjBySqlNoPage(" select id,goodsBrand from jl_material_goods_info where goodsBrand ='"+id+"' ");
+        	LogInfo loginfo=new LogInfo();
+        	loginfo.setId(UUID.randomUUID().toString());
+        	loginfo.setUsername(user.getId());
+        	loginfo.setCreatetime(new Date());
+        	loginfo.setDescription(temp.toString());
+        	if(list!=null&&list.size()>0){
+        		return 0;
+        	}else{
+                goodsBrandDao.delete(temp);
+                loginfo.setType("删除商品品牌信息");
+                logDao.add(loginfo);
+                return 1;
+        	}
+        	
+            
         }
+        return 1;
     }
 
 

@@ -210,4 +210,17 @@ public class StoreAppController extends BaseController {
         this.jsonWrite2(rd);
     }
     
+    @RequestMapping("/findStoreInfoById")
+    @ResponseBody
+    @ApiOperation(value = "根据id查询库存信息", notes = "根据id查询库存信息", httpMethod = "POST")
+    public void findStoreInfoById(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
+    							@ApiParam(required = true, name = "id", value = "id")@RequestParam("id")String id){
+    	Store store=storeService.findById(id);
+    	ResultData rd=new ResultData();
+    	rd.setData(store);
+    	rd.setCode(200);
+    	rd.setMsg("查询成功");
+    	this.jsonWrite2(rd);
+    }
+    
 }

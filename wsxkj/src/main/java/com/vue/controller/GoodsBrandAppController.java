@@ -120,9 +120,14 @@ public class GoodsBrandAppController extends BaseController {
         ResultData rd=new ResultData();
         try{
             User user= getCurrentUser();
-            goodsBrandService.delInfo(id,user);
+            int ret=goodsBrandService.delInfo(id,user);
             rd.setCode(200);
-            rd.setMsg("删除成功");
+            if(ret==1){
+            	rd.setMsg("删除成功");
+            }else{
+            	rd.setCode(500);
+            	rd.setMsg("品牌有管理的商品信息，不能删除");
+            }
         }catch (JwtException e){
             e.printStackTrace();
             rd.setCode(500);

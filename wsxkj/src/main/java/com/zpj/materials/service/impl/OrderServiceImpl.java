@@ -331,7 +331,7 @@ public class OrderServiceImpl implements OrderService{
                 //修改订单
 
                 Map param=new HashMap();
-                param.put("userId",user.getId());
+//                param.put("userId",user.getId());
                 param.put("orderId",id);
                 MyPage mp=orderGoodsService.findPageData(param,1,50);
                 List<OrderGoodsInfo> list =(List<OrderGoodsInfo>)mp.getData();

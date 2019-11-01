@@ -118,9 +118,17 @@ public class GoodsTypeAppController extends BaseController {
         ResultData rd=new ResultData();
         try{
             User user= getCurrentUser();
-            goodsTypeService.delInfo(id,user);
+            int ret=goodsTypeService.delInfo(id,user);
             rd.setCode(200);
-            rd.setMsg("删除成功");
+            if(ret==1){
+            	rd.setMsg("删除成功");
+            }else if(ret==2){
+            	rd.setCode(500);
+            	rd.setMsg("分类有关联的品牌信息，不能删除");
+            }else{
+            	rd.setCode(500);
+            	rd.setMsg("分类有关联的商品信息，不能删除");
+            }
         }catch (JwtException e){
             e.printStackTrace();
             rd.setCode(500);
