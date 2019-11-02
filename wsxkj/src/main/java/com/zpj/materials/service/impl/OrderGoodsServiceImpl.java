@@ -68,9 +68,9 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
 				Double totalbuyMoney=((Double)tempMap.get("soldNum"))*((Double)tempMap.get("inPrice"));
 				*/
 				/* 潘 新增  */
-				Double totalbuyMoney=((Double)tempMap.get("soldNum"))*(((Double)tempMap.get("soldPrice")) - ((Double)tempMap.get("inPrice")));
+				Double inMoneyOne=((Double)tempMap.get("soldNum"))*(((Double)tempMap.get("soldPrice")) - ((Double)tempMap.get("inPrice")));
 				
-				inMoney+=(totalSoldMoney-totalbuyMoney);
+				inMoney+=inMoneyOne;
 				outNum+=((Double)tempMap.get("soldNum"));
 			}
 		}
