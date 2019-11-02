@@ -379,17 +379,17 @@ public class OrderServiceImpl implements OrderService{
                     ogi.setUpdateTime(new Date());
                     orderGoodsService.saveInfo(ogi);
 
-
-                    if(judgeStr(String.valueOf(jsonObject.get("storeId")))){
-                        double soldNum=Double.parseDouble(String.valueOf(jsonObject.get("soldNum")));
-                        orderDao.executeSql(" update jl_material_store_info set storeNum=storeNum-"+soldNum+" where id='"+String.valueOf(jsonObject.get("storeId"))+"' ");
-                    }
-                    if(judgeStr(String.valueOf(jsonObject.get("goodsId")))){
-                        double soldNum=Double.parseDouble(String.valueOf(jsonObject.get("soldNum")));
-                        if(judgeStr(String.valueOf(jsonObject.get("storeId")))){
-                        	orderDao.executeSql(" update jl_material_goods_info set storeNum=storeNum-"+soldNum+" where id='"+String.valueOf(jsonObject.get("goodsId"))+"' ");
-                        }
-                    }
+                    /* 潘 删除   */
+//                    if(judgeStr(String.valueOf(jsonObject.get("storeId")))){
+//                        double soldNum=Double.parseDouble(String.valueOf(jsonObject.get("soldNum")));
+//                        orderDao.executeSql(" update jl_material_store_info set storeNum=storeNum-"+soldNum+" where id='"+String.valueOf(jsonObject.get("storeId"))+"' ");
+//                    }
+//                    if(judgeStr(String.valueOf(jsonObject.get("goodsId")))){
+//                        double soldNum=Double.parseDouble(String.valueOf(jsonObject.get("soldNum")));
+//                        if(judgeStr(String.valueOf(jsonObject.get("storeId")))){
+//                        	orderDao.executeSql(" update jl_material_goods_info set storeNum=storeNum-"+soldNum+" where id='"+String.valueOf(jsonObject.get("goodsId"))+"' ");
+//                        }
+//                    }
                 }
             }
 
