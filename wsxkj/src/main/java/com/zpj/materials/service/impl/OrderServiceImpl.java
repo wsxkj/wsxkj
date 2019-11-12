@@ -95,14 +95,14 @@ public class OrderServiceImpl implements OrderService{
 		sql.append(" select sum(t.stp) as xse,DATE_FORMAT(t.updateTime,'%Y-%m') as time,sum(itp) as jlr from ( select a.soldTotalPrice as stp,a.updateTime,(a.soldNum*b.inPrice) as itp  from jl_material_order_goods_info a left join  jl_material_store_info b on a.storeId=b.id  where 1=1 ");
 		*/
 		/* 潘 新增  */
-    	sql.append(" select sum(t.stp) as xse,DATE_FORMAT(t.updateTime,'%Y-%m') as time,sum(itp) as jlr from ( select a.soldTotalPrice as stp,a.updateTime,(a.soldNum*(a.soldPrice - b.inPrice)) as itp  from jl_material_order_goods_info a left join  jl_material_store_info b on a.storeId=b.id  where 1=1 ");
+    	sql.append(" select sum(t.stp) as xse,DATE_FORMAT(t.updateTime,'%Y-%m') as time,sum(itp) as jlr from ( select a.soldTotalPrice as stp,c.updateTime,(a.soldNum*(a.soldPrice - b.inPrice)) as itp  from jl_material_order_goods_info a left join  jl_material_store_info b on a.storeId=b.id left join jl_material_order_info c on c.id=a.orderId  where 1=1 ");
 		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
 			sql.append(" and b.userId='"+canshu.get("userId")+"'") ;
 		}
 		if(null!=canshu.get("time")&&!"".equalsIgnoreCase((String)canshu.get("time"))){
-			sql.append(" and a.updateTime like '"+canshu.get("time")+"%'") ;
+			sql.append(" and c.updateTime like '"+canshu.get("time")+"%'") ;
 		}
-		sql.append(") t group by DATE_FORMAT(updateTime,'%Y-%m') ");
+		sql.append(") t group by DATE_FORMAT(t.updateTime,'%Y-%m') ");
 		List list=orderDao.findMapObjBySqlNoPage(sql.toString());
 		if(null!=list&&list.size()>0){
 			retmap=(Map)list.get(0);
@@ -162,14 +162,14 @@ public class OrderServiceImpl implements OrderService{
 		sql.append(" select sum(t.stp) as soldmoney,DATE_FORMAT(t.updateTime,'%Y-%m-%d') as time,sum(itp) as inmoney,sum(t.chl) as outnum from ( select a.soldTotalPrice as stp,a.updateTime,(a.soldNum*b.inPrice) as itp , a.soldNum as chl  from jl_material_order_goods_info a left join  jl_material_store_info b on a.storeId=b.id  where 1=1 ");
 		*/
     	/* 潘 新增  */
-    	sql.append(" select sum(t.stp) as soldmoney,DATE_FORMAT(t.updateTime,'%Y-%m-%d') as time,sum(itp) as inmoney,sum(t.chl) as outnum from ( select a.soldTotalPrice as stp,a.updateTime,(a.soldNum*(a.soldPrice - b.inPrice)) as itp , a.soldNum as chl  from jl_material_order_goods_info a left join  jl_material_store_info b on a.storeId=b.id  where 1=1 ");
+    	sql.append(" select sum(t.stp) as soldmoney,DATE_FORMAT(t.updateTime,'%Y-%m-%d') as time,sum(itp) as inmoney,sum(t.chl) as outnum from ( select a.soldTotalPrice as stp,c.updateTime,(a.soldNum*(a.soldPrice - b.inPrice)) as itp , a.soldNum as chl  from jl_material_order_goods_info a left join  jl_material_store_info b on a.storeId=b.id left join jl_material_order_info c on c.id=a.orderId  where 1=1 ");
 		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
 			sql.append(" and b.userId='"+canshu.get("userId")+"'") ;
 		}
 		if(null!=canshu.get("time")&&!"".equalsIgnoreCase((String)canshu.get("time"))){
-			sql.append(" and a.updateTime like '"+canshu.get("time")+"%'") ;
+			sql.append(" and c.updateTime like '"+canshu.get("time")+"%'") ;
 		}
-		sql.append(") t group by DATE_FORMAT(updateTime,'%Y-%m-%d') ");
+		sql.append(") t group by DATE_FORMAT(t.updateTime,'%Y-%m-%d') ");
 		List<Map> list=orderDao.findMapObjBySqlNoPage(sql.toString());
 		//进货件数
 		sql=new StringBuilder(200);

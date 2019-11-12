@@ -1,5 +1,6 @@
 package com.zpj.materials.service.impl;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.HashMap;
@@ -46,12 +47,12 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
     */
 	public Map findFourData(Map canshu){
 		StringBuilder sql=new StringBuilder(200);
-		sql.append("select a.soldNum,a.soldPrice,a.soldTotalPrice,b.inPrice,b.outPrice  from "+tablename +" a left join  jl_material_store_info b on a.storeId=b.id  where 1=1 ");
+		sql.append("select a.soldNum,a.soldPrice,a.soldTotalPrice,b.inPrice,b.outPrice  from "+tablename +" a left join  jl_material_store_info b on a.storeId=b.id left join jl_material_order_info c on c.id=a.orderId where 1=1 ");
 		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
 			sql.append(" and b.userId='"+canshu.get("userId")+"'") ;
 		}
 		if(null!=canshu.get("time")&&!"".equalsIgnoreCase((String)canshu.get("time"))){
-			sql.append(" and a.updateTime like '"+canshu.get("time")+"%'") ;
+			sql.append(" and c.updateTime like '"+canshu.get("time")+"%'") ;
 		}
 		float totalSoldMoney=0;//今日销售总额
 		float inMoney=0;//净利润
@@ -100,17 +101,20 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
     public int  findOrderGoodsOutCount(Map canshu){
         Map param=new HashMap();
         StringBuilder sql=new StringBuilder(100);
-        sql.append("select sum(soldNum) as sn from "+tablename +" where 1=1 ");
+        sql.append("select sum(a.soldNum) as sn,b.updatetime as ordertime from "+tablename +" a left join jl_material_order_info b on a.orderId=b.id where 1=1 ");
         if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
-            sql.append(" and userId='"+canshu.get("userId")+"'") ;
+            sql.append(" and b.userId='"+canshu.get("userId")+"'") ;
         }
         if(null!=canshu.get("startTime")&&!"".equalsIgnoreCase((String)canshu.get("startTime"))){
-            sql.append(" and updateTime>='"+canshu.get("startTime")+"'") ;
+            sql.append(" and b.updateTime>='"+canshu.get("startTime")+"'") ;
         }
         if(null!=canshu.get("endTime")&&!"".equalsIgnoreCase((String)canshu.get("endTime"))){
-            sql.append(" and updateTime<='"+canshu.get("endTime")+"'") ;
+            sql.append(" and b.updateTime<='"+canshu.get("endTime")+"'") ;
         }
-        List list=orderGoodsDao.findMapObjBySqlNoPage(sql.toString());
+        List<Map> list=orderGoodsDao.findMapObjBySqlNoPage(sql.toString());
+        if(list!=null&&list.size()>0){
+        	return Integer.parseInt(list.get(0).get("sn").toString());
+        }
         return 0;
     }
 	@Override
