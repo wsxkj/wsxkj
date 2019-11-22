@@ -78,74 +78,130 @@ public class LoginAppController extends BaseController {
 	public void checkLogin(@ApiParam(required = false, name = "phone", value = "手机号码")@RequestParam("phone")String phone,
 						   @ApiParam(required = false, name = "yzm", value = "验证码")@RequestParam("yzm")String yzm
 						   ){
-		IdCodeInfo ici=idCodeService.findInfoByPhone(phone);
-		Map retMap=new HashMap();
 		Date tempTime=null;
 		Date now=new Date();
-		Date date1=ici.getUpdateTime();
-		long bt=DateHelper.getDiffMinute(now,date1);
-		//判断验证码是否过期
-		if(bt>0&&bt<=5){
-			if(ici.getYzm().equalsIgnoreCase(yzm)){
-				User user=userService.findUserByPhone(phone);
-				if(null!=user){
-					tempTime=user.getLastLoginTime();
-					user.setLastLoginTime(now);
-					user.setUpdateTime(now);
-					Level lv=levelService.findInfoById(user.getLevel());
-					user.setLevelName(lv.getName());
-					if(user.getLevel()>0&&user.getLevel()<4){
-						Date endtime=user.getEndTime();
-						if(now.compareTo(endtime)<0){
-							user.setIsExpire("0");
-						}else{
-							user.setIsExpire("1");
-						}
-					}else{
+		Map retMap=new HashMap();
+		//测试上架用户特殊处理
+		if(phone!=null&&phone.equalsIgnoreCase("13101995003")&&yzm!=null&&yzm.equalsIgnoreCase("1234")){
+			User user=userService.findUserByPhone(phone);
+			if(null!=user){
+				tempTime=user.getLastLoginTime();
+				user.setLastLoginTime(now);
+				user.setUpdateTime(now);
+				Level lv=levelService.findInfoById(user.getLevel());
+				user.setLevelName(lv.getName());
+				if(user.getLevel()>0&&user.getLevel()<4){
+					Date endtime=user.getEndTime();
+					if(now.compareTo(endtime)<0){
 						user.setIsExpire("0");
+					}else{
+						user.setIsExpire("1");
 					}
 				}else{
-					//第一次登陆时设置默认
-					user=new User();
-					user.setUpdateTime(now);
-					tempTime=now;
-					user.setLastLoginTime(now);
-					user.setPhone(phone);
-					//默认普通会员
-					user.setLevelId("LEVEL_19822103696886");
-					user.setLevel(0);
-					user.setLevelName("普通会员");
 					user.setIsExpire("0");
-					user.setMaxtime(0);
-					user.setStartTime(now);
 				}
-				user.setPassword(MsgUtil.generatePassword(6));
-				userService.saveInfo(user);
-				retMap.put("code", 200);
-				retMap.put("msg", "登陆成功");
-				
-				
-				//用户保存以后重新替换之前的lastlogintime字段保证接口返回的数据正确
-				user.setLastLoginTime(tempTime);
-				String token=JwtUtil.buildJsonByUser(user);
-				user.setToken(token);
-				retMap.put("data", user);
-				
-				LogInfo loginfo=new LogInfo();
-		        loginfo.setId(UUID.randomUUID().toString());
-		        loginfo.setUsername(user.getId());
-		        loginfo.setCreatetime(new Date());
-		        loginfo.setType("登陆成功");
-		        loginfo.setDescription(user.toString());
-		        logService.saveLog(loginfo);
-				System.out.println("phone:"+phone+";token:"+token);
+			}else{
+				//第一次登陆时设置默认
+				user=new User();
+				user.setUpdateTime(now);
+				tempTime=now;
+				user.setLastLoginTime(now);
+				user.setPhone(phone);
+				//默认普通会员
+				user.setLevelId("LEVEL_19822103696886");
+				user.setLevel(0);
+				user.setLevelName("普通会员");
+				user.setIsExpire("0");
+				user.setMaxtime(0);
+				user.setStartTime(now);
+			}
+			user.setPassword(MsgUtil.generatePassword(6));
+			userService.saveInfo(user);
+			retMap.put("code", 200);
+			retMap.put("msg", "登陆成功");
+			
+			
+			//用户保存以后重新替换之前的lastlogintime字段保证接口返回的数据正确
+			user.setLastLoginTime(tempTime);
+			String token=JwtUtil.buildJsonByUser(user);
+			user.setToken(token);
+			retMap.put("data", user);
+			
+			LogInfo loginfo=new LogInfo();
+	        loginfo.setId(UUID.randomUUID().toString());
+	        loginfo.setUsername(user.getId());
+	        loginfo.setCreatetime(new Date());
+	        loginfo.setType("登陆成功");
+	        loginfo.setDescription(user.toString());
+	        logService.saveLog(loginfo);
+			System.out.println("phone:"+phone+";token:"+token);
+		}else{
+			IdCodeInfo ici=idCodeService.findInfoByPhone(phone);
+			Date date1=ici.getUpdateTime();
+			long bt=DateHelper.getDiffMinute(now,date1);
+			//判断验证码是否过期
+			if(bt>0&&bt<=5){
+				if(ici.getYzm().equalsIgnoreCase(yzm)){
+					User user=userService.findUserByPhone(phone);
+					if(null!=user){
+						tempTime=user.getLastLoginTime();
+						user.setLastLoginTime(now);
+						user.setUpdateTime(now);
+						Level lv=levelService.findInfoById(user.getLevel());
+						user.setLevelName(lv.getName());
+						if(user.getLevel()>0&&user.getLevel()<4){
+							Date endtime=user.getEndTime();
+							if(now.compareTo(endtime)<0){
+								user.setIsExpire("0");
+							}else{
+								user.setIsExpire("1");
+							}
+						}else{
+							user.setIsExpire("0");
+						}
+					}else{
+						//第一次登陆时设置默认
+						user=new User();
+						user.setUpdateTime(now);
+						tempTime=now;
+						user.setLastLoginTime(now);
+						user.setPhone(phone);
+						//默认普通会员
+						user.setLevelId("LEVEL_19822103696886");
+						user.setLevel(0);
+						user.setLevelName("普通会员");
+						user.setIsExpire("0");
+						user.setMaxtime(0);
+						user.setStartTime(now);
+					}
+					user.setPassword(MsgUtil.generatePassword(6));
+					userService.saveInfo(user);
+					retMap.put("code", 200);
+					retMap.put("msg", "登陆成功");
+					
+					
+					//用户保存以后重新替换之前的lastlogintime字段保证接口返回的数据正确
+					user.setLastLoginTime(tempTime);
+					String token=JwtUtil.buildJsonByUser(user);
+					user.setToken(token);
+					retMap.put("data", user);
+					
+					LogInfo loginfo=new LogInfo();
+			        loginfo.setId(UUID.randomUUID().toString());
+			        loginfo.setUsername(user.getId());
+			        loginfo.setCreatetime(new Date());
+			        loginfo.setType("登陆成功");
+			        loginfo.setDescription(user.toString());
+			        logService.saveLog(loginfo);
+					System.out.println("phone:"+phone+";token:"+token);
+				}else{
+					retMap.put("code",500);
+					retMap.put("msg", "验证码错误");
+				}
 			}else{
 				retMap.put("code",500);
-				retMap.put("msg", "验证码错误");
+				retMap.put("msg", "验证码已过期");
 			}
-		}else{
-			retMap.put("code",500);
-			retMap.put("msg", "验证码已过期");
 		}
 		jsonWrite3(retMap);
 

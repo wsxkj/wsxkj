@@ -131,7 +131,7 @@ public class OrderServiceImpl implements OrderService{
 		List<Map> list=orderDao.findMapObjBySqlNoPage(sql.toString());
 		//进货件数
 		sql=new StringBuilder(200);
-		sql.append("select SUM(inNum) as innum from jl_material_store_info ");
+		sql.append("select SUM(inNum) as innum from jl_material_store_info where 1=1 ");
 		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
 			sql.append(" and userId='"+canshu.get("userId")+"'") ;
 		}

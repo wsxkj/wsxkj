@@ -57,7 +57,7 @@ public class GoodsAppController extends BaseController {
         try{
             User user= getCurrentUser();
             Map map=new HashMap();
-            double innum=0;
+//            double innum=0;
 
             //保存商品信息
             Goods goods = goodsService.findById(id);
@@ -67,8 +67,9 @@ public class GoodsAppController extends BaseController {
             goods.setName(name);
             goods.setPicture(picture);
             goods.setQrCode(qrCode);
-            goods.setStoreNum(innum);
+//            goods.setStoreNum(innum);
             goods.setUserId(user.getId());
+            
             goodsService.saveInfo(goods);
             
             rd.setCode(200);

@@ -169,12 +169,9 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
 	public List findOrderListByGoodsId(Map canshu, Integer page, Integer limit){
 		StringBuffer sql=new StringBuffer(500);
 		
-		sql.append(" select t.id,c.nickname,g.soldTotalPrice,t.updateTime from  jl_material_order_info t LEFT JOIN jl_material_customer_info c on c.id=t.customerId LEFT JOIN jl_material_order_goods_info g on g.orderId=t.id  where 1=1 ");
+		sql.append(" select t.id,c.nickname,a.sn as soldNum,t.updateTime from  jl_material_order_info t LEFT JOIN jl_material_customer_info c on c.id=t.customerId INNER JOIN ( select SUM(soldNum) as sn ,orderId  from jl_material_order_goods_info where goodsId='"+canshu.get("goodsId")+"' GROUP BY orderId ) a on t.id=a.orderId  where 1=1 ");
 		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
 			sql.append(" and t.userId='"+canshu.get("userId")+"'");
-        }
-		if(null!=canshu.get("goodsId")&&!"".equalsIgnoreCase((String)canshu.get("goodsId"))){
-			sql.append("and g.goodsId='"+canshu.get("goodsId")+"' ");
         }
 		sql.append(" order by t.updateTime desc");
 		List list=orderGoodsDao.findMapObjBySql(sql.toString(), null, page, limit);
