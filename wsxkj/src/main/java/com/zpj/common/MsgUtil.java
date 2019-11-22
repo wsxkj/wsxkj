@@ -34,7 +34,7 @@ public class MsgUtil {
         request.putQueryParameter("RegionId", "cn-hangzhou");
         request.putQueryParameter("PhoneNumbers", phone);
         request.putQueryParameter("SignName", "微商小会计");
-        request.putQueryParameter("TemplateCode", "SMS_163845223");
+        request.putQueryParameter("TemplateCode", "SMS_177242862");
         request.putQueryParameter("TemplateParam", "{\"code\":\""+yzm+"\"}");
         try {
             CommonResponse response = client.getCommonResponse(request);
@@ -58,6 +58,16 @@ public class MsgUtil {
         String str="0123456789";
         StringBuilder uuid=new StringBuilder(5);
         for(int i=0;i<4;i++) {
+            uuid.append(str.charAt(new Random().nextInt(str.length())));
+        }
+        return uuid.toString();
+    }
+	
+	public static String generatePassword(int length){
+
+        String str="0123456789";
+        StringBuilder uuid=new StringBuilder(7);
+        for(int i=0;i<length;i++) {
             uuid.append(str.charAt(new Random().nextInt(str.length())));
         }
         return uuid.toString();
