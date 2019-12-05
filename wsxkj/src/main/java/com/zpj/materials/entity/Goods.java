@@ -36,6 +36,21 @@ public class Goods implements java.io.Serializable{
 	private Date updateTime;
 	@ApiModelProperty(value = "总库存数量",name="storeNum", required = false)
 	private double storeNum;
+	/**********v1_1_0新增*****开始********/
+	@ApiModelProperty(value = "功效",name="effect", required = false)
+	private String effect;
+	@ApiModelProperty(value = "适用肤质",name="suitableForSkin", required = false)
+	private String suitableForSkin;
+	@ApiModelProperty(value = "详情",name="detail", required = false)
+	private String detail;
+	@ApiModelProperty(value = "是否发布，1发布，0不发布",name="isPublish", required = false)
+	private String isPublish;
+	@ApiModelProperty(value = "浏览次数",name="glanceTimes", required = false)
+	private int glanceTimes=0;
+	@ApiModelProperty(value = "售价",name="soldPrice", required = false)
+	private double soldPrice=0;
+	
+	/**********v1_1_0新增****结束*********/
 	
 	/***********稍后设置填充临时值用**开始************/
 	@ApiModelProperty(value = "总进货数量",name="totalInNum", required = false)
@@ -212,6 +227,44 @@ public class Goods implements java.io.Serializable{
 	public void setGoodsBrandName(String goodsBrandName) {
 		this.goodsBrandName = goodsBrandName;
 	}
+	public String getEffect() {
+		return effect;
+	}
+	public void setEffect(String effect) {
+		this.effect = effect;
+	}
+	public String getSuitableForSkin() {
+		return suitableForSkin;
+	}
+	public void setSuitableForSkin(String suitableForSkin) {
+		this.suitableForSkin = suitableForSkin;
+	}
+	public String getDetail() {
+		return detail;
+	}
+	public void setDetail(String detail) {
+		this.detail = detail;
+	}
+	public String getIsPublish() {
+		return isPublish;
+	}
+	public void setIsPublish(String isPublish) {
+		this.isPublish = isPublish;
+	}
+	public int getGlanceTimes() {
+		return glanceTimes;
+	}
+	public void setGlanceTimes(int glanceTimes) {
+		this.glanceTimes = glanceTimes;
+	}
+	public double getSoldPrice() {
+		return soldPrice;
+	}
+	public void setSoldPrice(double soldPrice) {
+		this.soldPrice = soldPrice;
+	}
+	
+	
 	
 	
 }

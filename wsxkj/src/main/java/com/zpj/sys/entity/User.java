@@ -58,6 +58,13 @@ public class User implements java.io.Serializable {
 	
 	@ApiModelProperty(value = "token",name="token", required =  false)
 	private String token;
+	
+	/**********v1_1_0新增*****开始********/
+	@ApiModelProperty(value = "微商店铺名称",name="shopName", required =  false)
+	private String shopName;
+	@ApiModelProperty(value = "微商店铺地址",name="shopUrl", required =  false)
+	private String shopUrl;
+	/**********v1_1_0新增****结束*********/
 
 	@Id
 	@Column(name = "id", unique = true, nullable = false ,length=36)
@@ -178,5 +185,19 @@ public class User implements java.io.Serializable {
 		StringBuffer sb=new StringBuffer(300);
 		return sb.append("id:"+this.id+",phone:"+this.phone+",wxid:"+this.wxid+",wxnickname:"+this.wxnickname+",lastLoginTime:"+this.lastLoginTime+",levelId:"+this.getLevelId()).toString();
 	}
+	public String getShopName() {
+		return shopName;
+	}
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
+	}
+	public String getShopUrl() {
+		return shopUrl;
+	}
+	public void setShopUrl(String shopUrl) {
+		this.shopUrl = shopUrl;
+	}
+	
+	
 
 }
