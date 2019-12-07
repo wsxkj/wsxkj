@@ -48,7 +48,7 @@ public class SetCharacterFilter implements Filter{
 		}else{
 //			//手机请求
 			if(str_href.indexOf("app")>-1){
-				if(str_href.indexOf("app/login")>-1||str_href.indexOf("app/file")>-1){
+				if(str_href.indexOf("app/login")>-1||str_href.indexOf("app/file")>-1||str_href.indexOf("v1_1_0/findGoodsById")>-1||str_href.indexOf("v1_1_0/searchGoodsList")>-1){
 					chain.doFilter(request, response);
 				}else{
 					User user=getCurrentUser(req);

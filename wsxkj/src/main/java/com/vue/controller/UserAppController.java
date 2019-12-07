@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.zpj.common.BaseController;
 import com.zpj.common.MyPage;
+import com.zpj.common.ResultData;
 import com.zpj.sys.entity.User;
 import com.zpj.sys.service.UserService;
 
+import io.jsonwebtoken.JwtException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -35,6 +37,8 @@ public class UserAppController extends BaseController{
 		User u=userService.findById(id);
 		jsonWrite2(u);
 	}
+	
+	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@ResponseBody
 	public void update(User u){
@@ -92,6 +96,35 @@ public class UserAppController extends BaseController{
 		jsonWrite2(my);
 	}
 	
-	
-	
+	 /**************************v1_1_0版本新接口**开始*****************************/
+	@RequestMapping(value = "/v1_1_0/setShop", method = RequestMethod.GET)
+	@ApiOperation(value = "设置商店名称", notes = "设置商店名称", httpMethod = "GET")
+	@ResponseBody
+	public void setShop_v1_1_0(
+			@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
+			@ApiParam(required = false, name = "shopName", value = "店铺名称")@RequestParam(value="shopName",required = false)String shopName,
+			@ApiParam(required = false, name = "shopUrl", value = "店铺地址")@RequestParam(value="shopUrl",required = false)String shopUrl
+			){
+		ResultData rd=new ResultData();
+	try{	
+		User user= getCurrentUser();
+		User temp=userService.findById(user.getId());
+		temp.setShopName(shopName);
+		temp.setShopUrl(shopUrl);
+		userService.saveInfo(temp);
+		rd.setData(temp);
+        rd.setCode(200);
+        rd.setMsg("设置成功");
+    }catch (JwtException e){
+        e.printStackTrace();
+        rd.setCode(500);
+        rd.setMsg("token转码失败，token过期");
+    }catch (Exception e){
+        e.printStackTrace();
+        rd.setCode(500);
+        rd.setMsg("设置失败");
+    }
+    this.jsonWrite2(rd);
+	}
+	 /**************************v1_1_0版本新接口**结束*****************************/
 }

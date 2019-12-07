@@ -343,4 +343,223 @@ public class GoodsAppController extends BaseController {
         this.jsonWrite2(rd);
     }
     
+    
+ /**************************v1_1_0版本新接口**开始*****************************/
+    
+    @RequestMapping("/v1_1_0/saveGoodsInfo")
+    @ResponseBody
+    @ApiOperation(value = "商品编辑保存", notes = "商品编辑保存", httpMethod = "POST" ,response = Goods.class)
+    public void saveGoodsInfo_v1_1_0(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
+    					 @ApiParam(required = true, name = "id", value = "商品id")@RequestParam("id")String id,
+                         @ApiParam(required = true, name = "name", value = "名称")@RequestParam("name")String name,
+                         @ApiParam(required = false, name = "qrCode", value = "条形码")@RequestParam(value="qrCode",required = false)String qrCode,
+                         @ApiParam(required = false, name = "picture", value = "图片路径")@RequestParam(value="picture",required = false)String picture,
+                         @ApiParam(required = true, name = "goodsType", value = "商品类型")@RequestParam("goodsType")String goodsType,
+                         @ApiParam(required = true, name = "goodsBrand", value = "商品品牌")@RequestParam("goodsBrand")String goodsBrand,
+                         @ApiParam(required = false, name = "effect", value = "功效")@RequestParam(value="effect",required = false)String effect,
+                         @ApiParam(required = false, name = "suitableForSkin", value = "适用肤质")@RequestParam(value="suitableForSkin",required = false)String suitableForSkin,
+                         @ApiParam(required = false, name = "detail", value = "详细")@RequestParam(value="detail",required = false)String detail,
+                         @ApiParam(required = false, name = "isPublish", value = "是否发布1发布，0不发布")@RequestParam(value="isPublish",required = false)String isPublish,
+                         @ApiParam(required = false, name = "soldPrice", value = "售价")@RequestParam(value="soldPrice",required = false)double soldPrice
+                         
+    		){
+        ResultData rd=new ResultData();
+        try{
+            User user= getCurrentUser();
+            Map map=new HashMap();
+//            double innum=0;
+
+            //保存商品信息
+            Goods goods = goodsService.findById(id);
+            goods.setUpdateTime(new Date());
+            goods.setGoodsBrand(goodsBrand);
+            goods.setGoodsType(goodsType);
+            goods.setName(name);
+            goods.setPicture(picture);
+            goods.setQrCode(qrCode);
+            goods.setEffect(effect);
+            goods.setSoldPrice(soldPrice);
+            goods.setSuitableForSkin(suitableForSkin);
+            goods.setDetail(detail);
+            goods.setIsPublish(isPublish);
+//            goods.setStoreNum(innum);
+            goods.setUserId(user.getId());
+            
+            goodsService.saveInfo(goods);
+            
+            rd.setCode(200);
+            rd.setMsg("保存成功");
+        }catch (JwtException e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("token转码失败，token过期");
+        }catch (Exception e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("保存失败");
+        }
+        this.jsonWrite2(rd);
+    }
+    
+    
+    @RequestMapping("/v1_1_0/saveNewInfo")
+    @ResponseBody
+    @ApiOperation(value = "新商品保存", notes = "新商品保存", httpMethod = "POST" ,response = Goods.class)
+    public void saveNewInfo_v1_1_0(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
+                         @ApiParam(required = true, name = "name", value = "名称")@RequestParam("name")String name,
+                         @ApiParam(required = false, name = "qrCode", value = "条形码")@RequestParam(value="qrCode",required = false)String qrCode,
+                         @ApiParam(required = false, name = "picture", value = "图片路径")@RequestParam(value="picture",required = false)String picture,
+                         @ApiParam(required = true, name = "goodsType", value = "商品类型")@RequestParam("goodsType")String goodsType,
+                         @ApiParam(required = true, name = "goodsBrand", value = "商品品牌")@RequestParam("goodsBrand")String goodsBrand,
+                         @ApiParam(required = true, name = "inNum", value = "进货数量")@RequestParam("inNum")String inNum,
+                         @ApiParam(required = true, name = "inPrice", value = "进货价格")@RequestParam("inPrice")String inPrice,
+                         @ApiParam(required = true, name = "outPrice", value = "出货价格")@RequestParam("outPrice")String outPrice,
+                         @ApiParam(required = false, name = "sureDate", value = "保质日期")@RequestParam(value="sureDate",required = false)String sureDate,
+                         @ApiParam(required = false, name = "effect", value = "功效")@RequestParam(value="effect",required = false)String effect,
+                         @ApiParam(required = false, name = "suitableForSkin", value = "适用肤质")@RequestParam(value="suitableForSkin",required = false)String suitableForSkin,
+                         @ApiParam(required = false, name = "detail", value = "详细")@RequestParam(value="detail",required = false)String detail,
+                         @ApiParam(required = false, name = "isPublish", value = "是否发布1发布，0不发布")@RequestParam(value="isPublish",required = false)String isPublish,
+                         @ApiParam(required = false, name = "soldPrice", value = "售价")@RequestParam(value="soldPrice",required = false)double soldPrice
+    		){
+        ResultData rd=new ResultData();
+        try{
+            User user= getCurrentUser();
+            Map map=new HashMap();
+            double innum=0;
+            if(null!=inNum) innum=Double.parseDouble(inNum);
+
+            //保存新商品信息
+            Goods goods=new Goods();
+            goods.setUpdateTime(new Date());
+            goods.setGoodsBrand(goodsBrand);
+            goods.setGoodsType(goodsType);
+            goods.setName(name);
+            goods.setPicture(picture);
+            goods.setQrCode(qrCode);
+            goods.setStoreNum(innum);
+            goods.setUserId(user.getId());
+            goods.setEffect(effect);
+            goods.setSoldPrice(soldPrice);
+            goods.setSuitableForSkin(suitableForSkin);
+            goods.setDetail(detail);
+            goods.setIsPublish(isPublish);
+            goodsService.saveInfo(goods);
+            //保存库存信息
+            if(innum>0){
+            	Store store=new Store();
+            	store.setGoodsId(goods.getId());
+            	store.setUserId(user.getId());
+            	store.setInDate(new Date());
+            	store.setInNum(innum);
+            	store.setStoreNum(innum);
+            	store.setInPrice(Double.parseDouble(inPrice));
+            	store.setOutPrice(Double.parseDouble(outPrice));
+            	if(judgeStr(sureDate)){
+            		store.setSureDate(DateHelper.getStringDate(sureDate,"yyyy-MM-dd"));
+            	}
+            	store.setUpdateTime(new Date());
+            	storeService.saveInfo(store);
+            }
+            rd.setCode(200);
+            rd.setMsg("保存成功");
+        }catch (JwtException e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("token转码失败，token过期");
+        }catch (Exception e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("保存失败");
+        }
+        this.jsonWrite2(rd);
+    }
+    @RequestMapping("/v1_1_0/findGoodsById")
+    @ResponseBody
+    @ApiOperation(value = "查询商品详细信息 增加浏览次数，同时不用token可以直接访问", notes = "查询商品详细信息", httpMethod = "POST",response = Goods.class )
+    public void findGoodsById_v1_1_0(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
+    		@ApiParam(required = false, name = "id", value = "商品Id主键")@RequestParam(value="id")String id){
+    	ResultData rd=new ResultData();
+        try{
+            User user= getCurrentUser();
+        	Goods goods = goodsService.findById(id);
+        	goods.setGlanceTimes(goods.getGlanceTimes()+1);
+        	goodsService.saveInfo(goods);
+            rd.setData(goods);
+            rd.setCode(200);
+            rd.setMsg("查询成功");
+        }catch (JwtException e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("token转码失败，token过期");
+        }catch (Exception e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("查询失败");
+        }
+        this.jsonWrite2(rd);
+    }
+    
+    @RequestMapping("/v1_1_0/setIsPublishByGoodsId")
+    @ResponseBody
+    @ApiOperation(value = "根据商品id设置是否发布", notes = "根据商品id设置是否发布", httpMethod = "POST",response = Goods.class )
+    public void setIsPublishByGoodsId_v1_1_0(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
+    		@ApiParam(required = false, name = "id", value = "商品Id主键")@RequestParam(value="id")String id,
+    		@ApiParam(required = false, name = "isPublish", value = "是否发布，1发布，0不发布")@RequestParam(value="isPublish",required = false)String isPublish){
+    	ResultData rd=new ResultData();
+        try{
+            User user= getCurrentUser();
+        	Goods goods = goodsService.findById(id);
+        	if(isPublish!=null&&!isPublish.equalsIgnoreCase("")){
+        		goods.setIsPublish(isPublish);
+        	}else{
+        		goods.setIsPublish("0");
+        	}
+        	goodsService.saveInfo(goods);
+            rd.setData(goods);
+            rd.setCode(200);
+            rd.setMsg("设置成功");
+        }catch (JwtException e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("token转码失败，token过期");
+        }catch (Exception e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("设置失败");
+        }
+        this.jsonWrite2(rd);
+    }
+    
+    @RequestMapping("/v1_1_0/searchGoodsList")
+    @ResponseBody
+    @ApiOperation(value = "查询商品列表带发布选项", notes = "查询商品列表", httpMethod = "POST",response = Goods.class )
+    public void searchGoodsList_v1_1_0(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
+    		@ApiParam(required = false, name = "key", value = "名称")@RequestParam(value="key",required = false)String key,
+    		@ApiParam(required = false, name = "isPublish", value = "是否发布，1发布，0不发布")@RequestParam(value="isPublish",required = false)String isPublish,
+    		@ApiParam(required = true, name = "cpage", value = "当前页")@RequestParam("cpage")String cpage,
+                                   @ApiParam(required = true, name = "pagerow", value = "pagerow")@RequestParam("pagerow")String pagerow){
+        ResultData rd=new ResultData();
+        try{
+            User user= getCurrentUser();
+            Map map=new HashMap();
+            map.put("userId",user.getId());
+            map.put("name", filterStr(key));
+            List list = goodsService.findMultiGoods(map,Integer.parseInt(cpage),Integer.parseInt(pagerow));
+            rd.setData(list);
+            rd.setCount(0);
+            rd.setCode(200);
+            rd.setMsg("查询成功");
+        }catch (JwtException e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("token转码失败，token过期");
+        }catch (Exception e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("查询失败");
+        }
+        this.jsonWrite2(rd);
+    } 
+    
+    /**************************v1_1_0版本新接口**结束*****************************/
 }
