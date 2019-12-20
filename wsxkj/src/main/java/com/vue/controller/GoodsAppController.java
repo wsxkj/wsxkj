@@ -1,5 +1,6 @@
 package com.vue.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +22,7 @@ import com.zpj.materials.entity.Store;
 import com.zpj.materials.service.GoodsService;
 import com.zpj.materials.service.StoreService;
 import com.zpj.sys.entity.User;
+import com.zpj.sys.service.UserService;
 
 import io.jsonwebtoken.JwtException;
 import io.swagger.annotations.Api;
@@ -41,7 +43,8 @@ public class GoodsAppController extends BaseController {
     private GoodsService goodsService;
     @Autowired
     private StoreService storeService;
-
+    @Autowired
+	public UserService userService;
     
     @RequestMapping("/saveGoodsInfo")
     @ResponseBody
@@ -473,14 +476,14 @@ public class GoodsAppController extends BaseController {
         }
         this.jsonWrite2(rd);
     }
-    @RequestMapping("/v1_1_0/findGoodsById")
+    @RequestMapping("/v1_1_0/findGoodsByIdH5")
     @ResponseBody
     @ApiOperation(value = "查询商品详细信息 增加浏览次数，同时不用token可以直接访问", notes = "查询商品详细信息", httpMethod = "POST",response = Goods.class )
-    public void findGoodsById_v1_1_0(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
+    public void findGoodsById_v1_1_0(
     		@ApiParam(required = false, name = "id", value = "商品Id主键")@RequestParam(value="id")String id){
     	ResultData rd=new ResultData();
         try{
-            User user= getCurrentUser();
+//            User user= getCurrentUser();
         	Goods goods = goodsService.findById(id);
         	goods.setGlanceTimes(goods.getGlanceTimes()+1);
         	goodsService.saveInfo(goods);
@@ -507,7 +510,7 @@ public class GoodsAppController extends BaseController {
     		@ApiParam(required = false, name = "isPublish", value = "是否发布，1发布，0不发布")@RequestParam(value="isPublish",required = false)String isPublish){
     	ResultData rd=new ResultData();
         try{
-            User user= getCurrentUser();
+//            User user= getCurrentUser();
         	Goods goods = goodsService.findById(id);
         	if(isPublish!=null&&!isPublish.equalsIgnoreCase("")){
         		goods.setIsPublish(isPublish);
@@ -544,11 +547,52 @@ public class GoodsAppController extends BaseController {
             Map map=new HashMap();
             map.put("userId",user.getId());
             map.put("name", filterStr(key));
-            List list = goodsService.findMultiGoods(map,Integer.parseInt(cpage),Integer.parseInt(pagerow));
+            map.put("isPublish",isPublish);
+            List list = goodsService.findMultiGoods_v1_1_0(map,Integer.parseInt(cpage),Integer.parseInt(pagerow));
             rd.setData(list);
             rd.setCount(0);
             rd.setCode(200);
             rd.setMsg("查询成功");
+        }catch (JwtException e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("token转码失败，token过期");
+        }catch (Exception e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("查询失败");
+        }
+        this.jsonWrite2(rd);
+    } 
+    @RequestMapping("/v1_1_0/searchGoodsListH5")
+    @ResponseBody
+    @ApiOperation(value = "查询商品列表带发布选项", notes = "查询商品列表", httpMethod = "POST",response = Goods.class )
+    public void searchGoodsList1_v1_1_0(@ApiParam(required = true, name = "userid", value = "userid")@RequestParam("userid")String userid,
+    		@ApiParam(required = false, name = "key", value = "名称")@RequestParam(value="key",required = false)String key,
+    		@ApiParam(required = false, name = "isPublish", value = "是否发布，1发布，0不发布")@RequestParam(value="isPublish",required = false)String isPublish,
+    		@ApiParam(required = true, name = "cpage", value = "当前页")@RequestParam("cpage")String cpage,
+                                   @ApiParam(required = true, name = "pagerow", value = "pagerow")@RequestParam("pagerow")String pagerow){
+        ResultData rd=new ResultData();
+        try{
+        	
+            User user= userService.findById(userid);
+            if(user!=null){
+            	 Map map=new HashMap();
+                 map.put("userId",user.getId());
+                 map.put("name", filterStr(key));
+                 map.put("isPublish",isPublish);
+                 List list = goodsService.findMultiGoods_v1_1_0(map,Integer.parseInt(cpage),Integer.parseInt(pagerow));
+                 rd.setData(list);
+                 rd.setCount(0);
+                 rd.setCode(200);
+                 rd.setMsg("查询成功");
+            }else{
+            	rd.setData(new ArrayList());
+                rd.setCount(0);
+                rd.setCode(500);
+                rd.setMsg("没有关联到用户数据");
+            }
+           
         }catch (JwtException e){
             e.printStackTrace();
             rd.setCode(500);

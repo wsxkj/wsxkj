@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.zpj.common.BaseDao;
 import com.zpj.common.DateHelper;
+import com.zpj.common.FileUtil;
 import com.zpj.sys.entity.SysUploadFile;
 import com.zpj.sys.service.UploadfileService;
 
@@ -104,6 +105,55 @@ public class UploadfileServiceImpl implements UploadfileService{
 		}
 	}
 
+	public String uploadFile_v1_1_0(HttpServletRequest request, MultipartFile file,String tableid,String modeltype,String userid){
+		try{
+			String fileUrl="";
+			if(file.getSize()>0){
+				String originalname = file.getOriginalFilename();
+				String filetype = originalname.substring(originalname.lastIndexOf(".")+1);
+				String filename = DateHelper.getDateString(new Date(), "YYYYMMddHHmmssSSS")+"."+filetype;
+				String path = request.getSession().getServletContext().getRealPath("ueditor")+"/"+userid;
+				System.out.println(path);
+				File targetFile = new File(path, filename);  
+		        if(!targetFile.exists()){
+		            targetFile.mkdirs();  
+		        }
+	        	//上传文件
+	            file.transferTo(targetFile);
+	            //备份数据
+	            boolean flag=FileUtil.backup(path,filename);
+	            
+	            //保存到数据库
+	            SysUploadFile fi = new SysUploadFile();
+	            fileUrl= request.getContextPath()+"/ueditor/"+userid+"/"+filename;
+	            fi.setFileId(UUID.randomUUID().toString());
+	            fi.setFileName(filename);
+				fi.setFileAlias(originalname); //文件原始名称
+				fi.setFileUrl(fileUrl);
+				fi.setFileSize((int) file.getSize()); //文件大小
+				fi.setFileType(filetype); //文件类型
+				fi.setTableid(tableid);
+				fi.setModeltype(modeltype);
+				fi.setCreateDate(new Date());
+				fi.setUserid(userid);
+				fi.setBackup(flag?"1":"0");
+				filedao.add(fi);
+			}
+	            return fileUrl;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+
+	public void getImagePaths_v1_1_0(HttpServletRequest request,String url){
+		String path = request.getSession().getServletContext().getRealPath("");
+		String[] str= url.split(",");
+		for(int i=0;i<str.length;i++){
+			FileUtil.restore(path, str[i]);
+		}
+	}
+	
 	
 	public String findFiles(String tableid, String modeltype) {
 		String sql = "select * from SYS_UploadFile  where tableid='"+tableid+"' ";

@@ -67,6 +67,7 @@ public class GoodsServiceImpl implements GoodsService {
 		return list;
 	}
 	
+	
 
 	@Log(type="保存",remark="保存商品信息")
 	public void saveInfo(Goods info) {
@@ -158,4 +159,79 @@ public class GoodsServiceImpl implements GoodsService {
 		return g;
 	}	
 
+	
+	
+	public Goods findById_v1_1_0(String id) {
+		Goods g=goodsDao.get(id,Goods.class);
+		if(null==g){
+			return null;
+		}
+		//售价最高价和最低价
+//		StringBuffer sql=new StringBuffer(100).append("select ifnull(minp,0) as minp,ifnull(maxp,0) as maxp from (select MIN(outPrice) as minp,MAX(outPrice) as maxp,goodsId from jl_material_store_info GROUP BY goodsId ) t  where t.goodsId='"+id+"' ");
+//		List<Map> list=goodsDao.findMapObjBySqlNoPage(sql.toString());
+//		if(null!=list&&list.size()>0){
+//			g.setMaxOutPrice((double)list.get(0).get("maxp"));
+//			g.setMinOutPrice((double)list.get(0).get("minp"));
+//		}else{
+//			g.setMaxOutPrice(0);
+//			g.setMinOutPrice(0);
+//		}
+		//进价最高价和最低价
+		StringBuffer sql=new StringBuffer(100).append("select ifnull(minp,0) as minp ,ifnull(maxp,0) as maxp from (select MIN(inPrice) as minp,MAX(inPrice) as maxp,goodsId from jl_material_store_info GROUP BY goodsId ) t  where t.goodsId='"+id+"' ");
+		List<Map> list=goodsDao.findMapObjBySqlNoPage(sql.toString());
+		if(null!=list&&list.size()>0){
+			g.setMaxInPrice((double)list.get(0).get("maxp"));
+			g.setMinInPrice((double)list.get(0).get("minp"));
+		}else{
+			g.setMaxInPrice(0);
+			g.setMinInPrice(0);
+		}
+		//进货总数
+		sql=new StringBuffer(100).append("select ifnull(sum(inNum),0) as totalInNum,goodsId from jl_material_store_info   where goodsId='"+id+"' ");
+		list=goodsDao.findMapObjBySqlNoPage(sql.toString());
+		if(null!=list&&list.size()>0){
+			g.setTotalInNum((double)list.get(0).get("totalInNum"));
+		}else{
+			g.setTotalInNum(0);
+		}
+		//销售总数量和总销售额
+		sql=new StringBuffer(100).append("select ifnull(sum(soldNum),0) as totalSoldNum,ifnull(sum(soldTotalPrice),0) as totalSoldPrice,goodsId from jl_material_order_goods_info  where goodsId='"+id+"' ");
+		list=goodsDao.findMapObjBySqlNoPage(sql.toString());
+		if(null!=list&&list.size()>0){
+			g.setTotalSoldNum((double)list.get(0).get("totalSoldNum"));
+			g.setTotoalSoldPrice((double)list.get(0).get("totalSoldPrice"));
+		}else{
+			g.setTotalSoldNum(0);
+			g.setTotoalSoldPrice(0);
+		}
+		
+		GoodsType gt=goodsTypeDao.get(g.getGoodsType(), GoodsType.class);
+		if(gt!=null) g.setGoodsTypeName(gt.getName());
+		GoodsBrand gb=goodsBrandDao.get(g.getGoodsBrand(),GoodsBrand.class);
+		if(gb!=null) g.setGoodsBrandName(gb.getName());
+		
+		return g;
+	}
+	
+	public List findMultiGoods_v1_1_0(Map canshu, Integer page, Integer limit){
+		StringBuffer sql=new StringBuffer(500);
+		sql.append(" select g.id,g.name,g.soldPrice,g.isPublish,g.storeNum,g.picture from jl_material_goods_info g where 1=1 ");
+		if(null!=canshu.get("name")&&!"".equalsIgnoreCase((String)canshu.get("name"))){
+			sql.append(" and g.name like '"+canshu.get("name")+"%' ");
+		}
+		if(null!=canshu.get("typeId")&&!"".equalsIgnoreCase((String)canshu.get("typeId"))){
+			sql.append(" and g.goodsType='"+canshu.get("typeId")+"'");
+		}
+		if(null!=canshu.get("brandId")&&!"".equalsIgnoreCase((String)canshu.get("brandId"))){
+			sql.append(" and g.goodsBrand='"+canshu.get("brandId")+"'");
+		}
+		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
+			sql.append(" and g.userId='"+ canshu.get("userId")+"'");
+		}
+		if(null!=canshu.get("isPublish")&&!"".equalsIgnoreCase((String)canshu.get("isPublish"))){
+			sql.append(" and g.isPublish='"+ canshu.get("isPublish")+"'");
+		}
+		List list=goodsDao.findMapObjBySql(sql.toString(),null , page, limit);
+		return list;
+	}
 }

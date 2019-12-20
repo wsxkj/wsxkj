@@ -29,6 +29,11 @@ public class SysUploadFile implements java.io.Serializable {
 	private String fileRemark;
 	private String tableid;
 	private String modeltype;
+	
+	
+	/**v1_1_0版本新增用户id字段方便以后整理信息***/
+	private String userid;
+	private String backup;//判断是否备份，备份成功1，备份失败0
 
 	public SysUploadFile() {
 	}
@@ -143,4 +148,22 @@ public class SysUploadFile implements java.io.Serializable {
 	public void setModeltype(String modeltype) {
 		this.modeltype = modeltype;
 	}
+
+	public String getUserid() {
+		return userid;
+	}
+
+	public void setUserid(String userid) {
+		this.userid = userid;
+	}
+
+	public String getBackup() {
+		return backup;
+	}
+
+	public void setBackup(String backup) {
+		this.backup = backup;
+	}
+	
+	
 }

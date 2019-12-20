@@ -23,9 +23,35 @@ public interface GoodsService {
 	 */
 	List findMultiGoods(Map param, Integer page, Integer limit);
 	
+	
+	
+	
 	void saveInfo(Goods info);
 
 	void deleteInfo(String deleteID);
 	
 	public Goods findById(String id);
+	
+	
+	/**
+	 * v1_1_0版本查询详细信息，去掉不必要的字段
+	 * @Title findById_v1_1_0
+	 * @param id
+	 * @return
+	 * @author zpj
+	 * @time 2019年12月16日 上午11:26:01
+	 */
+	public Goods findById_v1_1_0(String id);
+	
+	/**
+	 * v1_1_0版本增加是否发布字段查询，同时返回售价字段和是否发布字段
+	 * @Title findMultiGoods_v1_1_0
+	 * @param param
+	 * @param page
+	 * @param limit
+	 * @return
+	 * @author zpj
+	 * @time 2019年12月16日 上午10:57:16
+	 */
+	List findMultiGoods_v1_1_0(Map param, Integer page, Integer limit);
 }

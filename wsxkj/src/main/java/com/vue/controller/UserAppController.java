@@ -97,8 +97,8 @@ public class UserAppController extends BaseController{
 	}
 	
 	 /**************************v1_1_0版本新接口**开始*****************************/
-	@RequestMapping(value = "/v1_1_0/setShop", method = RequestMethod.GET)
-	@ApiOperation(value = "设置商店名称", notes = "设置商店名称", httpMethod = "GET")
+	@RequestMapping(value = "/v1_1_0/setShop", method = RequestMethod.POST)
+	@ApiOperation(value = "设置商店名称", notes = "设置商店名称", httpMethod = "POST")
 	@ResponseBody
 	public void setShop_v1_1_0(
 			@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
