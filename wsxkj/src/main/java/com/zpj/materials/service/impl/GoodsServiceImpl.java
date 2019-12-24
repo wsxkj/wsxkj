@@ -50,7 +50,7 @@ public class GoodsServiceImpl implements GoodsService {
 	
 	public List findMultiGoods(Map canshu, Integer page, Integer limit){
 		StringBuffer sql=new StringBuffer(500);
-		sql.append(" select g.id,g.name,t1.minp,t1.maxp,g.storeNum,g.picture from jl_material_goods_info g LEFT JOIN (select MIN(outPrice) as minp,MAX(outPrice) as maxp,goodsId from jl_material_store_info GROUP BY goodsId) t1 on t1.goodsId=g.id where 1=1 ");
+		sql.append(" select g.id,g.name,g.soldPrice,t1.minp,t1.maxp,g.storeNum,g.picture from jl_material_goods_info g LEFT JOIN (select MIN(outPrice) as minp,MAX(outPrice) as maxp,goodsId from jl_material_store_info GROUP BY goodsId) t1 on t1.goodsId=g.id where 1=1 ");
 		if(null!=canshu.get("name")&&!"".equalsIgnoreCase((String)canshu.get("name"))){
 			sql.append(" and g.name like '"+canshu.get("name")+"%' ");
 		}

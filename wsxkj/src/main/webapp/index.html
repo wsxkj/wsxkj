@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="h5/css/swiper.min.css"/>
+		<script src="h5/js/vue.min.js"></script>
+		<script src="h5/js/swiper.min.js"></script>
+		<script src="h5/js/vue-awesome-swiper.js"></script>
+		<script src="h5/js/main.js"></script>
+		<script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+		<script src="https://unpkg.com/clipboard@2/dist/clipboard.min.js"></script>
+		<style type="text/css">
+			
+			@font-face {
+			  font-family: 'pingFangSC-Medium';
+			  src: url('font/PingFang Medium_downcc.otf');
+			  font-weight: normal;
+			  font-style: normal;
+			}
+			@font-face {
+			  font-family: 'wechat-M';
+			  src: url('font/WeChatSansStd-Medium.ttf');
+			  font-weight: normal;
+			  font-style: normal;
+			}
+			@font-face {
+			  font-family: 'wechat-R';
+			  src: url('font/WeChatSansStd-Regular.ttf');
+			  font-weight: normal;
+			  font-style: normal;
+			}
+			*{
+				padding: 0;
+				margin: 0;
+				font-family: "pingFangSC-Medium";
+			}
+			#back{
+				position: absolute;
+				width: 6rem;
+				height: 6rem;
+				background-image:url(h5/images/back.png) ;
+				background-size:cover ;
+				left: 2.5rem;
+				top:4.5rem;
+				z-index: 10000;
+			}
+			#app>header{
+				/*height: 52rem;*/				
+			}
+			#app>header img{
+				width: 100%;
+				/*height: 100%;*/
+			}
+			.swiper-container{
+				height: 100%;
+			}
+			.item{
+				padding: 0 3.5rem;
+			}
+			.item .price{
+				height: 12rem;
+				color:#ff1e1e;
+				font-size: 4rem;
+				line-height: 12rem;
+				
+			}
+			.item .price > span{
+				/*font-family: "wechat-M";*/
+			}
+			.item .price .price1{
+				font-size: 6rem;
+				font-weight: 800;
+				margin: 0 -1rem 0 -1.5rem;
+				letter-spacing:-2px;
+				
+			}
+			.item .itemName{
+				font-size: 3.5rem;
+				font-weight: bold;
+				line-height: 4rem;
+				color:#000;
+			}
+			.item .itemInfo{
+				line-height: 12rem;
+				display: flex;
+				justify-content: space-between;
+				font-size: 2.8rem;
+				color:#808080;
+			}
+			.empty{
+				background: #f5f5f5;
+				height: 2rem;
+			}
+			.itemDesc ,.itemDetail{
+				padding: 2rem 3.5rem;
+			}
+			.itemDesc .singleDesc{
+				padding: 2rem 0;
+				display: flex;
+				font-size: 2.8rem;
+				color: #373737;
+			}
+			.itemDesc .singleDesc .name{
+				width:14rem;
+				font-weight: bold;
+				flex-shrink: 0
+			}
+			.itemDetail{
+				font-size: 2.8rem;
+				line-height: 3.4rem;
+				color:#373737;
+			}
+			.other{
+				padding: 0 3.5rem 20rem 3.5rem;
+			}
+			.other > header{
+				padding: 3rem 0;
+				height: 3.5rem;
+				line-height: 3.5rem;
+				display: flex;
+				font-size: 2.8rem;
+				font-weight: bold;
+			}
+			.other > header .left{
+				height: 100%;
+				width: 1rem;
+				background: #5ac8fa;
+				margin-right: 1rem;
+			}
+			.other .singleItem{
+				height: 12rem;
+				padding: 3rem 0;
+				display: flex;
+			}
+			.other .singleItem .image,.other .singleItem .price{
+				height: 100%;
+				width: 12rem;
+				flex-shrink: 0;
+			}
+			.other .singleItem .image img{
+				width: 100%;
+				height: 100%;
+			}
+			.other .singleItem .name{
+				padding: 1rem 3rem;
+				height: 11rem;
+				font-size: 2.8rem;
+				line-height: 3.3rem;
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-line-clamp: 3; 
+				overflow: hidden;
+				flex-grow: 1;
+				color:#373737;
+			}
+			.other .singleItem .name .topEmpty{
+				height: 1rem;
+			}
+			.other .singleItem .price{
+				margin-left: 5rem;
+				line-height: 12rem;
+				font-size: 2.8rem;
+				font-weight: bold;
+			}
+			footer{
+				position: fixed;
+				bottom: 0;
+				width: calc(100% - 7rem);
+				display: flex;
+				padding: 0 3.5rem;
+				justify-content: space-between;
+				height: 11rem;				
+				border-top:1px solid #e6e6e6;
+				background: #fff;
+				
+			}
+			footer .store{
+				width: 14rem;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				font-size: 2.3rem;
+				font-weight: bold;
+			}
+			footer .store img{
+				width: 3.5rem;
+				height: 3.5rem;
+			}
+			footer .copy{
+				width: 24rem;
+				display: flex;
+				justify-content: center;
+				align-items: center;			
+			}
+			footer .copy >div{
+				line-height: 7.5rem;
+				width: 100%;
+				border-radius: 3.75rem ;
+				background: #9b66ff;
+				color:#fff;
+				font-size: 2.8rem;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<div id="back" v-show="browseList.length > 1" @click="back"></div>
+			<header>				
+				<swiper :options="swiperOption">
+					<swiper-slide v-for="item in navImage">
+						<img :src=" 'http://47.101.146.253:8280'+item"/>
+					</swiper-slide>				
+					<div class="swiper-pagination" slot="pagination"></div>
+				  </swiper>			
+			</header>
+			<div class="item">
+				<div class="price">
+					<span style="font-weight: bold;">￥</span>
+					<span class="price1">{{soldPriceInt}}</span>
+					<span class="price2">.{{soldPriceFloat}}</span>
+				</div>
+				<div class="itemName">{{itemName}}</div>
+				<div class="itemInfo">
+					<span class="stock">库存 {{stock}}</span>
+					<span class="browse">浏览 {{browse}}</span>
+				</div>
+			</div>
+			<div class="empty"  v-show="itemDesc.length>0"></div>
+			<div class="itemDesc" v-show="itemDesc.length>0">
+				<div class="singleDesc" v-for="item in itemDesc">
+					<div class="name">{{item.name}}</div>
+					<div class="info">{{item.info}}</div>
+				</div>
+			</div>
+			<div class="empty" v-show="itemDetail.length>0"></div>
+			<div class="itemDetail" v-show="itemDetail.length>0">
+				{{itemDetail}}
+			</div>
+			<div class="empty"></div>
+			<div class="other">
+				<header>
+					<div class="left"></div>
+					<span>其他人在看</span>
+				</header>
+				<div class="singleItem" v-for="item in otherInfo" @click="link(item.id)">
+					<div class="image">
+						<img alt="图片" :src="item.imgPath" />
+					</div>
+					<div class="name">
+						<div class="topEmpty"></div>
+						<span>{{item.info}}</span>
+					</div>
+					<div class="price">￥{{item.price}}</div>
+				</div>				
+			</div>
+			<footer>
+				<div class="store">
+					<img src="h5/images/store.png" />
+					<span>{{storeName}}</span>
+				</div>
+				<div class="copy">
+					<div @click="copy" :data-clipboard-text="itemName" id="copybtn">复制商品名称</div>
+				</div>
+			</footer>
+		</div>
+	</body>
+	
+</html>
+<script>
+	Vue.use(VueAwesomeSwiper)	
+	var a=new Vue({
+		el:"#app",
+		data:{
+			swiperOption: {
+			    pagination: {
+					el: '.swiper-pagination'
+			    }
+			},
+			isBack:false,
+			navImage:[],
+			soldPriceInt:600,
+			soldPriceFloat:00,
+			itemName:"",
+			stock:0,
+			browse:0,
+			itemDesc:[],
+			itemDetail:"",
+			otherInfo:[],
+			storeName:"",
+			userid:"",
+			browseList:[]
+		},
+		methods:{
+			link:function(id){
+			    this.getItemInfo(id);
+				this.browseList.push(id)
+			},
+			back:function(){
+				this.browseList.pop()
+				
+				var id= this.browseList[this.browseList.length-1]
+				this.getItemInfo(id);
+			},
+			copy:function(){
+				var clipboard = new ClipboardJS('#copybtn');
+				clipboard.on("success",function(){
+					alert("复制商品名称成功，快去和卖家沟通吧")
+				})
+				
+				clipboard.on("error",function(){
+					alert("复制失败，请手动复制")
+				})
+			},
+			getItemInfo:function(ID){
+				this.itemDesc=[]
+				var that=this
+				this.$http.post("http://47.101.146.253:8280/app/goods/v1_1_0/findGoodsByIdH5",{id:ID},{emulateJSON: true})
+				 .then(function(res){				
+					data=JSON.parse(res.bodyText).data
+					 console.log(data)					
+					//导航图片									
+					var navImage= data.picture?data.picture.split(","):["/images/default.png"] 
+						
+					that.navImage = navImage;
+					
+					var isBack = data.picture?true:false
+					//商品名称
+					that.itemName=data.name
+					//库存
+					that.stock =data.storeNum
+					//浏览
+					that.browse=data.glanceTimes
+					//售价
+					// data.soldPrice
+					var price=data.soldPrice			
+					var arr=price.toString().split(".")
+					that.soldPriceInt=arr[0]
+//					that.soldPriceInt=666
+					if(arr.length=1){
+						that.soldPriceFloat="00"
+					}else{
+						that.soldPriceFloat=arr[1]
+					}					
+					//功效
+					if(data.effect){
+						var json={
+							name:"功效",
+							info:data.effect					
+						}
+						that.itemDesc.push(json)
+					}
+					//肤质			
+					if(data.suitableForSkin){
+						var json={
+							name:"适合肤质",
+							info:data.suitableForSkin					
+						}
+						that.itemDesc.push(json)
+					}
+					//详情
+					if(data.detail){
+						that.itemDetail=data.detail		
+					}
+																			 
+					})				
+			},
+			getOtherList:function(userid){
+				var that = this
+				var json={
+					userid:userid,
+					isPublish:1,
+					cpage:1,
+					pagerow:20
+				}
+				this.$http.post("http://47.101.146.253:8280/app/goods/v1_1_0/searchGoodsListH5",json,{emulateJSON: true})
+				.then(function(res){
+					data=JSON.parse(res.bodyText).data
+					console.log(data)
+					for(var i=0;i<data.length;i++){
+						var path = data[i].picture?"http://47.101.146.253:8280"+data[i].picture.split(",")[0]:"images/default.png"
+						
+						var json={
+							info:data[i].name,
+							imgPath:path,
+							price:data[i].soldPrice,
+							id:data[i].id
+						}					
+						that.otherInfo.push(json)
+					}	
+					
+				})
+			}
+			
+		},
+		mounted:function(){
+			
+			var that=this;					
+			//根据商品id获取商品详情
+			var ID=GetQueryString("id")			
+			this.getItemInfo(ID);												
+			//获取“其他人在看”列表
+			var USER_ID=GetQueryString("userid") 
+			that.userid=USER_ID;
+			this.getOtherList(USER_ID)
+						
+			//browseList 添加 商品ID
+			this.browseList.push(ID)
+			
+			//店铺名
+			this.$http.post("http://47.101.146.253:8280/app/user/v1_1_0/findShopNameByUseridH5",{userid:USER_ID},{emulateJSON: true})
+				.then(function(res){
+					console.log(res)
+					that.storeName=res.data.data
+				})
+		}
+	})
+	
+	
+</script>

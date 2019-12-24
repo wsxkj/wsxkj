@@ -126,5 +126,30 @@ public class UserAppController extends BaseController{
     }
     this.jsonWrite2(rd);
 	}
+	
+	@RequestMapping(value = "/v1_1_0/findShopNameByUseridH5", method = RequestMethod.POST)
+	@ApiOperation(value = "根据用户id获取商铺名称", notes = "根据用户id获取商铺名称", httpMethod = "POST")
+	@ResponseBody
+	public void findShopNameByUseridH5_v1_1_0(
+			@ApiParam(required = true, name = "userid", value = "userid")@RequestParam("userid")String userid
+			){
+		ResultData rd=new ResultData();
+	try{	
+		User user= userService.findById(userid);
+		
+		rd.setData(user.getShopName());
+        rd.setCode(200);
+        rd.setMsg("查询成功");
+    }catch (JwtException e){
+        e.printStackTrace();
+        rd.setCode(500);
+        rd.setMsg("token转码失败，token过期");
+    }catch (Exception e){
+        e.printStackTrace();
+        rd.setCode(500);
+        rd.setMsg("查询失败");
+    }
+    this.jsonWrite2(rd);
+	}
 	 /**************************v1_1_0版本新接口**结束*****************************/
 }
