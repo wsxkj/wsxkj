@@ -112,7 +112,8 @@ public class TestAspect {
         	loginfo.setCreatetime(new Date());
         	loginfo.setType((String)tmap.get("type"));
         	loginfo.setDescription(userinfo.getPhone()+"  在"+(String)tmap.get("remark")+"。具体信息："+(String)tmap.get("param"));
-        	logService.saveLog(loginfo);
+//        	logService.saveLog(loginfo);
+        	LogManager.me().executeLog(logService,loginfo);
         }
 	}
 	

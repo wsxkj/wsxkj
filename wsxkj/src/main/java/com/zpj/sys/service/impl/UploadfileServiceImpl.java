@@ -120,13 +120,14 @@ public class UploadfileServiceImpl implements UploadfileService{
 		        }
 	        	//上传文件
 	            file.transferTo(targetFile);
+	            String file_id=UUID.randomUUID().toString();
 	            //备份数据
-	            boolean flag=FileUtil.backup(path,filename);
+	            FileUtil.getInstance().backupFile(file_id,path, filename);
 	            
 	            //保存到数据库
 	            SysUploadFile fi = new SysUploadFile();
 	            fileUrl= request.getContextPath()+"/ueditor/"+userid+"/"+filename;
-	            fi.setFileId(UUID.randomUUID().toString());
+	            fi.setFileId(file_id);
 	            fi.setFileName(filename);
 				fi.setFileAlias(originalname); //文件原始名称
 				fi.setFileUrl(fileUrl);
@@ -136,7 +137,7 @@ public class UploadfileServiceImpl implements UploadfileService{
 				fi.setModeltype(modeltype);
 				fi.setCreateDate(new Date());
 				fi.setUserid(userid);
-				fi.setBackup(flag?"1":"0");
+//				fi.setBackup(flag?"1":"0");
 				filedao.add(fi);
 			}
 	            return fileUrl;
@@ -150,7 +151,7 @@ public class UploadfileServiceImpl implements UploadfileService{
 		String path = request.getSession().getServletContext().getRealPath("");
 		String[] str= url.split(",");
 		for(int i=0;i<str.length;i++){
-			FileUtil.restore(path, str[i]);
+			FileUtil.getInstance().restore(path, str[i]);
 		}
 	}
 	
@@ -183,9 +184,14 @@ public class UploadfileServiceImpl implements UploadfileService{
 	
 	public void delFile(String fileid) {
 		//删除数据库数据
-		String sql = "delete from SYS_UploadFile where fileid="+fileid;
+		String sql = "delete from SYS_UploadFile where fileid='"+fileid+"'";
 		filedao.executeSql(sql);
 		
+	}
+	
+	public void updateBackupField(String fileid,boolean flag){
+		String sql = "update SYS_UploadFile set backup="+(flag?"1":"0")+" where fileid='"+fileid+"'";
+		filedao.executeSql(sql);
 	}
 
 }

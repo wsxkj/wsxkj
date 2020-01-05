@@ -6,11 +6,39 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.Properties;
+import java.util.TimerTask;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
 
+import com.zpj.sys.entity.LogInfo;
+import com.zpj.sys.service.LogInfoService;
+import com.zpj.sys.service.UploadfileService;
+import com.zpj.sys.service.impl.UploadfileServiceImpl;
+
 
 public class FileUtil {
+	
+	//文件备份操作延时
+    private final int OPERATE_DELAY_TIME = 1000;
+
+    //文件备份操作线程池
+    private ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(5);
+    
+    public UploadfileService uploadfileService=null;
+	
+    private FileUtil() {
+	}
+    private static FileUtil fu=new FileUtil();
+    
+    public static FileUtil getInstance(){
+    	if(fu==null){
+    		fu=new FileUtil();
+    	}
+    	return fu;
+    }
+    
 	/**
 	 * 拷贝文件
 	 * @Title copyFile
@@ -20,7 +48,7 @@ public class FileUtil {
 	 * @author zpj
 	 * @time 2019年12月17日 下午1:20:36
 	 */
-	public static void copyFile(File src, File target) throws IOException {
+	private void copyFile(File src, File target) throws IOException {
 		FileChannel in = null;
 		FileChannel out = null;
 		try {
@@ -48,7 +76,7 @@ public class FileUtil {
 	public static void main(String[] args) throws IOException {
 		File a=new File("D://test/jflyfox/bbs/article_file/20180912_143719_248315.txt");
 		File b=new File("D://test/fa/1.txt");
-		copyFile(a,b);
+//		copyFile(a,b);
 	}
 	
 	
@@ -61,7 +89,7 @@ public class FileUtil {
 	 * @author zpj
 	 * @time 2019年12月17日 下午3:09:08
 	 */
-	public static boolean backup(String sourcePath,String fileName) {
+	private boolean backup(String sourcePath,String fileName) {
 		Long start=System.currentTimeMillis();
 		System.out.println("备份文件开始");
 		String filePath=sourcePath.substring(sourcePath.lastIndexOf("/"));
@@ -103,7 +131,7 @@ public class FileUtil {
 	 * @author zpj
 	 * @time 2019年12月17日 下午3:12:29
 	 */
-	public static boolean restore(String projectPath,String restorePathAndName) {
+	public boolean restore(String projectPath,String restorePathAndName) {
 		Long start=System.currentTimeMillis();
 		System.out.println("还原文件开始");
 		if ("".equalsIgnoreCase(projectPath)) {
@@ -147,4 +175,23 @@ public class FileUtil {
 		
 		return true;
 	}
+	public void backupFile(String file_id,String path,String filename) {
+        executor.schedule(this.backupFile1(file_id,path,filename), OPERATE_DELAY_TIME, TimeUnit.MILLISECONDS);
+    }
+	private TimerTask backupFile1(final String file_id,final String path,final String filename) {
+        return new TimerTask() {
+        @Override
+	        public void run() {
+	            try {
+	            	if(null==uploadfileService){
+	            		uploadfileService=(UploadfileService)SpringContext.getBean("uploadfileService");
+	            	}
+	            	boolean flag=backup(path, filename);
+	            	uploadfileService.updateBackupField(file_id, flag);
+	            } catch (Exception e) {
+	            	e.printStackTrace();
+	            }
+	        }
+	    };
+    }
 }

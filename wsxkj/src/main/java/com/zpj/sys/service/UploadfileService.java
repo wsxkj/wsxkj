@@ -64,5 +64,15 @@ public interface UploadfileService {
 	 * @time 2019年5月9日 上午11:28:21
 	 */
 	public void delFileByPath(String path);
+	
+	/**
+	 * 延迟更新是否备份字段
+	 * @Title updateBackupField
+	 * @param fileid
+	 * @param flag
+	 * @author zpj
+	 * @time 2020年1月2日 上午10:04:46
+	 */
+	public void updateBackupField(String fileid,boolean flag);
 
 }
