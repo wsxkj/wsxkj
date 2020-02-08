@@ -606,4 +606,35 @@ public class GoodsAppController extends BaseController {
     } 
     
     /**************************v1_1_0版本新接口**结束*****************************/
+    
+    /**************************v1_3_0版本新接口**开始*****************************/
+    @RequestMapping("/v1_3_0/findGoodsByQrcode")
+    @ResponseBody
+    @ApiOperation(value = "查询商品详细信息", notes = "查询商品详细信息", httpMethod = "POST",response = Goods.class )
+    public void findGoodsByQrcode(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
+    		@ApiParam(required = false, name = "qrCode", value = "条形码")@RequestParam(value="qrCode")String qrCode){
+    	ResultData rd=new ResultData();
+        try{
+            User user= getCurrentUser();
+            Goods goods1=goodsService.findByQrcode(qrCode,user.getId());
+            if(null!=goods1){
+            	Goods goods = goodsService.findById_v1_1_0(goods1.getId());
+            	rd.setData(goods);
+            }else{
+            	rd.setData("");
+            }
+            rd.setCode(200);
+            rd.setMsg("查询成功");
+        }catch (JwtException e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("token转码失败，token过期");
+        }catch (Exception e){
+            e.printStackTrace();
+            rd.setCode(500);
+            rd.setMsg("查询失败");
+        }
+        this.jsonWrite2(rd);
+    }
+    /**************************v1_3_0版本新接口**结束*****************************/
 }

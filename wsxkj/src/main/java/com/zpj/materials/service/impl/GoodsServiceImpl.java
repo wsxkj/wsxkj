@@ -234,4 +234,12 @@ public class GoodsServiceImpl implements GoodsService {
 		List list=goodsDao.findMapObjBySql(sql.toString(),null , page, limit);
 		return list;
 	}
+	
+	public Goods findByQrcode(String qrcode,String userId){
+		List<Goods> list=goodsDao.findBySqlT("select * from "+tablename+" where qrCode='"+qrcode+"' and userId='"+userId+"' ", Goods.class);
+		if(null!=list&&list.size()>0){
+			return list.get(0);
+		}
+		return null;
+	}
 }

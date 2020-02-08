@@ -54,4 +54,15 @@ public interface GoodsService {
 	 * @time 2019年12月16日 上午10:57:16
 	 */
 	List findMultiGoods_v1_1_0(Map param, Integer page, Integer limit);
+	
+	
+	/**
+	 * @Description (根据条形码查询商品信息)
+	 * @title findByQrcode
+	 * @param qrcode
+	 * @return Goods
+	 * @author zpj
+	 * @Date 2020年2月5日 下午4:03:35
+	 */
+	public Goods findByQrcode(String qrcode,String userId);
 }

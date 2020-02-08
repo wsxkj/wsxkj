@@ -129,7 +129,7 @@ public class LoginAppController extends BaseController {
 			
 			LogInfo loginfo=new LogInfo();
 	        loginfo.setId(UUID.randomUUID().toString());
-	        loginfo.setUsername(user.getId());
+	        loginfo.setUsername(user.getPhone());
 	        loginfo.setCreatetime(new Date());
 	        loginfo.setType("登陆成功");
 	        loginfo.setDescription(user.toString());
@@ -188,7 +188,7 @@ public class LoginAppController extends BaseController {
 					
 					LogInfo loginfo=new LogInfo();
 			        loginfo.setId(UUID.randomUUID().toString());
-			        loginfo.setUsername(user.getId());
+			        loginfo.setUsername(user.getPhone());
 			        loginfo.setCreatetime(new Date());
 			        loginfo.setType("登陆成功");
 			        loginfo.setDescription(user.toString());
