@@ -21,7 +21,7 @@ public interface GoodsService {
 	 * @author zpj
 	 * @time 2019年5月27日 下午3:14:46
 	 */
-	List findMultiGoods(Map param, Integer page, Integer limit);
+//	List findMultiGoods(Map param, Integer page, Integer limit);
 	
 	
 	

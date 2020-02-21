@@ -245,7 +245,7 @@ public class GoodsAppController extends BaseController {
             map.put("userId",user.getId());
             map.put("typeId", filterStr(typeId));
             map.put("brandId", filterStr(brandId));
-            List list = goodsService.findMultiGoods(map,Integer.parseInt(cpage),Integer.parseInt(pagerow));
+            List list = goodsService.findMultiGoods_v1_1_0(map,Integer.parseInt(cpage),Integer.parseInt(pagerow));
             rd.setData(list);
             rd.setCount(0);
             rd.setCode(200);
@@ -275,7 +275,7 @@ public class GoodsAppController extends BaseController {
             Map map=new HashMap();
             map.put("userId",user.getId());
             map.put("name", filterStr(key));
-            List list = goodsService.findMultiGoods(map,Integer.parseInt(cpage),Integer.parseInt(pagerow));
+            List list = goodsService.findMultiGoods_v1_1_0(map,Integer.parseInt(cpage),Integer.parseInt(pagerow));
             rd.setData(list);
             rd.setCount(0);
             rd.setCode(200);

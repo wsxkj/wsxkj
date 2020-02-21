@@ -48,24 +48,24 @@ public class GoodsServiceImpl implements GoodsService {
 		return goodsDao.findPageDateSqlT(tablename,"", param,px , page, limit, Goods.class);
 	}
 	
-	public List findMultiGoods(Map canshu, Integer page, Integer limit){
-		StringBuffer sql=new StringBuffer(500);
-		sql.append(" select g.id,g.name,g.soldPrice,t1.minp,t1.maxp,g.storeNum,g.picture from jl_material_goods_info g LEFT JOIN (select MIN(outPrice) as minp,MAX(outPrice) as maxp,goodsId from jl_material_store_info GROUP BY goodsId) t1 on t1.goodsId=g.id where 1=1 ");
-		if(null!=canshu.get("name")&&!"".equalsIgnoreCase((String)canshu.get("name"))){
-			sql.append(" and g.name like '"+canshu.get("name")+"%' ");
-		}
-		if(null!=canshu.get("typeId")&&!"".equalsIgnoreCase((String)canshu.get("typeId"))){
-			sql.append(" and g.goodsType='"+canshu.get("typeId")+"'");
-		}
-		if(null!=canshu.get("brandId")&&!"".equalsIgnoreCase((String)canshu.get("brandId"))){
-			sql.append(" and g.goodsBrand='"+canshu.get("brandId")+"'");
-		}
-		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
-			sql.append(" and g.userId='"+ canshu.get("userId")+"'");
-		}
-		List list=goodsDao.findMapObjBySql(sql.toString(),null , page, limit);
-		return list;
-	}
+//	public List findMultiGoods(Map canshu, Integer page, Integer limit){
+//		StringBuffer sql=new StringBuffer(500);
+//		sql.append(" select g.id,g.name,g.soldPrice,t1.minp,t1.maxp,g.storeNum,g.picture from jl_material_goods_info g LEFT JOIN (select MIN(outPrice) as minp,MAX(outPrice) as maxp,goodsId from jl_material_store_info GROUP BY goodsId) t1 on t1.goodsId=g.id where 1=1 ");
+//		if(null!=canshu.get("name")&&!"".equalsIgnoreCase((String)canshu.get("name"))){
+//			sql.append(" and g.name like '"+canshu.get("name")+"%' ");
+//		}
+//		if(null!=canshu.get("typeId")&&!"".equalsIgnoreCase((String)canshu.get("typeId"))){
+//			sql.append(" and g.goodsType='"+canshu.get("typeId")+"'");
+//		}
+//		if(null!=canshu.get("brandId")&&!"".equalsIgnoreCase((String)canshu.get("brandId"))){
+//			sql.append(" and g.goodsBrand='"+canshu.get("brandId")+"'");
+//		}
+//		if(null!=canshu.get("userId")&&!"".equalsIgnoreCase((String)canshu.get("userId"))){
+//			sql.append(" and g.userId='"+ canshu.get("userId")+"'");
+//		}
+//		List list=goodsDao.findMapObjBySql(sql.toString(),null , page, limit);
+//		return list;
+//	}
 	
 	
 
@@ -231,6 +231,7 @@ public class GoodsServiceImpl implements GoodsService {
 		if(null!=canshu.get("isPublish")&&!"".equalsIgnoreCase((String)canshu.get("isPublish"))){
 			sql.append(" and g.isPublish='"+ canshu.get("isPublish")+"'");
 		}
+		sql.append(" order by g.updateTime desc");
 		List list=goodsDao.findMapObjBySql(sql.toString(),null , page, limit);
 		return list;
 	}
@@ -242,4 +243,7 @@ public class GoodsServiceImpl implements GoodsService {
 		}
 		return null;
 	}
+
+	
+
 }
