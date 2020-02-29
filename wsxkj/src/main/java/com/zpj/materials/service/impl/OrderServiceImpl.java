@@ -276,7 +276,7 @@ public class OrderServiceImpl implements OrderService{
             orderDao.delete(oi);
     }
     
-    public void saveOrderMultiInfo(String id,String customerid,String state,String trackingNo,String orderGoods,String postage,User user) throws RuntimeException{
+    public synchronized void saveOrderMultiInfo(String id,String customerid,String state,String trackingNo,String orderGoods,String postage,User user) throws RuntimeException{
     	try{
 
             boolean updateflag=false;

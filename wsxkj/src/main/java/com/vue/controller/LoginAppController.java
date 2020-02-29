@@ -65,8 +65,8 @@ public class LoginAppController extends BaseController {
 		LogInfo loginfo=new LogInfo();
         loginfo.setId(UUID.randomUUID().toString());
         loginfo.setCreatetime(new Date());
-        loginfo.setType("发送手机验证码");
-        loginfo.setDescription("手机验证");
+        loginfo.setType("发送手机验证码:"+yzm);
+        loginfo.setDescription("手机验证:"+phone);
         logService.saveLog(loginfo);
 		jsonWrite2(rd);
 	}
