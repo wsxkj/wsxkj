@@ -322,13 +322,21 @@ public class GoodsAppController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "查询商品批次信息", notes = "查询商品批次信息", httpMethod = "POST",response = Goods.class )
     public void findStoreInfoByGoodsId(@ApiParam(required = true, name = "token", value = "token")@RequestParam("token")String token,
-    		@ApiParam(required = false, name = "id", value = "商品Id主键")@RequestParam(value="id")String id){
+    		@ApiParam(required = false, name = "id", value = "商品Id主键")@RequestParam(value="id")String id,
+    		@ApiParam(required = false, name = "cpage", value = "当前页")@RequestParam(value="cpage",required = false)String cpage,
+    		@ApiParam(required = false, name = "climit", value = "条数")@RequestParam(value="climit",required = false)String climit){
     	ResultData rd=new ResultData();
         try{
             User user= getCurrentUser();
             Map map=new HashMap();
             map.put("userId",user.getId());
             map.put("goodsId", filterStr(id));
+            if(isNotNullObject(cpage)){
+            	page=Integer.parseInt(cpage);
+            }
+            if(isNotNullObject(climit)){
+            	limit=Integer.parseInt(climit);
+            }
         	MyPage mp = storeService.findPageData(map, page, limit);
             rd.setData(mp.data);
             rd.setCount(mp.count);
