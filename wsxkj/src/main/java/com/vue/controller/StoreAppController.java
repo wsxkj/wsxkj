@@ -118,29 +118,41 @@ public class StoreAppController extends BaseController {
             Store store=storeService.findById(storeId);
             double old_inNum=store.getInNum();
             String goodsId=store.getGoodsId();
+            double storeNum=store.getStoreNum();//当前库存记录中库存表中库存量
             Goods goods=goodsService.findById(goodsId);
+            double totalStoreNum=goods.getStoreNum();//该商品总库存量
+            double soldNum=old_inNum-storeNum;//修改前，该库存的售出量
             Map map=new HashMap();
             double innum=0;
             double new_inNum=0;//经过计算后goods表中需要修改的值
             if(null!=inNum) innum=Double.parseDouble(inNum);
-            new_inNum=goods.getStoreNum()-old_inNum+innum;
-            if(new_inNum<0){
-        		//说明该库存已经被使用过了
-        		flag=true;
-        	}
+            if(innum >= old_inNum){
+            	//如果修改后的进货数量大于修改之前老的进货数量
+            	flag=false;
+            }else{
+            	//如果修改后的进货数量大于该库存已经售出的数量
+            	if(innum>=soldNum){
+            		//新的入库量大于售出量
+            		flag=false;
+            	}else{
+            		flag=true;
+            	}
+            }
             if(flag){
             	rd.setCode(500);
             	rd.setMsg("该库存已经被使用过，不可修改。");
             }else{
-            	goods.setStoreNum(new_inNum);
-            	goodsService.saveInfo(goods);
             	//保存库存信息
             	if(innum>0){
+            		new_inNum=totalStoreNum-old_inNum+innum;//商品表中总库存量
+                	goods.setStoreNum(new_inNum);
+                	goodsService.saveInfo(goods);
             		store.setGoodsId(goodsId);
             		store.setUserId(user.getId());
             		store.setInDate(new Date());
             		store.setInNum(innum);
-            		store.setStoreNum(innum);
+            		double new_storeNum=(innum-soldNum);
+            		store.setStoreNum(new_storeNum);
             		store.setInPrice(Double.parseDouble(inPrice));
             		store.setOutPrice(Double.parseDouble(outPrice));
             		if(judgeStr(sureDate)){
