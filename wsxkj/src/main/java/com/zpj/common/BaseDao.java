@@ -589,6 +589,18 @@ public class BaseDao<T extends Serializable> {
 		return list;
 	}
 
+	public void executeSqlMutil(String sql) {
+		try {
+			// jdbcTemplate.execute(sql);
+			Session session = sessionFactory.getCurrentSession();
+			session.createSQLQuery(sql).executeUpdate();
+			session.flush(); //清理缓存，执行批量插入  
+			session.clear(); //清空缓存中的 对象  
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
 	public void executeSql(String sql) {
 		try {
 			// jdbcTemplate.execute(sql);

@@ -13,12 +13,12 @@ import java.util.Random;
 
 public class MsgUtil {
     public static String REGIONID="cn-hangzhou";
-    public static String ACCESSKEYID="LTAIn1xLz01BcmER1";
-    public static String SECRET="HQReR4XNoQWXN1T9UiMGTQyg4bbUcb1";
+    public static String ACCESSKEYID="";
+    public static String SECRET="";
 
 
 	public static void main(String[] args) {
-        MsgUtil.sendMsg("8888","18962862897");
+        MsgUtil.sendMsg("8888","");
 	}
 
 	public static void sendMsg(String yzm,String phone){
