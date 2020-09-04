@@ -233,6 +233,12 @@ public class LoginAppController extends BaseController {
 				String token=JwtUtil.buildJsonByUser(user);
 				user.setToken(token);
 				retMap.put("data", user);
+				LogInfo loginfo=new LogInfo();
+		        	loginfo.setId(UUID.randomUUID().toString());
+		        	loginfo.setUsername(user.getId());
+		        	loginfo.setCreatetime(new Date());
+		        	loginfo.setType("更新Token成功");
+		        	loginfo.setDescription(user.toString());
 			}else{
 				retMap.put("code", 500);
 				retMap.put("msg", "更新token失败，密码已过期，请重新登陆");
