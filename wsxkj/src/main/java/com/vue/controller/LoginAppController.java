@@ -114,6 +114,7 @@ public class LoginAppController extends BaseController {
 				user.setIsExpire("0");
 				user.setMaxtime(0);
 				user.setStartTime(now);
+				user.setCreatTime(now);
 			}
 			user.setPassword(MsgUtil.generatePassword(6));
 			userService.saveInfo(user);
@@ -173,6 +174,7 @@ public class LoginAppController extends BaseController {
 						user.setIsExpire("0");
 						user.setMaxtime(0);
 						user.setStartTime(now);
+						user.setCreatTime(now);
 					}
 					user.setPassword(MsgUtil.generatePassword(6));
 					userService.saveInfo(user);
@@ -239,6 +241,7 @@ public class LoginAppController extends BaseController {
 		        	loginfo.setCreatetime(new Date());
 		        	loginfo.setType("更新Token成功");
 		        	loginfo.setDescription(user.toString());
+		        	logService.saveLog(loginfo);
 			}else{
 				retMap.put("code", 500);
 				retMap.put("msg", "更新token失败，密码已过期，请重新登陆");

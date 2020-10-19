@@ -108,7 +108,7 @@ public class TestAspect {
 		if(userinfo!=null){
 			LogInfo loginfo=new LogInfo();
 			loginfo.setId(UUID.randomUUID().toString());
-        	loginfo.setUsername(userinfo.getPhone());
+        	loginfo.setUsername(userinfo.getId());
         	loginfo.setCreatetime(new Date());
         	loginfo.setType((String)tmap.get("type"));
         	loginfo.setDescription(userinfo.getPhone()+"  在"+(String)tmap.get("remark")+"。具体信息："+(String)tmap.get("param"));

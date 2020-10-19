@@ -59,6 +59,9 @@ public class User implements java.io.Serializable {
 	@ApiModelProperty(value = "token",name="token", required =  false)
 	private String token;
 	
+	@ApiModelProperty(value = "创建时间",name="creatTime", required =  false)
+	private Date creatTime;
+	
 	/**********v1_1_0新增*****开始********/
 	@ApiModelProperty(value = "微商店铺名称",name="shopName", required =  false)
 	private String shopName;
@@ -196,6 +199,12 @@ public class User implements java.io.Serializable {
 	}
 	public void setShopUrl(String shopUrl) {
 		this.shopUrl = shopUrl;
+	}
+	public Date getCreatTime() {
+		return creatTime;
+	}
+	public void setCreatTime(Date creatTime) {
+		this.creatTime = creatTime;
 	}
 	
 	

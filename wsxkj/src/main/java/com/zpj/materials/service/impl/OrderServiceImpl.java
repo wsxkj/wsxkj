@@ -278,7 +278,7 @@ public class OrderServiceImpl implements OrderService{
     
     public synchronized void saveOrderMultiInfo(String id,String customerid,String state,String trackingNo,String orderGoods,String postage,User user) throws RuntimeException{
     	try{
-
+    		System.out.println("----saveOrderMultiInfo进入方法-----");
             boolean updateflag=false;
             //订单信息保存
             OrderInfo oi=null;
@@ -303,13 +303,16 @@ public class OrderServiceImpl implements OrderService{
             this.saveInfo(oi);
 //            orderGoods="[{\"id\":\"\",\"orderId\":\"\",\"goodsId\":\"GOODS_19513174669990\",\"storeId\":\"STORE_19513212995202\",\"soldNum\":\"1\",\"soldPrice\":\"100\",\"soldTotalPrice\":\"100\",\"paidMoney\":\"100\",\"unpaidMoney\":\"0\"}]";
 //            orderGoods="[{id:\"1\",goodsId:\"1\",storeId:\"asdfd\",soldNum:\"1\",soldPrice:\"100\",soldTotalPrice:\"200\",paidMoney:\"50\",unpaidMoney:\"150\"},{id:\"2\",goodsId:\"2\",storeId:\"df\",soldNum:\"2\",soldPrice:\"300\",soldTotalPrice:\"600\",paidMoney:\"500\",unpaidMoney:\"100\"}]";
+            System.out.println("----json字符串转换开始-----");
             JSONArray jsonArray=JSONArray.fromObject(orderGoods);
+            System.out.println("----json字符串转换结束-----");
             JSONObject jsonObject;
 //            StringBuffer sql=new StringBuffer(2000);
             //订单商品信息保存
             if(!updateflag){          
                 //新增订单
                 for (int n=0;n<jsonArray.size();n++){
+                	System.out.println("----OrderGoodsInfo保存开始-----");
                     jsonObject=(JSONObject)jsonArray.get(n);
                     OrderGoodsInfo ogi=new OrderGoodsInfo();
                     ogi.setGoodsId(String.valueOf(jsonObject.get("goodsId")));
@@ -322,19 +325,22 @@ public class OrderServiceImpl implements OrderService{
                     ogi.setUnpaidMoney(Double.parseDouble(String.valueOf(jsonObject.get("unpaidMoney"))));
                     ogi.setUpdateTime(new Date());
                     orderGoodsService.saveInfo(ogi);
-
+                    System.out.println("----OrderGoodsInfo保存结束-----");
 
                     if(judgeStr(String.valueOf(jsonObject.get("goodsId")))){
                         double soldNum=Double.parseDouble(String.valueOf(jsonObject.get("soldNum")));
                         if(judgeStr(String.valueOf(jsonObject.get("storeId")))){
+                        	System.out.println("----jl_material_goods_info保存开始-----");
                         	orderDao.executeSql(" update jl_material_goods_info set storeNum=(storeNum-"+soldNum+") where id='"+String.valueOf(jsonObject.get("goodsId"))+"' ");
+                        	System.out.println("----jl_material_goods_info保存结束-----");
                         }
                         
                     }
                     if(judgeStr(String.valueOf(jsonObject.get("storeId")))){
                         double soldNum=Double.parseDouble(String.valueOf(jsonObject.get("soldNum")));
+                        System.out.println("----jl_material_store_info保存开始-----");
                         orderDao.executeSql(" update jl_material_store_info set storeNum=(storeNum-"+soldNum+") where id='"+String.valueOf(jsonObject.get("storeId"))+"' ");
-                        
+                        System.out.println("----jl_material_store_info保存结束-----");
                     }
                     
                 }
@@ -395,7 +401,7 @@ public class OrderServiceImpl implements OrderService{
 
         }catch (Exception e){
             e.printStackTrace();
-            throw new RuntimeException();
+//            throw new RuntimeException();
         }
     }
 

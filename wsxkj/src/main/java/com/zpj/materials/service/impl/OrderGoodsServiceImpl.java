@@ -202,7 +202,7 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
 	            }
 	        }
 	        //修改库存
-	        //原先的ordergoods数据删除
+	        //原先的ordergoods数据删除jl_material_order_goods_info
 	        orderGoodsDao.executeSql("delete from "+tablename+" where orderId='"+orderId+"'");
 	    }catch (Exception e){
 	        e.printStackTrace();
