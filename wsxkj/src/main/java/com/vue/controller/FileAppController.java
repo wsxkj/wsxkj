@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.zpj.common.qiniu.QiNiu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -117,7 +118,7 @@ public class FileAppController extends BaseController{
 	@RequestMapping("/v1_1_0/viewImage")
 	@ResponseBody
 	@ApiOperation(value = "v1_1_0图片查看功能，带备份还原功能", notes = "v1_1_0图片查看功能，带备份还原功能", httpMethod = "POST")
-	public void viewImage_v1_1_0(HttpServletRequest request,MultipartFile file,
+	public void viewImage_v1_1_0(HttpServletRequest request,
 			@ApiParam(required = true, name = "token", value = "token")@RequestParam(value="token",required=true)String token,
 			@ApiParam(required = false, name = "url", value = "存放图片的路径地址，多个用逗号分割")@RequestParam(value="url",required=false)String url) {				
 		ResultData rd=new ResultData();
@@ -146,5 +147,96 @@ public class FileAppController extends BaseController{
             rd.setMsg("操作失败");
         }
         this.jsonWrite2(rd);
+	}
+
+	@RequestMapping("/qiniu/upload")
+	@ResponseBody
+	@ApiOperation(value = "图片保存到七牛上", notes = "图片保存到七牛上", httpMethod = "POST")
+	public void uploadFile_qiniu(HttpServletRequest request,MultipartFile file,
+							@ApiParam(required = true, name = "token", value = "token")@RequestParam(value="token",required=true)String token,
+							@ApiParam(required = false, name = "id", value = "该条信息的主键（没有就填空）")@RequestParam(value="id",required=false)String id,
+							@ApiParam(required = false, name = "modeltype", value = "图片所属的模块分类（随便取）")@RequestParam(value="modeltype",required=false)String modeltype) {
+		ResultData rd=new ResultData();
+		try{
+//        	String token=request.getParameter("token");
+			User user =null;
+			if(null!=token&&!"".equalsIgnoreCase(token)){
+				user= JwtUtil.getUserByJson(token);
+
+			}
+			if(user!=null){
+				jsonData = uploadfileService.uploadFileQiNiu(request,file,id,modeltype,user.getId());
+			}else{
+				jsonData="";
+			}
+			if(jsonData.equalsIgnoreCase("")){
+				rd.setCode(500);
+				rd.setData(jsonData);
+				rd.setMsg("操作失败");
+			}else{
+				rd.setCode(200);
+				rd.setData(jsonData);
+				rd.setMsg("上传成功");
+			}
+
+		}catch (Exception e){
+			e.printStackTrace();
+			rd.setCode(500);
+			rd.setMsg("操作失败");
+		}
+		this.jsonWrite2(rd);
+	}
+
+	@RequestMapping("/qiniu/viewImage")
+	@ResponseBody
+	@ApiOperation(value = "qiniu图片查看功能, 返回七牛云图片地址", notes = "qiniu图片查看功能, 返回七牛云图片地址", httpMethod = "POST")
+	public void viewImage_qiniu(HttpServletRequest request,
+								 @ApiParam(required = true, name = "token", value = "token")@RequestParam(value="token",required=true)String token,
+								 @ApiParam(required = false, name = "url", value = "存放图片的路径地址，多个用逗号分割")@RequestParam(value="url",required=false)String url) {
+		ResultData rd=new ResultData();
+		try{
+			User user =null;
+			if(null!=token&&!"".equalsIgnoreCase(token)){
+				user= JwtUtil.getUserByJson(token);
+			}
+			jsonData="";
+			if(user!=null){
+				jsonData=uploadfileService.getImagePathsQiNiu(request,url);
+			}
+			if(jsonData.equalsIgnoreCase("")){
+				rd.setCode(500);
+				rd.setData(jsonData);
+				rd.setMsg("操作失败");
+			}else{
+				rd.setCode(200);
+				rd.setData(jsonData);
+				rd.setMsg("操作成功");
+			}
+
+		}catch (Exception e){
+			e.printStackTrace();
+			rd.setCode(500);
+			rd.setMsg("操作失败");
+		}
+		this.jsonWrite2(rd);
+	}
+
+	@RequestMapping("/qiniu/getUpToken")
+	@ResponseBody
+	@ApiOperation(value = "qiniu文件上传的token获取", notes = "qiniu文件上传的token获取", httpMethod = "POST")
+	public void getUpToken_qiniu(HttpServletRequest request,
+								@ApiParam(required = true, name = "token", value = "token")@RequestParam(value="token",required=true)String token ) {
+		ResultData rd=new ResultData();
+		User user= getCurrentUser();
+		if(user!=null){
+			rd.setCode(200);
+			rd.setData(QiNiu.getInstance().getToken());
+			rd.setMsg("获取成功");
+		}else{
+			rd.setCode(500);
+			rd.setData("");
+			rd.setMsg("操作失败");
+		}
+		this.jsonWrite2(rd);
 	}
 }

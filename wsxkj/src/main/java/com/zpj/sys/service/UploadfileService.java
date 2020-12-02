@@ -75,4 +75,23 @@ public interface UploadfileService {
 	 */
 	public void updateBackupField(String fileid,boolean flag);
 
+	/**
+	 *@MethodName uploadFileQiNiu
+	 *@Description (TODO 保存文件到7牛上)
+	 *@Params [request, file, tableid, modeltype, userid]
+	 *@Return java.lang.String
+	 *@Author zpj
+	 *@Date  2020/11/25 9:19
+	 **/
+	public String uploadFileQiNiu(HttpServletRequest request, MultipartFile file,String tableid,String modeltype,String userid);
+
+	/**
+	 *@MethodName getImagePathsQiNiu
+	 *@Description (TODO 从七牛上获取图片访问路径)
+	 *@Params [request, url]
+	 *@Return java.lang.String
+	 *@Author zpj
+	 *@Date  2020/11/25 11:50
+	 **/
+	public String getImagePathsQiNiu(HttpServletRequest request,String url);
 }

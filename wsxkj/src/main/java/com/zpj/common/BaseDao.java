@@ -596,11 +596,14 @@ public class BaseDao<T extends Serializable> {
 			session.createSQLQuery(sql).executeUpdate();
 			session.flush(); //清理缓存，执行批量插入  
 			session.clear(); //清空缓存中的 对象  
+			session.close();
 		} catch (RuntimeException e) {
+			System.out.println(sql);
 			e.printStackTrace();
 			throw e;
 		}
 	}
+	
 	public void executeSql(String sql) {
 		try {
 			// jdbcTemplate.execute(sql);
@@ -608,6 +611,7 @@ public class BaseDao<T extends Serializable> {
 			session.createSQLQuery(sql).executeUpdate();
 		} catch (RuntimeException e) {
 			e.printStackTrace();
+			System.out.println("执行报错："+sql);
 			throw e;
 		}
 	}

@@ -30,6 +30,10 @@ public class PropertyHelper{
 			params.put("android.latestversion",prop.get("android.latestversion"));
 			params.put("android.downloadaddress",prop.get("android.downloadaddress"));
 			params.put("android.forceupdate",prop.get("android.forceupdate"));
+			params.put("accessKey",prop.get("qiniu.accessKey"));
+			params.put("secretKey",prop.get("qiniu.secretKey"));
+			params.put("bucket",prop.get("qiniu.bucket"));
+			params.put("domainName",prop.get("qiniu.domainName"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {

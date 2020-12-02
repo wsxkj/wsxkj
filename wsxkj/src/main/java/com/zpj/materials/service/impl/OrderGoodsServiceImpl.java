@@ -179,11 +179,21 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
 	}
 	
 	@Log(type="保存",remark="保存订单商品信息")
-    public void saveInfo(OrderGoodsInfo orderGoodsInfo){
-        orderGoodsDao.add(orderGoodsInfo);
+    public boolean saveInfo(OrderGoodsInfo orderGoodsInfo){
+		boolean flag=false;
+		try{
+			orderGoodsDao.add(orderGoodsInfo);
+			flag=true;
+		}catch (Exception e) {
+			System.out.println("保存订单商品信息,报错");
+			e.printStackTrace();
+			throw e;
+		}
+		return flag;
     }
 	
-    public void deleteOrderGoodsInfoByOrderId(String orderId) throws RuntimeException{
+    public boolean deleteOrderGoodsInfoByOrderId(String orderId) throws RuntimeException{
+    	boolean flag=false;
     	try{
 	    	Map param=new HashMap();
 	        param.put("orderId",orderId);
@@ -204,10 +214,13 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
 	        //修改库存
 	        //原先的ordergoods数据删除jl_material_order_goods_info
 	        orderGoodsDao.executeSql("delete from "+tablename+" where orderId='"+orderId+"'");
+	        flag=true;
 	    }catch (Exception e){
 	        e.printStackTrace();
+	        System.out.println("执行方法deleteOrderGoodsInfoByOrderId报错");
 	        throw new RuntimeException();
 	    }
+    	return flag;
         
     }
     
