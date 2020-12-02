@@ -146,7 +146,7 @@ public class LoginAppController extends BaseController {
 					User user=userService.findUserByPhone(phone);
 					if(null!=user){
 						tempTime=user.getLastLoginTime();
-						user.setLastLoginTime(now);
+						user.setLastLoginTime(user.getUpdateTime());
 						user.setUpdateTime(now);
 						Level lv=levelService.findInfoById(user.getLevel());
 						user.setLevelName(lv.getName());
