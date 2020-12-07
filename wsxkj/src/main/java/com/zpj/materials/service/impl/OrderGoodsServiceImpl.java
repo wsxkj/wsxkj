@@ -184,7 +184,7 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
 		try{
 			orderGoodsDao.add(orderGoodsInfo);
 			flag=true;
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			System.out.println("保存订单商品信息,报错");
 			e.printStackTrace();
 			throw e;
