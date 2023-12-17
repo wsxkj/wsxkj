@@ -500,7 +500,7 @@
         <snapshotRepository>
             <id>nexus-snapshots</id>
             <name>nexus distribution snapshot repository</name>
-            <url>http://maven.apache.org</url>
+            <url>https://maven.apache.org</url>
         </snapshotRepository>
     </distributionManagement>
   
